@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -12,36 +13,63 @@ namespace SWE_Server
     {
         private Socket _socket;
 
-        public string method { get; private set; }
+        public IDictionary<string, string> Header { get; private set; }
 
         public Request(Socket socket)
         {
-            _socket = socket;            
+            IDictionary<string, string> header = new Dictionary<string,string>();
+            _socket = socket;
 
             NetworkStream stream = new NetworkStream(_socket);
             StreamReader reader = new StreamReader(stream);
 
+            Url url = null;
+
             while (true)
-            {                
-                string line = reader.ReadLine();
+            {
+                string line = "";
+                try
+                {
+                    line = reader.ReadLine();
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine("Error while reading request: " + e.Message);
+                }
                 
                 if (string.IsNullOrEmpty(line))
                     break;
-                
-                if(string.IsNullOrEmpty(method))
+
+                if (url == null)
                 {
                     var buffer = line.Split(' ');
 
-                    URL url = new URL(buffer[1]);
+                    url = new Url(buffer[0], buffer[1]);
+                }
+                else
+                {
+                    var parts = line.Split(": ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                    {
+                        header.Add(parts[0], parts[1]);
+                    }
                 }
 
-
                 Console.WriteLine(line);
+            }
 
+            Header = new ReadOnlyDictionary<string, string>(header);
+
+            if (url != null && url.Method == Url.MethodType.POST)
+            {
+                ProcessPostData();
             }
         }
 
+        private void ProcessPostData()
+        {
+            throw new NotImplementedException();
+        }
 
-        
      }
 }

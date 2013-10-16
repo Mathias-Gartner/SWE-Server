@@ -46,7 +46,7 @@
     <Compile Include="Request.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="MyThread.cs" />
-    <Compile Include="URL.cs" />
+    <Compile Include="Url.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
