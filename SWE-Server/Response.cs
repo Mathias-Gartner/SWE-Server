@@ -20,11 +20,11 @@ namespace SWE_Server
 
                 writer.WriteLine("HTTP/1.1 200 OK");
                 writer.WriteLine("Connection: close");
-                //writer.WriteLine("Content-Type: image/jpeg");
-                writer.WriteLine("Content-Type: text/html");
+                writer.WriteLine("Content-Type: image/jpeg");
+                //writer.WriteLine("Content-Type: text/html");
 
-                //var fs = File.OpenRead(@"C:\Users\Christoph\Pictures\Ich2.jpg");
-                var fs = File.OpenRead(@"E:\lvplan.html");
+                var fs = File.OpenRead(@"C:\Users\Christoph\Pictures\Ich2.jpg");
+                //var fs = File.OpenRead(@"E:\lvplan.html");
 
                 writer.WriteLine("Content-Length: " + fs.Length);
                 writer.WriteLine();

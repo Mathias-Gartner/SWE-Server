@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Interface;
 
 namespace SWE_Server
 {
@@ -12,6 +13,9 @@ namespace SWE_Server
     {
         static void Main(string[] args)
         {
+            PluginManager manager = PluginManager.getInstance();
+            manager.LoadPlugins();
+            
             TcpListener listener = new TcpListener(IPAddress.Any, 8080);
             listener.Start();
 

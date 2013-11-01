@@ -27,7 +27,7 @@ namespace SWE_Server
             
             var response = new Response();
 
-            //Thread.Sleep(7500);
+            //Thread.Sleep(7500);       //zum testen der Multi-User-Fähigket
             response.send(socket);
 
             socket.Close();
