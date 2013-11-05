@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Interface;
 
 namespace SWE_Server
 {
@@ -24,8 +25,10 @@ namespace SWE_Server
         public void Run()
         {
             var request = new Request(socket);
-            
-            var response = new Response();
+
+            var data = PluginManager.getInstance().HandleRequest(request);
+
+            var response = new Response(data);
 
             //Thread.Sleep(7500);       //zum testen der Multi-User-Fähigket
             response.send(socket);

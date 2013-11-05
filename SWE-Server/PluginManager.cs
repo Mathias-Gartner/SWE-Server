@@ -60,5 +60,33 @@ namespace SWE_Server
                 return plugins;
             }
         }
+
+        public Data HandleRequest(Request request)
+        {
+            if (request.Url == null)
+                return new Data() { StatusCode = 400 };
+
+            if (!request.Url.Parameters.Keys.Contains("action"))
+                request.Url.Parameters.Add("action", "StaticFile");
+
+            var pluginName = request.Url.Parameters["action"];
+
+            var plugin = plugins.Where(p => p.Name == pluginName).FirstOrDefault();
+            if (plugin == null)
+                return new Data() { StatusCode = 404 };
+
+            Data data;
+            try
+            {
+                data = plugin.CreateProduct(request);
+            }
+            catch (Exception e)
+            {
+                data = new Data();
+                data.StatusCode = 500;
+                ExceptionHandler.ErrorMsg(4, e);
+            }
+            return data;
+        }
     }
 }

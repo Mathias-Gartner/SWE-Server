@@ -5,41 +5,87 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Interface;
 
 namespace SWE_Server
 {
     class Response
     {
+        private Data _data;
+
+        public Response(Data data)
+        {
+            _data = data;
+        }
+
         public void send(Socket socket)
         {
+            if (socket == null || _data == null)
+                return;
+
             NetworkStream stream = null;
             try
             {
                 stream = new NetworkStream(socket);
                 var writer = new StreamWriter(stream);
 
-                writer.WriteLine("HTTP/1.1 200 OK");
+                writer.Write("HTTP/1.1 ");
+
+                switch (_data.StatusCode)
+                {
+                    case 200:
+                        writer.WriteLine("200 OK");
+                        break;
+                    case 400:
+                        writer.WriteLine("400 Bad Request");
+                        if (_data.Content.Length < 1)
+                            _data.SetContent("<h1>Bad Request</h1>");
+                        break;
+                    case 404:
+                        writer.WriteLine("404 Not Found");
+                        if (_data.Content.Length < 1)
+                            _data.SetContent("<h1>Url not found</h1>");
+                        break;
+                    default:
+                        writer.WriteLine("500 Internal Server Error");
+                        if (_data.Content.Length < 1)
+                            _data.SetContent("<h1>Internal Server Error</h1>");
+                        break;
+                }
+
                 writer.WriteLine("Connection: close");
-                writer.WriteLine("Content-Type: image/jpeg");
-                //writer.WriteLine("Content-Type: text/html");
-
-                var fs = File.OpenRead(@"C:\Users\Christoph\Pictures\Ich2.jpg");
-                //var fs = File.OpenRead(@"E:\lvplan.html");
-
-                writer.WriteLine("Content-Length: " + fs.Length);
+                writer.WriteLine("Content-Type: " + _data.Contenttype);
+                
+                writer.WriteLine("Content-Length: " + _data.Content.Length);
                 writer.WriteLine();
                 writer.Flush();
 
-                fs.CopyTo(stream);
+                if (_data.DocumentType == Data.DocumentTypeType.EmbeddedHtml)
+                    appendFile(stream, Properties.Settings.Default.HeaderFile);
+
+                stream.Write(_data.Content, 0, _data.Content.Length);
+
+                if (_data.DocumentType == Data.DocumentTypeType.EmbeddedHtml)
+                    appendFile(stream, Properties.Settings.Default.FooterFile);
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error sending response: " + e.Message);
+                ExceptionHandler.ErrorMsg(3, e);
             }
             finally
             {
                 if (stream != null)
                     stream.Close();
+            }
+        }
+
+        private void appendFile(Stream stream, string filename)
+        {
+            if (File.Exists(filename))
+            {
+                var fs = File.OpenRead(filename);
+                fs.CopyTo(stream);
+                fs.Close();
             }
         }
     }

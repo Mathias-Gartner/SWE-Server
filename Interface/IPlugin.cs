@@ -8,8 +8,8 @@ namespace Interface
 {
     public interface IPlugin
     {
-        string GetName { get; }
-        string GetAutor { get; }
-        Data CreateProduct(Dictionary<string, string> Parameter);
+        string Name { get; }
+        string Author { get; }
+        Data CreateProduct(Request request);
     }
 }
