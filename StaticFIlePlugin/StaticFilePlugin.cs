@@ -41,6 +41,7 @@ namespace StaticFilePlugin
 
         public Data CreateProduct(Request request)
         {
+            string filename = null;
             Data data = new Data();
             data.DocumentType = Data.DocumentTypeType.StandaloneFile;
 
@@ -56,16 +57,25 @@ namespace StaticFilePlugin
             var file = new FileInfo(path);
             if (file.Exists)
             {
+                filename = file.Name;
                 LoadFile(data, file);
             }
             else if (dir.Exists && dir.GetFiles().Any(f => f.Name == "index.html"))
             {
-                LoadFile(data, dir.GetFiles().Where(f => f.Name == "index.html").Single());
+                file = dir.GetFiles().Where(f => f.Name == "index.html").Single();
+                filename = file.Name;
+                LoadFile(data, file);
             }
             else
             {
                 return new Data() { StatusCode = 404 };
             }
+
+            if (request.Url.Parameters.ContainsKey("download") && !String.IsNullOrEmpty(filename))
+            {
+                data.Disposition = filename;
+            }
+
             return data;
         }
 

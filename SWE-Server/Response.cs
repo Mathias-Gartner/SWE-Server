@@ -53,6 +53,12 @@ namespace SWE_Server
                         break;
                 }
 
+                if (!String.IsNullOrEmpty(_data.Disposition))
+                {
+                    writer.WriteLine(String.Format("Content-Disposition: attachment; filename=\"{0}\"", _data.Disposition));
+ 
+                }
+
                 writer.WriteLine("Connection: close");
                 writer.WriteLine("Content-Type: " + _data.Contenttype);
                 

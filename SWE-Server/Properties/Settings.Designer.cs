@@ -37,7 +37,7 @@ namespace SWE_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("header.html")]
+        [global::System.Configuration.DefaultSettingValueAttribute("index_top.html")]
         public string HeaderFile {
             get {
                 return ((string)(this["HeaderFile"]));
@@ -49,7 +49,7 @@ namespace SWE_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("footer.html")]
+        [global::System.Configuration.DefaultSettingValueAttribute("index_bottom.html")]
         public string FooterFile {
             get {
                 return ((string)(this["FooterFile"]));

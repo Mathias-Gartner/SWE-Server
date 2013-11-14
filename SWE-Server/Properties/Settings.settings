@@ -6,10 +6,10 @@
       <Value Profile="(Default)">\Plugins</Value>
     </Setting>
     <Setting Name="HeaderFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">header.html</Value>
+      <Value Profile="(Default)">index_top.html</Value>
     </Setting>
     <Setting Name="FooterFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">footer.html</Value>
+      <Value Profile="(Default)">index_bottom.html</Value>
     </Setting>
   </Settings>
 </SettingsFile>
