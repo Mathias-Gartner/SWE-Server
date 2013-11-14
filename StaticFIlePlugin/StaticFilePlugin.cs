@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interface;
 using System.IO;
+using System.Net;
 
 namespace StaticFilePlugin
 {
@@ -60,11 +61,18 @@ namespace StaticFilePlugin
                 filename = file.Name;
                 LoadFile(data, file);
             }
-            else if (dir.Exists && dir.GetFiles().Any(f => f.Name == "index.html"))
+            else if (dir.Exists)
             {
-                file = dir.GetFiles().Where(f => f.Name == "index.html").Single();
-                filename = file.Name;
-                LoadFile(data, file);
+                file = dir.GetFiles().Where(f => f.Name == "index.html").SingleOrDefault();
+                if (file != null)
+                {
+                    filename = file.Name;
+                    LoadFile(data, file);
+                }
+                else
+                {
+                    return DirectoryOverview(dir);
+                }
             }
             else
             {
@@ -93,6 +101,24 @@ namespace StaticFilePlugin
             file.OpenRead().CopyTo(memstream);
             data.Content = memstream.ToArray();
             data.Contenttype = GetMimeType(file.Extension);
+        }
+
+        private Data DirectoryOverview(DirectoryInfo dir)
+        {
+            Data data = new Data();
+            data.DocumentType = Data.DocumentTypeType.EmbeddedHtml;
+            var sb = new StringBuilder();
+            sb.Append("<div>");
+            foreach (var file in dir.GetFiles())
+            {
+                sb.Append("<p><a href=\"");
+                sb.Append(WebUtility.HtmlEncode(file.Name));
+                sb.Append("\">");
+                sb.Append(WebUtility.HtmlEncode(file.Name));
+                sb.Append("</a></p>");
+            }
+            data.SetContent(sb.ToString());
+            return data;
         }
     }
 }
