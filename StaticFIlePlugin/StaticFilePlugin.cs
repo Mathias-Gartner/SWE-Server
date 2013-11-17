@@ -109,6 +109,14 @@ namespace StaticFilePlugin
             data.DocumentType = Data.DocumentTypeType.EmbeddedHtml;
             var sb = new StringBuilder();
             sb.Append("<div>");
+            foreach (var subdir in dir.GetDirectories())
+            {
+                sb.Append("<p><a href=\"");
+                sb.Append(WebUtility.HtmlEncode(subdir.Name));
+                sb.Append("/\">");
+                sb.Append(WebUtility.HtmlEncode(subdir.Name));
+                sb.Append("/</a></p>");
+            }
             foreach (var file in dir.GetFiles())
             {
                 sb.Append("<p><a href=\"");
