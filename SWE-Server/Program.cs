@@ -16,7 +16,9 @@ namespace SWE_Server
             PluginManager manager = PluginManager.getInstance();
             manager.LoadPlugins();
             
-            TcpListener listener = new TcpListener(IPAddress.Any, 8080);
+            TcpListener listener = new TcpListener(IPAddress.IPv6Any, 8080);
+            // enable dual stacked server
+            listener.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
             listener.Start();
 
             while (true)

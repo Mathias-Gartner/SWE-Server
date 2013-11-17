@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,15 +90,27 @@ namespace Interface
 
         private void ProcessPostData()
         {
+            if (!Header.ContainsKey("content-length") || !Header.ContainsKey("content-type"))
+                return;
+
             switch (Header["content-type"])
             {
                 case "multipart/form-data":
                     throw new NotSupportedException();
                 case "application/x-www-form-urlencoded":
-                    string line;
-                    line = _reader.ReadLine();
+                    int length;
+                    if (!int.TryParse(Header["content-length"], out length))
+                        return;
+
+                    char[] text = new char[length];
+                    if (_reader.ReadBlock(text, 0, length) != length)
+                        return;
+
+                    string line = new string(text);
                     if (String.IsNullOrEmpty(line))
                         break;
+
+                    line = WebUtility.UrlDecode(line);
 
                     var dictionary = new Dictionary<string, string>();
                     var args = line.Split('&');

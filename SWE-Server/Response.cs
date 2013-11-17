@@ -41,6 +41,11 @@ namespace SWE_Server
                         if (_data.Content.Length < 1)
                             _data.SetContent("<h1>Bad Request</h1>");
                         break;
+                    case 401:
+                        writer.WriteLine("401 Forbidden");
+                        if (_data.Content.Length < 1)
+                            _data.SetContent("<h1>Forbidden</h1>");
+                        break;
                     case 404:
                         writer.WriteLine("404 Not Found");
                         if (_data.Content.Length < 1)
