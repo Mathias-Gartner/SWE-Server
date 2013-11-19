@@ -24,15 +24,27 @@ namespace SWE_Server
 
         public void Run()
         {
-            var request = new Request(socket);
+            NetworkStream stream = null;
+            try
+            {
+                stream = new NetworkStream(socket);
+            }
+            catch (IOException e)
+            {
+                ExceptionHandler.ErrorMsg(5, e);
+                return;
+            }
+
+            var request = new Request(stream);
 
             var data = PluginManager.getInstance().HandleRequest(request);
 
             var response = new Response(data);
 
             //Thread.Sleep(7500);       //zum testen der Multi-User-Fähigket
-            response.send(socket);
+            response.send(stream);
 
+            stream.Close();
             socket.Close();
         }
     }

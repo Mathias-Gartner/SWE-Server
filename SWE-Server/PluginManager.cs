@@ -9,19 +9,21 @@ using Interface;
 
 namespace SWE_Server
 {
-    class PluginManager
+    public class PluginManager
     {
-        private static List<IPlugin> plugins = null;
+        private List<IPlugin> plugins = null;
         private static volatile PluginManager Instance;
 
-        private PluginManager() { }
+        private PluginManager()
+        {
+            plugins = new List<IPlugin>();
+        }
 
         public static PluginManager getInstance()
         {
             if (Instance == null)
             {
                 Instance = new PluginManager();
-                plugins = new List<IPlugin>();
             }
 
             return Instance;
@@ -63,7 +65,7 @@ namespace SWE_Server
 
         public Data HandleRequest(Request request)
         {
-            if (request.Url == null)
+            if (request == null || request.Url == null)
                 return new Data() { StatusCode = 400 };
 
             if (!request.Url.Parameters.Keys.Contains("action"))

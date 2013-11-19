@@ -42,6 +42,10 @@ namespace Interface
                     {
                         Parameters.Add(pair[0], pair[1]);
                     }
+                    else if (pair.Length == 1)
+                    {
+                        Parameters.Add(pair[0], String.Empty);
+                    }
                 }
             }
         }

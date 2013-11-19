@@ -48,12 +48,28 @@ namespace NaviPlugin
                 }
                 return value;
             }
-            set
+            set // should only be set to true using SetGenerating
             {
-                lock (lockObject)
+                if (value == false)
                 {
-                    _generating = value;
+                    lock (lockObject)
+                    {
+                        _generating = value;
+                    }
                 }
+            }
+        }
+
+        public bool SetGenerating()
+        {
+            lock (lockObject)
+            {
+                if (!_generating)
+                {
+                    _generating = true;
+                    return true;
+                }
+                else return false;
             }
         }
 
@@ -213,19 +229,6 @@ namespace NaviPlugin
                 
                 if (!streetMap[street].Contains(city))
                     streetMap[street].Add(city);
-            }
-        }
-
-        private bool SetGenerating()
-        {
-            lock (lockObject)
-            {
-                if (!_generating)
-                {
-                    _generating = true;
-                    return true;
-                }
-                else return false;
             }
         }
     }

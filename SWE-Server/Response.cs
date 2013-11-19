@@ -18,15 +18,13 @@ namespace SWE_Server
             _data = data;
         }
 
-        public void send(Socket socket)
+        public void send(Stream stream)
         {
-            if (socket == null || _data == null)
+            if (stream == null || _data == null)
                 return;
 
-            NetworkStream stream = null;
             try
             {
-                stream = new NetworkStream(socket);
                 var writer = new StreamWriter(stream);
 
                 writer.Write("HTTP/1.1 ");
@@ -42,7 +40,7 @@ namespace SWE_Server
                             _data.SetContent("<h1>Bad Request</h1>");
                         break;
                     case 401:
-                        writer.WriteLine("401 Forbidden");
+                        writer.WriteLine("403 Forbidden");
                         if (_data.Content.Length < 1)
                             _data.SetContent("<h1>Forbidden</h1>");
                         break;
@@ -65,9 +63,9 @@ namespace SWE_Server
                 }
 
                 writer.WriteLine("Connection: close");
-                writer.WriteLine("Content-Type: " + _data.Contenttype);
+                writer.WriteLine("Content-Type: {0}", _data.Contenttype);
                 
-                writer.WriteLine("Content-Length: " + _data.Content.Length);
+                writer.WriteLine("Content-Length: {0}", _data.Content.Length);
                 writer.WriteLine();
                 writer.Flush();
 

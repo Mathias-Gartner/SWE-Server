@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Interface;
 using System.IO;
 using System.Net;
@@ -17,6 +16,13 @@ namespace StaticFilePlugin
 
         public StaticFilePlugin()
         {
+            Path = ConfigurationManager.AppSettings["DocumentRoot"];
+            if (Path == null)
+                Path = "";
+
+            if (!Path.EndsWith("\\"))
+                Path += "\\";
+
             var dictionary = new Dictionary<string, string>();
             dictionary.Add(".css", "text/css");
             dictionary.Add(".gif", "image/gif");
@@ -29,6 +35,8 @@ namespace StaticFilePlugin
             dictionary.Add(".txt", "text/plain");
             mimeTypes = new ReadOnlyDictionary<string, string>(dictionary);
         }
+
+        public string Path { get; set; }
 
         public string Name
         {
@@ -49,11 +57,11 @@ namespace StaticFilePlugin
             // dir up is not allowed, limit to DocumentRoot
             if (request.Url.Path.Contains(".."))
             {
-                data.StatusCode = 401;
+                data.StatusCode = 403;
                 return data;
             }
 
-            var path = ConfigurationManager.AppSettings["DocumentRoot"] + request.Url.Path.Replace('/', '\\');
+            var path = Path + request.Url.Path.Replace('/', '\\');
             var dir = new DirectoryInfo(path);
             var file = new FileInfo(path);
             if (file.Exists)

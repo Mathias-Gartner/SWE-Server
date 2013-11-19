@@ -12,22 +12,23 @@ namespace Interface
 {
     public class Request
     {
-        private Socket _socket;
+        private Stream _stream;
         private StreamReader _reader;
 
         public Url Url { get; private set; }
         public IReadOnlyDictionary<string, string> Header { get; private set; }
         public IReadOnlyDictionary<string, string> PostData { get; private set; }
 
-        public Request(Socket socket)
+        public Request(Stream stream)
         {
             IDictionary<string, string> header = new Dictionary<string, string>();
-            _socket = socket;
+            _stream = stream;
 
-            NetworkStream stream = null;
+            if (stream == null)
+                return;
+
             try
             {
-                stream = new NetworkStream(_socket);
                 _reader = new StreamReader(stream);
 
                 while (true)
@@ -39,7 +40,7 @@ namespace Interface
                     }
                     catch (IOException e)
                     {
-                        Console.WriteLine("Error while reading request: " + e.Message);
+                        Console.WriteLine("Error while reading request: {0}", e.Message);
                     }
 
                     if (string.IsNullOrEmpty(line))
@@ -72,7 +73,7 @@ namespace Interface
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error receiving request: " + e.Message);
+                Console.WriteLine("Error receiving request: {0}", e.Message);
             }
             catch (NotSupportedException)
             {
@@ -83,8 +84,8 @@ namespace Interface
             }
             finally
             {
-                if (stream != null)
-                    stream.Close();
+                if (_reader != null)
+                    _reader.Close();
             }
         }
 

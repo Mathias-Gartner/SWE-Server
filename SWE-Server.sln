@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticFilePlugin", "StaticF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaviPlugin", "NaviPlugin\NaviPlugin.csproj", "{08FEEFC9-1759-4846-B6C5-52528410F2E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{EDB60A68-0345-429B-A202-08559B5B1D98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB60A68-0345-429B-A202-08559B5B1D98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB60A68-0345-429B-A202-08559B5B1D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB60A68-0345-429B-A202-08559B5B1D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB60A68-0345-429B-A202-08559B5B1D98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
