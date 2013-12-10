@@ -7,6 +7,7 @@ using System.Text;
 using Interface;
 using System.IO;
 using System.Net;
+using System.Globalization;
 
 namespace StaticFilePlugin
 {
@@ -67,7 +68,7 @@ namespace StaticFilePlugin
             if (file.Exists)
             {
                 filename = file.Name;
-                LoadFile(data, file);
+                LoadFile(request, data, file);
             }
             else if (dir.Exists)
             {
@@ -75,11 +76,11 @@ namespace StaticFilePlugin
                 if (file != null)
                 {
                     filename = file.Name;
-                    LoadFile(data, file);
+                    LoadFile(request, data, file);
                 }
                 else
                 {
-                    return DirectoryOverview(dir);
+                    return DirectoryOverview(request, dir);
                 }
             }
             else
@@ -103,15 +104,62 @@ namespace StaticFilePlugin
                 return "application/octet-stream";
         }
 
-        private void LoadFile(Data data, FileInfo file)
+        private void LoadFile(Request request, Data data, FileInfo file)
         {
-            var memstream = new MemoryStream((int)file.Length);
-            file.OpenRead().CopyTo(memstream);
-            data.Content = memstream.ToArray();
-            data.Contenttype = GetMimeType(file.Extension);
+            if (IsNotModified(request, file))
+            {
+                data.StatusCode = 304;
+            }
+            else
+            {
+                var memstream = new MemoryStream((int)file.Length);
+                file.OpenRead().CopyTo(memstream);
+                data.Content = memstream.ToArray();
+                data.Contenttype = GetMimeType(file.Extension);
+                data.LastModified = file.LastWriteTimeUtc;
+            }
         }
 
-        private Data DirectoryOverview(DirectoryInfo dir)
+        private bool IsNotModified(Request request, FileInfo file)
+        {
+            if (request.Header.Keys.Contains("if-modified-since"))
+            {
+                bool parsed = true;
+                DateTime date = DateTime.MinValue;
+                var dateString = request.Header["if-modified-since"];
+                try
+                {
+                    var day = int.Parse(dateString.Substring(5, 2));
+                    var month = Array.FindIndex(
+                        System.Globalization.DateTimeFormatInfo.InvariantInfo.AbbreviatedMonthNames
+                            .Select(m => m.ToLower())
+                            .ToArray(),
+                        m => m == dateString.Substring(8, 3)
+                        ) + 1;
+                    var year = int.Parse(dateString.Substring(12, 4));
+                    var hour = int.Parse(dateString.Substring(17, 2));
+                    var minute = int.Parse(dateString.Substring(20, 2));
+                    var second = int.Parse(dateString.Substring(23, 2));
+                    date = new DateTime(year, month, day, hour, minute, second);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    parsed = false;
+                }
+                catch (FormatException)
+                {
+                    parsed = false;
+                }
+
+                if (parsed && date >= file.LastWriteTimeUtc)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Data DirectoryOverview(Request request, DirectoryInfo dir)
         {
             Data data = new Data();
             data.DocumentType = Data.DocumentTypeType.EmbeddedHtml;
@@ -120,15 +168,24 @@ namespace StaticFilePlugin
             foreach (var subdir in dir.GetDirectories())
             {
                 sb.Append("<p><a href=\"");
+                sb.Append(request.Url.Path);
+                sb.Append("/");
                 sb.Append(WebUtility.HtmlEncode(subdir.Name));
-                sb.Append("/\">");
+                sb.Append("/");
+                if (request.Header.ContainsKey("download"))
+                    sb.Append("?download");
+                sb.Append("\">");
                 sb.Append(WebUtility.HtmlEncode(subdir.Name));
                 sb.Append("/</a></p>");
             }
             foreach (var file in dir.GetFiles())
             {
                 sb.Append("<p><a href=\"");
+                sb.Append(request.Url.Path);
+                sb.Append("/");
                 sb.Append(WebUtility.HtmlEncode(file.Name));
+                if (request.Header.ContainsKey("download"))
+                    sb.Append("?download");
                 sb.Append("\">");
                 sb.Append(WebUtility.HtmlEncode(file.Name));
                 sb.Append("</a></p>");

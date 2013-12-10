@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,8 @@ namespace Interface
 
         private void Parse(string url)
         {
+            url = WebUtility.UrlDecode(url);
+
             Parameters = new Dictionary<string, string>();
             var parts = url.Split('?');
             Path = parts[0];

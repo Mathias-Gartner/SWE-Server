@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Interface;
+using System.Globalization;
 
 namespace SWE_Server
 {
@@ -34,6 +35,11 @@ namespace SWE_Server
                     case 200:
                         writer.WriteLine("200 OK");
                         break;
+                    case 304:
+                        writer.WriteLine("304 Not Modified");
+                        if (_data.Content.Length > 0)
+                            _data.Content = new byte[0];
+                        break;
                     case 400:
                         writer.WriteLine("400 Bad Request");
                         if (_data.Content.Length < 1)
@@ -59,23 +65,30 @@ namespace SWE_Server
                 if (!String.IsNullOrEmpty(_data.Disposition))
                 {
                     writer.WriteLine(String.Format("Content-Disposition: attachment; filename=\"{0}\"", _data.Disposition));
- 
+
+                }
+
+
+                if (_data.LastModified != null)
+                {
+                    writer.WriteLine("Last-Modified: {0} GMT", _data.LastModified.Value.ToString("ddd, dd MMM yyyy hh:mm:ss", CultureInfo.InvariantCulture));
                 }
 
                 writer.WriteLine("Connection: close");
                 writer.WriteLine("Content-Type: {0}", _data.Contenttype);
-                
-                writer.WriteLine("Content-Length: {0}", _data.Content.Length);
+
+                var contentLength = _data.Content.Length + GetHeaderFooterContentLength(_data);
+                writer.WriteLine("Content-Length: {0}", contentLength);
                 writer.WriteLine();
                 writer.Flush();
 
                 if (_data.DocumentType == Data.DocumentTypeType.EmbeddedHtml)
-                    appendFile(stream, Properties.Settings.Default.HeaderFile);
+                    AppendFile(stream, Properties.Settings.Default.HeaderFile);
 
                 stream.Write(_data.Content, 0, _data.Content.Length);
 
                 if (_data.DocumentType == Data.DocumentTypeType.EmbeddedHtml)
-                    appendFile(stream, Properties.Settings.Default.FooterFile);
+                    AppendFile(stream, Properties.Settings.Default.FooterFile);
             }
             catch (IOException e)
             {
@@ -88,7 +101,14 @@ namespace SWE_Server
             }
         }
 
-        private void appendFile(Stream stream, string filename)
+        private long GetHeaderFooterContentLength(Data _data)
+        {
+            var header = new FileInfo(Properties.Settings.Default.HeaderFile);
+            var footer = new FileInfo(Properties.Settings.Default.FooterFile);
+            return (header.Exists ? header.Length : 0) + (footer.Exists ? footer.Length : 0);
+        }
+
+        private void AppendFile(Stream stream, string filename)
         {
             if (File.Exists(filename))
             {

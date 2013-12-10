@@ -74,11 +74,35 @@ namespace UnitTests
         public void DirUpAttack()
         {
             const string requestString = "GET /../ HTTP/1.1\n";
-            var request = new Request(new MemoryStream(Encoding.Default.GetBytes(requestString)));
+            var request = RequestFromString(requestString);
 
             var data = plugin.CreateProduct(request);
             Assert.AreEqual(403, data.StatusCode);
             Assert.AreEqual(0, data.Content.Length);
+        }
+
+        [TestMethod]
+        public void CachedFile()
+        {
+            System.IO.File.WriteAllText(dir + "\\cachefile", "cachefile");
+            const string requestString = "GET /cachefile HTTP/1.1\nIf-Modified-Since: Sun, 01 Jan 2090 12:13:14 GMT";
+            var request = RequestFromString(requestString);
+
+            var data = plugin.CreateProduct(request);
+            Assert.AreEqual(304, data.StatusCode);
+            Assert.AreEqual(0, data.Content.Length);
+        }
+
+        [TestMethod]
+        public void IllegalIfModifiedSinceHeader()
+        {
+            System.IO.File.WriteAllText(dir + "\\illegal-cache", "uncached file");
+            const string requestString = "GET /illegal-cache HTTP/1.1\nIf-Modified-Since: Yesterday";
+            var request = RequestFromString(requestString);
+
+            var data = plugin.CreateProduct(request);
+            Assert.AreEqual(200, data.StatusCode);
+            Assert.AreEqual("uncached file", Encoding.Default.GetString(data.Content));
         }
     }
 }

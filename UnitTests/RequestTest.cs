@@ -1,12 +1,24 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Interface;
+using System.IO;
 
 namespace UnitTests
 {
     [TestClass]
     public class RequestTest : BaseTest
     {
+        [TestMethod]
+        public void LeaveStreamOpen()
+        {
+            var stream = new MemoryStream();
+            Assert.IsTrue(stream.CanRead);
+            Assert.IsTrue(stream.CanWrite);
+            var request = new Request(stream);
+            Assert.IsTrue(stream.CanRead);
+            Assert.IsTrue(stream.CanWrite);
+        }
+
         [TestMethod]
         public void UrlWithParameters()
         {
@@ -54,6 +66,17 @@ namespace UnitTests
             Assert.AreEqual("value", request.PostData["param"]);
             Assert.AreEqual("/", request.Url.Path);
             Assert.AreEqual(Url.MethodType.POST, request.Url.Method);
+        }
+
+        [TestMethod]
+        public void IfModifiedSinceHeader()
+        {
+            const string requestString = "GET /cachefile HTTP/1.1\nIf-Modified-Since: Sun, 01 Jan 2090 GMT";
+            var request = RequestFromString(requestString);
+            Assert.AreEqual(1, request.Header.Count);
+            Assert.AreEqual("sun, 01 jan 2090 gmt", request.Header["if-modified-since"]);
+            Assert.AreEqual("/cachefile", request.Url.Path);
+            Assert.AreEqual(Url.MethodType.GET, request.Url.Method);
         }
     }
 }

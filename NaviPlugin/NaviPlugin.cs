@@ -86,7 +86,7 @@ namespace NaviPlugin
             else if (request.PostData != null)
                 return ValidationError();
 
-            var streetmapping = new StringBuilder(10000000);
+            /*var streetmapping = new StringBuilder(10000000);
             foreach (var key in streetMap.Keys)
             {
                 streetmapping.Append("<p>");
@@ -99,13 +99,13 @@ namespace NaviPlugin
                     streetmapping.Append("</li>");
                 }
                 streetmapping.Append("</ul>");
-            }
+            }*/
 
             const string generateLink = "<div><a href=\"/?action=Navi&generate=1\">Generieren</a></div>";
             const string form = "<div><form action=\"/?action=Navi\" method=\"POST\" accept-charset=\"UTF-8\"><input type=\"text\" name=\"street\" /><input type=\"submit\" value=\"Stadt suchen\" /></form></div>";
             Data data = new Data();
             if (Generated)
-                data.SetContent(streetmapping.ToString() + generateLink + form);
+                data.SetContent(/*streetmapping.ToString() +*/ generateLink + form);
             else
                 data.SetContent(generateLink);
 
@@ -115,7 +115,7 @@ namespace NaviPlugin
         private Data GeneratingMessage()
         {
             Data data = new Data();
-            data.SetContent("<p>Die Generierung der Kartendaten wird zur Zeit durchgef&uuml;hrt.</p>");
+            data.SetContent("<p>Die Generierung der Kartendaten wird zur Zeit durchgef&uuml;hrt.</p><a href=\"?action=Navi\">Nochmal probieren</a>");
             return data;
         }
 
@@ -130,12 +130,12 @@ namespace NaviPlugin
         {
             Data data = new Data();
             StringBuilder sb = new StringBuilder();
-            if (streetMap.ContainsKey(street))
+            if (streetMap.ContainsKey(street.ToLower()))
             {
                 sb.Append("<div><p>");
                 sb.Append(WebUtility.HtmlEncode(street));
                 sb.Append("</p><ul>");
-                foreach (var city in streetMap[street])
+                foreach (var city in streetMap[street.ToLower()])
                 {
                     sb.Append("<li>");
                     sb.Append(WebUtility.HtmlEncode(city));
@@ -149,6 +149,7 @@ namespace NaviPlugin
                 sb.Append(WebUtility.HtmlEncode(street));
                 sb.Append("</i> wurde nicht gefunden.</p></div>");
             }
+            sb.Append("<p><a href=\"javascript:history:back();\">Zur&uuml;ck</a></p>");
             data.SetContent(sb.ToString());
             return data;
         }
@@ -158,7 +159,7 @@ namespace NaviPlugin
             Thread thread = new Thread(new ThreadStart(DoGeneration));
             thread.Start();
             Data data = new Data();
-            data.SetContent("<p>Generierung gestartet.</p>");
+            data.SetContent("<p>Generierung gestartet.</p><a href=\"?action=Navi\">Weiter</a>");
             return data;
         }
 
@@ -169,7 +170,7 @@ namespace NaviPlugin
 
             streetMap.Clear();
 
-            using (var file = File.OpenRead(@"E:\FH\austria-latest.osm"))
+            using (var file = new FileStream(@"E:\FH\austria-latest.osm", FileMode.Open, FileAccess.Read, FileShare.Read, 512000))
             {
                 using (var reader = new XmlTextReader(file))
                 {
@@ -192,7 +193,7 @@ namespace NaviPlugin
                 }
             }
 
-            //sortieren
+            //sort
             var keys = streetMap.Keys.ToArray();
             foreach (var key in keys)
             {
@@ -224,6 +225,8 @@ namespace NaviPlugin
             }
             if (!String.IsNullOrEmpty(city) && !String.IsNullOrEmpty(street))
             {
+                street.ToLower();
+
                 if (!streetMap.ContainsKey(street))
                     streetMap[street] = new List<string>();
                 
