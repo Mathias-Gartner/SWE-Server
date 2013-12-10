@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Interface;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using SWE_Server.Properties;
 
 namespace SWE_Server
 {
@@ -24,10 +27,20 @@ namespace SWE_Server
 
         public void Run()
         {
-            NetworkStream stream = null;
+            Stream stream = null;
             try
             {
-                stream = new NetworkStream(socket);
+                if (Settings.Default.UseHttps)
+                {
+                    var sslStream = new SslStream(new NetworkStream(socket));
+                    var cert = new X509Certificate("cert.pfx", "sgn123");
+                    sslStream.AuthenticateAsServer(cert);
+                    stream = sslStream;
+                }
+                else
+                {
+                    stream = new NetworkStream(socket);
+                }
             }
             catch (IOException e)
             {

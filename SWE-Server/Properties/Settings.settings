@@ -11,5 +11,11 @@
     <Setting Name="FooterFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">index_bottom.html</Value>
     </Setting>
+    <Setting Name="Port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8080</Value>
+    </Setting>
+    <Setting Name="UseHttps" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

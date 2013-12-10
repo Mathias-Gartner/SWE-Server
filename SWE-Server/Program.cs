@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Interface;
+using SWE_Server.Properties;
 
 namespace SWE_Server
 {
@@ -13,7 +14,7 @@ namespace SWE_Server
     {
         static void Main(string[] args)
         {
-            const int port = 8080;
+            int port = Settings.Default.Port;
             PluginManager manager = PluginManager.getInstance();
             manager.LoadPlugins();
             
