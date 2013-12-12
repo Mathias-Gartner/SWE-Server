@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaviPlugin", "NaviPlugin\Na
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{EDB60A68-0345-429B-A202-08559B5B1D98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperaturPlugin", "TemperaturPlugin\TemperaturPlugin.csproj", "{CD0E859E-3A1F-4648-B377-C9FAC61093A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,7 @@ Global
 		{FDB3825D-E3A2-4BDD-B260-98C8D967D286}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB3825D-E3A2-4BDD-B260-98C8D967D286}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB3825D-E3A2-4BDD-B260-98C8D967D286}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08FEEFC9-1759-4846-B6C5-52528410F2E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,6 +40,12 @@ Global
 		{EDB60A68-0345-429B-A202-08559B5B1D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDB60A68-0345-429B-A202-08559B5B1D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDB60A68-0345-429B-A202-08559B5B1D98}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{CD0E859E-3A1F-4648-B377-C9FAC61093A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD0E859E-3A1F-4648-B377-C9FAC61093A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD0E859E-3A1F-4648-B377-C9FAC61093A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD0E859E-3A1F-4648-B377-C9FAC61093A1}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
