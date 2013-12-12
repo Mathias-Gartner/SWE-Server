@@ -29,7 +29,7 @@ namespace Interface
 
             try
             {
-                _reader = new StreamReader(stream);
+                _reader = new StreamReader(stream, Encoding.Default, false, 4092, true);
 
                 while (true)
                 {
@@ -54,10 +54,12 @@ namespace Interface
                     }
                     else
                     {
-                        var parts = line.Split(": ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        var parts = line.Split(':');
                         if (parts.Length > 1)
                         {
-                            header.Add(parts[0].ToLower(), parts[1].ToLower());
+                            header.Add(
+                                parts[0].ToLower().Trim(),
+                                line.Substring(parts[0].Length + 1).ToLower().Trim());
                         }
                     }
 
