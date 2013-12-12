@@ -17,5 +17,11 @@
     <Setting Name="UseHttps" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="Certificate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">cert.pfx</Value>
+    </Setting>
+    <Setting Name="PrivateKeyPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sgn123</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

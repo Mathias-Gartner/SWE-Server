@@ -33,7 +33,7 @@ namespace SWE_Server
                 if (Settings.Default.UseHttps)
                 {
                     var sslStream = new SslStream(new NetworkStream(socket));
-                    var cert = new X509Certificate("cert.pfx", "sgn123");
+                    var cert = new X509Certificate(Settings.Default.Certificate, Settings.Default.PrivateKeyPassword);
                     sslStream.AuthenticateAsServer(cert);
                     stream = sslStream;
                 }
@@ -57,7 +57,8 @@ namespace SWE_Server
             //Thread.Sleep(7500);       //zum testen der Multi-User-Fähigket
             response.send(stream);
 
-            stream.Close();
+            if (stream != null)
+                stream.Close();
             socket.Close();
         }
     }

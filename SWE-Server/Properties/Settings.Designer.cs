@@ -82,5 +82,29 @@ namespace SWE_Server.Properties {
                 this["UseHttps"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("cert.pfx")]
+        public string Certificate {
+            get {
+                return ((string)(this["Certificate"]));
+            }
+            set {
+                this["Certificate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sgn123")]
+        public string PrivateKeyPassword {
+            get {
+                return ((string)(this["PrivateKeyPassword"]));
+            }
+            set {
+                this["PrivateKeyPassword"] = value;
+            }
+        }
     }
 }
