@@ -13,7 +13,7 @@ namespace TemperaturPlugin
     {
         public string Name
         {
-            get { return "GetTemperature"; }
+            get { return "Temperatur"; }
         }
 
         public string Author
@@ -31,7 +31,7 @@ namespace TemperaturPlugin
             {
                 connection = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True");
                 connection.Open();
-                
+
                 ASCIIEncoding encoding = new ASCIIEncoding();
                 string buffer = null;
 
@@ -65,15 +65,27 @@ namespace TemperaturPlugin
                 if (suche_ja)
                 {
                     query = "SELECT Zeit, Messwert FROM Temperatur "
-                        + "WHERE Zeit = @datum0"
-                        + "OR Zeit = @datum8"
+                        + "WHERE Zeit = @datum0 "
+                        + "OR Zeit = @datum8 "
                         + "OR Zeit = @datum16";
-                    
+                    //WHERE Zeit = '20131212 00:00:00'
+
                     SqlCommand cmd = new SqlCommand(query, connection);
-                    cmd.Parameters.AddWithValue("@datum0", "'" + jahr + monat + tag + " 00:00:00'");
-                    cmd.Parameters.AddWithValue("@datum8", "'" + jahr + monat + tag + " 08:00:00'");
-                    cmd.Parameters.AddWithValue("@datum16", "'" + jahr + monat + tag + " 16:00:00'");
-                    reader = cmd.ExecuteReader();
+
+                    try
+                    {
+                        DateTime zeit = DateTime.Parse(jahr + "-" + monat + "-" + tag + " 00:00:00");
+                        cmd.Parameters.AddWithValue("@datum0", zeit);
+
+                        zeit = DateTime.Parse(jahr + "-" + monat + "-" + tag + " 08:00:00");
+                        cmd.Parameters.AddWithValue("@datum8", zeit);
+
+                        zeit = DateTime.Parse(jahr + "-" + monat + "-" + tag + " 16:00:00");
+                        cmd.Parameters.AddWithValue("@datum16", zeit);
+
+                        reader = cmd.ExecuteReader();
+                    }
+                    catch { }
 
                     if (reader == null)
                     {
