@@ -19,7 +19,9 @@ namespace StaticFilePlugin
         {
             Path = ConfigurationManager.AppSettings["DocumentRoot"];
             if (Path == null)
-                Path = "";
+                Path = ".";
+
+            Path = System.IO.Path.GetFullPath(Path);
 
             if (!Path.EndsWith("\\"))
                 Path += "\\";
@@ -55,14 +57,19 @@ namespace StaticFilePlugin
             Data data = new Data();
             data.DocumentType = Data.DocumentTypeType.StandaloneFile;
 
+            var requestPath = request.Url.Path.Replace("/", "\\");
+            if (requestPath.StartsWith("\\"))
+                requestPath = requestPath.Substring(1);
+
+            var path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Path, requestPath));
+            
             // dir up is not allowed, limit to DocumentRoot
-            if (request.Url.Path.Contains(".."))
+            if (path.Length < Path.Length || path.Substring(0, Path.Length) != Path)
             {
                 data.StatusCode = 403;
                 return data;
             }
 
-            var path = Path + request.Url.Path.Replace('/', '\\');
             var dir = new DirectoryInfo(path);
             var file = new FileInfo(path);
             if (file.Exists)
