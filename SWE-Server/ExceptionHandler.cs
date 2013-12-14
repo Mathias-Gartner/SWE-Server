@@ -20,7 +20,7 @@ namespace SWE_Server
             }
 
             if (e != null)
-                Console.Write(": {0}", e.Message);
+                Console.Write(": {0}: {1}", e.GetType().ToString(), e.Message);
 
             Console.WriteLine();
         }

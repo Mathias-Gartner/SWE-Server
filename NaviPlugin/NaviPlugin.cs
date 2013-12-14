@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,10 @@ namespace NaviPlugin
 {
     public class NaviPlugin : IPlugin
     {
-        object lockObject = new Object();
+        object generatingLockObject = new Object();
+        object progressLockObject = new Object();
         bool _generating = false;
+        float _progress = 0;
         Dictionary<string, ICollection<string>> streetMap = new Dictionary<string, ICollection<string>>();
 
         public string Name
@@ -42,7 +45,7 @@ namespace NaviPlugin
             get
             {
                 bool value;
-                lock (lockObject)
+                lock (generatingLockObject)
                 {
                     value = _generating;
                 }
@@ -52,7 +55,7 @@ namespace NaviPlugin
             {
                 if (value == false)
                 {
-                    lock (lockObject)
+                    lock (generatingLockObject)
                     {
                         _generating = value;
                     }
@@ -62,7 +65,7 @@ namespace NaviPlugin
 
         public bool SetGenerating()
         {
-            lock (lockObject)
+            lock (generatingLockObject)
             {
                 if (!_generating)
                 {
@@ -73,8 +76,29 @@ namespace NaviPlugin
             }
         }
 
+        public float Progress
+        {
+            get
+            {
+                lock (progressLockObject)
+                {
+                    return _progress;
+                }
+            }
+            set
+            {
+                lock (progressLockObject)
+                {
+                    _progress = value;
+                }
+            }
+        }
+
         public Data CreateProduct(Request request)
         {
+            if (request.Url.Parameters.ContainsKey("generationProgress"))
+                return GenerationProgress();
+            
             if (Generating)
                 return GeneratingMessage();
 
@@ -101,7 +125,7 @@ namespace NaviPlugin
                 streetmapping.Append("</ul>");
             }*/
 
-            const string generateLink = "<div><a href=\"/?action=Navi&generate=1\">Generieren</a></div>";
+            const string generateLink = "<div><p><a href=\"/?action=Navi&generate=1\">Generieren</a></p></div>";
             const string form = "<div><form action=\"/?action=Navi\" method=\"POST\" accept-charset=\"UTF-8\"><input type=\"text\" name=\"street\" /><input type=\"submit\" value=\"Stadt suchen\" /></form></div>";
             Data data = new Data();
             if (Generated)
@@ -115,7 +139,15 @@ namespace NaviPlugin
         private Data GeneratingMessage()
         {
             Data data = new Data();
-            data.SetContent("<p>Die Generierung der Kartendaten wird zur Zeit durchgef&uuml;hrt.</p><a href=\"?action=Navi\">Nochmal probieren</a>");
+            data.SetContent("<p>Die Generierung der Kartendaten wird zur Zeit durchgef&uuml;hrt.</p><!--<a href=\"?action=Navi\">Nochmal probieren</a>--><div id=\"progressBarDiv\"></div><script type=\"text/javascript\" src=\"/progessbar.js\"></script>");
+            return data;
+        }
+
+        private Data GenerationProgress()
+        {
+            Data data = new Data();
+            data.DocumentType = Data.DocumentTypeType.StandaloneFile;
+            data.SetContent("{\"progress\": " + Progress.ToString(System.Globalization.NumberFormatInfo.InvariantInfo) + "}");
             return data;
         }
 
@@ -168,9 +200,10 @@ namespace NaviPlugin
             if (Generating || !SetGenerating())
                 return;
 
+            Progress = 0;
             streetMap.Clear();
 
-            using (var file = new FileStream(@"E:\FH\austria-latest.osm", FileMode.Open, FileAccess.Read, FileShare.Read, 512000))
+            using (var file = new FileStream(ConfigurationManager.AppSettings["NaviFile"], FileMode.Open, FileAccess.Read, FileShare.Read, 512000))
             {
                 using (var reader = new XmlTextReader(file))
                 {
@@ -186,6 +219,8 @@ namespace NaviPlugin
                                     {
                                         ReadNode(osm.ReadSubtree());
                                     }
+
+                                    Progress = (float)file.Position / file.Length;
                                 }
                             }
                         }
@@ -225,7 +260,7 @@ namespace NaviPlugin
             }
             if (!String.IsNullOrEmpty(city) && !String.IsNullOrEmpty(street))
             {
-                street.ToLower();
+                street = street.ToLower();
 
                 if (!streetMap.ContainsKey(street))
                     streetMap[street] = new List<string>();
