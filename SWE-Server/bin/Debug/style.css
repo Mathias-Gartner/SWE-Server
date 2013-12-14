@@ -1,0 +1,90 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: lightgrey;
+	font-family: arial;
+}
+
+a {
+	color: #333;
+	transition: all linear 0.2s;
+}
+
+li a {
+    text-decoration: none;
+}
+
+a:hover {
+	color: black;
+}
+
+#content-wrapper {
+	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.7);
+	border: 1px solid grey;
+	min-height: 400px;
+	background: white;
+}
+
+#header {
+	height: 80px;
+	background: #3F3FAD;
+	border-bottom: 1px solid black;
+	color: white;
+	box-shadow: 0 0 5px 2px #000;
+	margin-bottom: 15px;
+}
+
+#navigation {
+	min-height: 50px;
+	background: grey;
+	font-size: 18px;
+	border-bottom: 1px solid grey;
+}
+
+#navigation ul {
+	padding: 12px 30px 12px 200px;
+	list-style-type: none;
+}
+
+#navigation li {
+	padding: 0 10px;
+	border-right: 1px solid lightgrey;
+	float: left;
+}
+
+#navigation li.last {
+	border: none;
+}
+
+#content {
+	min-height: 360px;
+	padding: 20px 40px;
+}
+
+#footer {
+	clear: both;
+	padding: 15px 30px 15px 30px;
+}
+
+.title {
+	line-height: 20px;
+	padding: 30px 10px 30px 250px;
+	text-shadow: 0 0 10px black;
+}
+
+.footbar {
+	text-align: center;
+	color: grey;
+}
+
+#progressBarDiv {
+    margin: 1em;
+    margin-left: 0;
+}
+
+#percentLabel {
+    margin-left: .5em;
+}
