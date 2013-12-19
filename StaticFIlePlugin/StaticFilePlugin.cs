@@ -197,6 +197,7 @@ namespace StaticFilePlugin
                 sb.Append(WebUtility.HtmlEncode(file.Name));
                 sb.Append("</a></p>");
             }
+            sb.Append("</div>");
             data.SetContent(sb.ToString());
             return data;
         }

@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace SWE_Server
 {
-    class Response
+    public class Response
     {
         private Data _data;
 
@@ -43,22 +43,22 @@ namespace SWE_Server
                     case 400:
                         writer.WriteLine("400 Bad Request");
                         if (_data.Content.Length < 1)
-                            _data.SetContent("<h1>Bad Request</h1>");
+                            _data.SetContent("<h1>400 Bad Request</h1>");
                         break;
-                    case 401:
+                    case 403:
                         writer.WriteLine("403 Forbidden");
                         if (_data.Content.Length < 1)
-                            _data.SetContent("<h1>Forbidden</h1>");
+                            _data.SetContent("<h1>403 Forbidden</h1>");
                         break;
                     case 404:
                         writer.WriteLine("404 Not Found");
                         if (_data.Content.Length < 1)
-                            _data.SetContent("<h1>Url not found</h1>");
+                            _data.SetContent("<h1>404 Url not found</h1>");
                         break;
                     default:
                         writer.WriteLine("500 Internal Server Error");
                         if (_data.Content.Length < 1)
-                            _data.SetContent("<h1>Internal Server Error</h1>");
+                            _data.SetContent("<h1>500 Internal Server Error</h1>");
                         break;
                 }
 

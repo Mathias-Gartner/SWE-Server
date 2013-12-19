@@ -48,6 +48,9 @@ namespace UnitTests
         public void Directory()
         {
             System.IO.Directory.CreateDirectory(dir + "\\testdir");
+            System.IO.File.WriteAllText(dir + "\\testdir\\testfile", "testcontent");
+            System.IO.Directory.CreateDirectory(dir + "\\testdir\\subdir");
+
             var request = RequestFromString("GET /testdir HTTP/1.1\n");
             var data = plugin.CreateProduct(request);
             Assert.AreEqual(200, data.StatusCode);
@@ -55,6 +58,9 @@ namespace UnitTests
             Assert.AreEqual(Data.DocumentTypeType.EmbeddedHtml, data.DocumentType);
             Assert.AreEqual("text/html", data.Contenttype);
             Assert.IsTrue(String.IsNullOrEmpty(data.Disposition));
+            var content = Encoding.Default.GetString(data.Content);
+            Assert.IsTrue(content.Contains("testfile"));
+            Assert.IsTrue(content.Contains("subdir"));
         }
 
         [TestMethod]
