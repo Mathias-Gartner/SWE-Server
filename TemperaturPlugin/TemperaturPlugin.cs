@@ -145,6 +145,7 @@ namespace TemperaturPlugin
 
                     DataTable datatable = new DataTable();
                     datatable.Load(reader);
+                    int gesamtZeilen = datatable.Rows.Count;
 
                     seite_ja = request.Url.Parameters.TryGetValue("page", out seite);
 
@@ -157,17 +158,21 @@ namespace TemperaturPlugin
                     {
                         buffer += datatable.Rows[i]["Zeit"].ToString() + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + datatable.Rows[i]["Messwert"].ToString() + "&degC<br />";
                         i++;
+
+                        if (i == gesamtZeilen)
+                            break;
                     }
 
                     string vorige_Seite = Convert.ToString(x - 1);
                     string naechste_Seite = Convert.ToString(x + 1);
 
                     if (x > 2)
-                        buffer += "<a href=/?action=Temperatur&page=" + vorige_Seite + ">Vorherige Seite</a>";
+                        buffer += "<a href=/?action=Temperatur&page=" + vorige_Seite + ">Vorherige Seite</a>&nbsp;&nbsp;&nbsp;";
                     if (x == 2)
-                        buffer += "<a href=/?action=Temperatur>Vorherige Seite</a>";
+                        buffer += "<a href=/?action=Temperatur>Vorherige Seite</a>&nbsp;&nbsp;&nbsp;";
 
-                    buffer += "&nbsp;&nbsp;&nbsp;<a href=/?action=Temperatur&page=" + naechste_Seite + ">N&auml;chste Seite</a>";
+                    if(i != gesamtZeilen)
+                        buffer += "<a href=/?action=Temperatur&page=" + naechste_Seite + ">N&auml;chste Seite</a>";
                 }
                 
                 byte[] Buffer = encoding.GetBytes(buffer);
