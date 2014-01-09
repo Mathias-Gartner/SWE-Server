@@ -47,12 +47,12 @@ namespace ServerzeitPlugin
             string buffer = "<div>Aktuelle Serverzeit:<br />" + time.Day.ToString() + "." + time.Month.ToString() + "." + time.Year.ToString() + "<br />" + time.Hour.ToString() + ":";
             
             if(time.Minute < 10)
-                buffer += "0" + time.Minute.ToString() + ":";
+                buffer += "0" + time.Minute.ToString() + ":";   //sieht statt 12:0:15 so aus: 12:00:15
             else
                 buffer += time.Minute.ToString() + ":";
             
             if(time.Second < 10)
-                buffer += "0" + time.Second.ToString() + "</div>";
+                buffer += "0" + time.Second.ToString() + "</div>";      //sieht statt 12:15:5 so aus: 12:15:05
             else
                 buffer += time.Second.ToString() + "</div>";
 

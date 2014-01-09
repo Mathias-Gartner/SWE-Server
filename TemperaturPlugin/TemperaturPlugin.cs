@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Interface;
 
@@ -21,10 +22,29 @@ namespace TemperaturPlugin
             get { return "Christoph Posch"; }
         }
 
+        public struct SystemTime
+        {
+            public int Year;
+            public int Month;
+            public int Day;
+            public int Hour;
+            public int Minute;
+            public int Second;
+            public int DayOfYear;
+        };
+
+        bool erstens = false;
+
         public Data CreateProduct(Request request)
         {
             SqlConnection connection = null;
             SqlDataReader reader = null;
+
+            if (erstens)
+            {
+                TemperaturMesser();
+                erstens = true;
+            }
 
             //using(connection = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True"))
             try
@@ -189,6 +209,87 @@ namespace TemperaturPlugin
 
                 if (reader != null)
                     reader.Close();
+            }
+        }
+
+        void TemperaturMesser()
+        {
+            Thread thread = new Thread(new ThreadStart(DoMessen));
+            thread.Start();
+        }
+
+        void DoMessen()
+        {
+            SqlConnection connection2 = null;
+            SqlDataReader reader2 = null;
+            SystemTime time = new SystemTime();
+            DateTime jetzt;
+            SqlCommand cmd;
+            string query2;
+            int d, x;
+            float wert;
+            
+            while (true)
+            {
+                jetzt = DateTime.Now;
+                
+                time.Hour = jetzt.Hour;
+
+                if (time.Hour == 0 || time.Hour == 8 || time.Hour == 16)
+                {
+                    time.Minute = jetzt.Minute;
+                    time.Second = jetzt.Second;
+                    if (time.Minute == 0)
+                        if (time.Second == 0)
+                        {
+                            time.Year = jetzt.Year;
+                            time.Month = jetzt.Month;
+                            time.Day = jetzt.Day;
+                            time.DayOfYear = jetzt.DayOfYear;
+
+                            try
+                            {
+                                connection2 = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True");
+                                connection2.Open();
+
+                                if (time.Year == 2012 || time.Year == 2016 || time.Year == 2020 || time.Year == 2024)
+                                    d = 1098;
+                                else
+                                    d = 1095;
+
+                                if (time.Hour == 0)
+                                    x = 3;
+                                else if (time.Hour == 8)
+                                    x = 2;
+                                else
+                                    x = 1;
+
+                                wert = (float)(-1 * Math.Cos((2 * Math.PI / d) * (time.DayOfYear * 3 - x)) * 20) + 10;
+
+                                if (time.Hour < 10)
+                                    query2 = "INSERT INTO Temperatur(Messwert, Zeit) VALUES(" + wert.ToString() + ", '" + time.Year.ToString() + time.Month + time.Day.ToString() + " 0" + time.Hour.ToString() + ":00:00')";
+                                else
+                                    query2 = "INSERT INTO Temperatur(Messwert, Zeit) VALUES(" + wert.ToString() + ", '" + time.Year.ToString() + time.Month.ToString() + time.Day.ToString() + " " + time.Hour.ToString() + ":00:00')";
+
+                                //Beispiel: query2 = "INSERT INTO Temperatur(Messwert, Zeit) VALUES(-10.000000, '20030101 00:00:00')";
+
+                                cmd = new SqlCommand(query2, connection2);
+                                reader2 = cmd.ExecuteReader();
+
+                            }
+
+                            finally
+                            {
+                                if (connection2 != null)
+                                    connection2.Close();
+
+                                if (reader2 != null)
+                                    reader2.Close();
+                            }
+                        }
+                }
+
+                Thread.Sleep(1000);
             }
         }
     }
