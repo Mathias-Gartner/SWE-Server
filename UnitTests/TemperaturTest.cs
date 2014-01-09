@@ -62,8 +62,8 @@ namespace UnitTests
         public void TemperatureSearchXml()
         {
             string bufferTest0 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Suchergebnis><Text>Dies ist ein XML-Format</Text></Suchergebnis>";
-            string bufferTest1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Suchergebnis><Text>Dies ist ein XML-Format</Text><Ergebnis><Datum>1.1.2003 00:00:00</Datum><Messwert>-10</Messwert></Ergebnis><Ergebnis><Datum>1.1.2003 08:00:00</Datum><Messwert>-9,999671</Messwert></Ergebnis><Ergebnis><Datum>1.1.2003 16:00:00</Datum><Messwert>9,998683</Messwert></Ergebnis></Suchergebnis>";
-            string bufferTest2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Suchergebnis><Text>Dies ist ein XML-Format</Text><Ergebnis><Datum>29.2.2004 00:00:00</Datum><Messwert>-0,588678</Messwert></Ergebnis><Ergebnis><Datum>29.2.2004 08:00:00</Datum><Messwert>-0,491413</Messwert></Ergebnis><Ergebnis><Datum>29.2.2004 16:00:00</Datum><Messwert>-0,393805</Messwert></Ergebnis></Suchergebnis>";
+            string bufferTest1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Suchergebnis><Text>Dies ist ein XML-Format</Text><Ergebnis><Datum>01.01.2003 00:00:00</Datum><Messwert>-10</Messwert></Ergebnis><Ergebnis><Datum>01.01.2003 08:00:00</Datum><Messwert>-9,999671</Messwert></Ergebnis><Ergebnis><Datum>01.01.2003 16:00:00</Datum><Messwert>-9,998683</Messwert></Ergebnis></Suchergebnis>";
+            string bufferTest2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Suchergebnis><Text>Dies ist ein XML-Format</Text><Ergebnis><Datum>29.02.2004 00:00:00</Datum><Messwert>-0,588678</Messwert></Ergebnis><Ergebnis><Datum>29.02.2004 08:00:00</Datum><Messwert>-0,491413</Messwert></Ergebnis><Ergebnis><Datum>29.02.2004 16:00:00</Datum><Messwert>-0,393805</Messwert></Ergebnis></Suchergebnis>";
 
             var request = RequestFromString("GET /?action=Temperatur&Suche_jahr=2003&Suche_monat=1&Suche_tag=1&Format=xml HTTP/1.1");
             var data = plugin.CreateProduct(request);
