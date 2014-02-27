@@ -49,7 +49,7 @@ namespace TemperaturPlugin
             //using(connection = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True"))
             try
             {
-                connection = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True");
+                connection = new SqlConnection("Data Source=.;Initial Catalog=TemperaturMessung;Integrated Security=True");
                 connection.Open();
 
                 Data Ausgabe = new Data();
