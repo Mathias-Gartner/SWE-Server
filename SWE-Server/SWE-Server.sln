@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWE-Server", "SWE-Server\SW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Interface.csproj", "{E4B27901-3208-4E6A-8677-6A7ACD67FDFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticFilePlugin", "StaticFIlePlugin\StaticFilePlugin.csproj", "{FDB3825D-E3A2-4BDD-B260-98C8D967D286}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticFilePlugin", "StaticFilePlugin\StaticFilePlugin.csproj", "{FDB3825D-E3A2-4BDD-B260-98C8D967D286}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaviPlugin", "NaviPlugin\NaviPlugin.csproj", "{08FEEFC9-1759-4846-B6C5-52528410F2E5}"
 EndProject
