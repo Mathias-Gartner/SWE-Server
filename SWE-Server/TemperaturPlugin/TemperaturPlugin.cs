@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Interface;
+using System.Configuration;
 
 namespace TemperaturPlugin
 {
@@ -46,10 +47,9 @@ namespace TemperaturPlugin
                 erstens = true;
             }
 
-            //using(connection = new SqlConnection("Data Source=CHRISTOPH-VAIO;Initial Catalog=TemperaturMessung;Integrated Security=True"))
             try
             {
-                connection = new SqlConnection("Data Source=.;Initial Catalog=TemperaturMessung;Integrated Security=True");
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["TemperatureConnectionString"].ConnectionString);
                 connection.Open();
 
                 Data Ausgabe = new Data();

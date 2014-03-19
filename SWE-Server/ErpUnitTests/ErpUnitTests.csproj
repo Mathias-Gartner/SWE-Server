@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EDB60A68-0345-429B-A202-08559B5B1D98}</ProjectGuid>
+    <ProjectGuid>{5E139A71-7393-4B7F-AAC1-D8A9523E39B1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTests</RootNamespace>
-    <AssemblyName>UnitTests</AssemblyName>
+    <RootNamespace>ErpUnitTests</RootNamespace>
+    <AssemblyName>ErpUnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,40 +50,28 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseTest.cs" />
-    <Compile Include="PluginManagerTest.cs" />
-    <Compile Include="ResponseTest.cs" />
-    <Compile Include="StaticFileTest.cs" />
+    <Compile Include="ErpBaseTest.cs" />
+    <Compile Include="Dal\DalTests.cs" />
+    <Compile Include="Dal\BusinessObjectDalFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestTest.cs" />
-    <Compile Include="NaviTest.cs" />
-    <Compile Include="TemperaturTest.cs" />
+    <Compile Include="Dal\FakeDalTests.cs" />
+    <Compile Include="FacadeTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ErpPlugin\ErpPlugin.csproj">
+      <Project>{18ade939-1e0b-4ae3-ac1c-2f256d419123}</Project>
+      <Name>ErpPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interface\Interface.csproj">
       <Project>{e4b27901-3208-4e6a-8677-6a7acd67fdfd}</Project>
       <Name>Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NaviPlugin\NaviPlugin.csproj">
-      <Project>{08feefc9-1759-4846-b6c5-52528410f2e5}</Project>
-      <Name>NaviPlugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StaticFIlePlugin\StaticFilePlugin.csproj">
-      <Project>{fdb3825d-e3a2-4bdd-b260-98c8d967d286}</Project>
-      <Name>StaticFilePlugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SWE-Server\SWE-Server.csproj">
-      <Project>{ccb7dde0-a425-46e1-89b4-a3376a02c5c6}</Project>
-      <Name>SWE-Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TemperaturPlugin\TemperaturPlugin.csproj">
-      <Project>{cd0e859e-3a1f-4648-b377-c9fac61093a1}</Project>
-      <Name>TemperaturPlugin</Name>
+    <ProjectReference Include="..\UnitTests\UnitTests.csproj">
+      <Project>{edb60a68-0345-429b-a202-08559b5b1d98}</Project>
+      <Name>UnitTests</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

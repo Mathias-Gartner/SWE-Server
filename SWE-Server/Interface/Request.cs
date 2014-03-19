@@ -18,6 +18,7 @@ namespace Interface
         public Url Url { get; private set; }
         public IReadOnlyDictionary<string, string> Header { get; private set; }
         public IReadOnlyDictionary<string, string> PostData { get; private set; }
+        public char[] RawPostData { get; private set; }
 
         public Request(Stream stream)
         {
@@ -96,19 +97,21 @@ namespace Interface
             if (!Header.ContainsKey("content-length") || !Header.ContainsKey("content-type"))
                 return;
 
+            int length;
+            if (!int.TryParse(Header["content-length"], out length))
+                return; 
+            
+            char[] text = new char[length];
+            if (_reader.ReadBlock(text, 0, length) != length)
+                return;
+
+            RawPostData = text;
+            
             switch (Header["content-type"])
             {
                 case "multipart/form-data":
                     throw new NotSupportedException();
                 case "application/x-www-form-urlencoded":
-                    int length;
-                    if (!int.TryParse(Header["content-length"], out length))
-                        return;
-
-                    char[] text = new char[length];
-                    if (_reader.ReadBlock(text, 0, length) != length)
-                        return;
-
                     string line = new string(text);
                     if (String.IsNullOrEmpty(line))
                         break;
