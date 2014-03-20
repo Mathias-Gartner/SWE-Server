@@ -10,14 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ERP_Client
 {
-    public partial class Start : Window
+    /// <summary>
+    /// Interaktionslogik für Kontakte.xaml
+    /// </summary>
+    public partial class Kontakte : Window
     {
-        public Start()
+        public Kontakte()
         {
             InitializeComponent();
         }

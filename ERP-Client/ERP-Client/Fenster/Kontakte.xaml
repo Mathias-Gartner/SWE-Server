@@ -1,0 +1,24 @@
+﻿<Window x:Class="ERP_Client.Kontakte"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Micro ERP - Kontakte"
+        Height="600"
+        Width="800">
+    
+    <TabControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="570" Width="792">
+        <TabItem Header="Hinzufügen">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem Header="Suche">
+            <Grid Background="#FFE5E5E5">
+                <TextBlock HorizontalAlignment="Left" Margin="20,22,0,0" TextWrapping="Wrap" Text="Vorname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="90,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" Width="580"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="20,52,0,0" TextWrapping="Wrap" Text="Nachname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="90,50,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" Width="580"/>
+
+                <Button Content="Suche" HorizontalAlignment="Right" Margin="0,20,20,0" VerticalAlignment="Top" Height="50" Width="75"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
