@@ -11,17 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ERP_Client.ViewModels.FensterModels;
 
-namespace ERP_Client
+namespace ERP_Client.Fenster
 {
-    /// <summary>
-    /// Interaktionslogik für Kontakte.xaml
-    /// </summary>
     public partial class Kontakte : Window
     {
         public Kontakte()
         {
             InitializeComponent();
+
+            this.DataContext = new KontaktViewModel();
         }
     }
 }
