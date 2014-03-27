@@ -8,5 +8,6 @@ namespace ERP_Client.ViewModels.FensterModels
 {
     class KontaktViewModel
     {
+        
     }
 }

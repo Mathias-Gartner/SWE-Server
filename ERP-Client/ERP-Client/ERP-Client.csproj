@@ -53,6 +53,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Address.cs" />
+    <Compile Include="Contact.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Fenster\Kontakte.xaml">
