@@ -8,6 +8,7 @@ namespace ERP_Client
 {
     public class Address
     {
+        public string State { get; set; }
         public string Name { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }

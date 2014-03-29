@@ -132,7 +132,9 @@ namespace ErpPlugin.Data.Database
 
         protected SqlConnection GetConnection()
         {
-            return new SqlConnection(ConfigurationManager.ConnectionStrings["ErpConnectionString"].ConnectionString);
+            var con = new SqlConnection(ConfigurationManager.ConnectionStrings["ErpConnectionString"].ConnectionString);
+            con.Open();
+            return con;
         }
 
         public static IEnumerable<SqlParameter> ExtractParameters(Dictionary<string, object> arguments)
@@ -142,7 +144,8 @@ namespace ErpPlugin.Data.Database
 
         public static void AppendWhereClause(StringBuilder sb, Dictionary<string, object> arguments)
         {
-            sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key=>String.Format("{0}=@{0}", key))));
+            if (arguments.Keys.Count > 0)
+                sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key=>String.Format("{0}=@{0}", key))));
         }
 
         public static StringBuilder PrepareSelect(IBusinessObjectDal dal)

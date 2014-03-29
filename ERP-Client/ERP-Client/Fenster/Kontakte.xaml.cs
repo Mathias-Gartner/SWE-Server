@@ -16,8 +16,15 @@ namespace ERP_Client.Fenster
 
         private void KontaktSuche(object sender, RoutedEventArgs e)
         {
+            //TODO: Use CommandViewModel
+
+            Contact c = new Contact();
+            c.State = "SearchObject";
+            c.Firstname = ((KontaktViewModel)DataContext).Firstname;
+            c.Lastname = ((KontaktViewModel)DataContext).Lastname;
+
             Proxy p = new Proxy();
-            p.KontaktSuchen();
+            p.KontaktSuchen(c);
         }
     }
 }

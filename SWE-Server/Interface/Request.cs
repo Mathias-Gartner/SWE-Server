@@ -30,7 +30,7 @@ namespace Interface
 
             try
             {
-                _reader = new StreamReader(stream, Encoding.Default, false, 4092, true);
+                _reader = new StreamReader(stream, Encoding.UTF8, false, 4092, true);
 
                 while (true)
                 {
@@ -58,9 +58,9 @@ namespace Interface
                         var parts = line.Split(':');
                         if (parts.Length > 1)
                         {
-                            header.Add(
-                                parts[0].ToLower().Trim(),
-                                line.Substring(parts[0].Length + 1).ToLower().Trim());
+                            var key = parts[0].ToLower().Trim();
+                            var value = line.Substring(parts[0].Length + 1).ToLower().Trim();
+                            header.Add(key, value);
                         }
                     }
 
@@ -69,6 +69,18 @@ namespace Interface
 
                 Header = new ReadOnlyDictionary<string, string>(header);
 
+                
+                if (Header.ContainsKey("expect") && Header["expect"] == "100-continue")
+                {
+                    _reader.Close();
+                    var writer = new StreamWriter(stream, Encoding.Default, 26, true);
+                    writer.WriteLine("HTTP/1.1 100 Continue");
+                    writer.WriteLine();
+                    writer.Flush();
+                    writer.Close();
+                    _reader = new StreamReader(stream, Encoding.UTF8, false, 4092, true);
+                }
+
                 if (Url != null && Url.Method == Url.MethodType.POST)
                 {
                     ProcessPostData();
@@ -76,7 +88,7 @@ namespace Interface
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error receiving request: {0}", e.Message);
+                Console.WriteLine("Error receiving request: {0}\n{1}", e.Message, e.StackTrace);
             }
             catch (NotSupportedException)
             {
@@ -94,7 +106,7 @@ namespace Interface
 
         private void ProcessPostData()
         {
-            if (!Header.ContainsKey("content-length") || !Header.ContainsKey("content-type"))
+            if (!Header.ContainsKey("content-length"))
                 return;
 
             int length;
@@ -102,11 +114,21 @@ namespace Interface
                 return; 
             
             char[] text = new char[length];
-            if (_reader.ReadBlock(text, 0, length) != length)
-                return;
+            var read = 0;
+            while (read < length)
+            {
+                read += _reader.ReadBlock(text, read, length - read);
+                //Console.WriteLine("post: " + new string(text));
+            }
 
             RawPostData = text;
             
+            if (!Header.ContainsKey("content-type"))
+            {
+                Console.WriteLine("Content-Type header is missing. Postdata is only available in RawPostData");
+                return;
+            }
+
             switch (Header["content-type"])
             {
                 case "multipart/form-data":
@@ -130,7 +152,8 @@ namespace Interface
                     PostData = new ReadOnlyDictionary<string, string>(dictionary);
                     break;
                 default:
-                    throw new NotSupportedException();
+                    Console.WriteLine("Unknown Content-Type. Postdata is only available in RawPostData");
+                    break;
             }
         }
     }
