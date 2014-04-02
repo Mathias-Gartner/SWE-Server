@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterScreen"
         Height="600"
         Width="800">
-    
+
     <TabControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="570" Width="792">
         <TabItem Header="Hinzufügen">
             <Grid Background="#FFE5E5E5"/>
@@ -19,6 +19,8 @@
                 <TextBox HorizontalAlignment="Left"  Margin="90,50,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" Width="580"/>
 
                 <Button Content="Suche" HorizontalAlignment="Right" Margin="0,20,20,0" VerticalAlignment="Top" Height="50" Width="75" Click="KontaktSuche"/>
+
+                <TextBlock Name="Suchergebnis" Margin="20,100,0,0" TextWrapping="Wrap" Text="Egebnis" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="428" VerticalAlignment="Top"/>
             </Grid>
         </TabItem>
     </TabControl>

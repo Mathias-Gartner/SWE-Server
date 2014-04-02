@@ -17,15 +17,17 @@ namespace ERP_Client
         public List<Contact> KontaktSuchen()
         {
             WebClient client = new WebClient();
-            //Uri baseUri = new Uri("http://localhost:8080");
-            Uri baseUri = new Uri("http://10.128.241.99:8080");
+            Uri baseUri = new Uri("http://localhost:8080");
+            //Uri baseUri = new Uri("http://10.128.241.99:8080");
             List<Contact> liste = new List<Contact>();
 
-            string result = client.DownloadString(new Uri(baseUri, "?action=Erp&req=search"));
+            //hier noch "in XML"-Konverter-Aufruf
 
+            string result = client.DownloadString(new Uri(baseUri, "?action=Erp&req=search"));
+            
             liste = LoadFromXMLString(result);
 
-            return liste;     //Noch schreiben XML to String Converter
+            return liste;
         }
 
         public static List<Contact> LoadFromXMLString(string xmlText)
