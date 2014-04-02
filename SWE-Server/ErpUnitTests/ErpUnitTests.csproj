@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Dal\ContactDalTests.cs" />
     <Compile Include="ErpBaseTest.cs" />
     <Compile Include="Dal\DalTests.cs" />
     <Compile Include="Dal\BusinessObjectDalFactoryTests.cs" />

@@ -23,12 +23,19 @@ namespace ERP_Client.Fenster
             int anzahl = 0;
             string text;
                         
-            liste = proxy.KontaktSuchen();
+            //TODO: Use CommandViewModel
+
+            Contact contact = new Contact();
+            contact.State = "SearchObject";
+            contact.Firstname = ((KontaktViewModel)DataContext).Firstname;
+            contact.Lastname = ((KontaktViewModel)DataContext).Lastname;
+
+            proxy.KontaktSuchen(contact);
 
             text = "Suchergebnis:";
 
             anzahl = liste.Count;
-                        
+
             for (int i = 0; i < anzahl; i++)
             {
                 kontakt = liste[i];
@@ -42,7 +49,6 @@ namespace ERP_Client.Fenster
             }
 
             Suchergebnis.Text = text;
-            
         }
     }
 }

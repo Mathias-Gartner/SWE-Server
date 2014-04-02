@@ -35,7 +35,7 @@ namespace ErpPlugin.Data.Database
                 arguments.Add("email", instance.Email);
             if (!String.IsNullOrEmpty(instance.Name))
                 arguments.Add("name", instance.Name);
-            if (!String.IsNullOrEmpty("uid"))
+            if (!String.IsNullOrEmpty(instance.Uid))
                 arguments.Add("uid", instance.Uid);
             if (!String.IsNullOrEmpty(instance.Prefix))
                 arguments.Add("prefix", instance.Prefix);
@@ -51,15 +51,26 @@ namespace ErpPlugin.Data.Database
             while (reader.Read())
             {
                 var contact = new Contact();
+                contact.State = BusinessObject.BusinessObjectState.Unmodified;
+
                 contact.ID = reader.GetInt32(0);
-                contact.Lastname = reader.GetString(1);
-                contact.Firstname = reader.GetString(2);
-                contact.DateOfBirth = reader.GetDateTime(3);
-                contact.Email = reader.GetString(4);
-                contact.Name = reader.GetString(5);
-                contact.Uid = reader.GetString(6);
-                contact.Prefix = reader.GetString(7);
-                contact.Suffix = reader.GetString(8);
+                if (!reader.IsDBNull(1))
+                    contact.Lastname = reader.GetString(1);
+                if (!reader.IsDBNull(2))
+                    contact.Firstname = reader.GetString(2);
+                if (!reader.IsDBNull(3))
+                    contact.DateOfBirth = reader.GetDateTime(3);
+                if (!reader.IsDBNull(4))
+                    contact.Email = reader.GetString(4);
+                if (!reader.IsDBNull(5))
+                    contact.Name = reader.GetString(5);
+                if (!reader.IsDBNull(6))
+                    contact.Uid = reader.GetString(6);
+                if (!reader.IsDBNull(7))
+                    contact.Prefix = reader.GetString(7);
+                if (!reader.IsDBNull(8))
+                    contact.Suffix = reader.GetString(8);
+
                 contacts.Add(contact);
             }
             return contacts;

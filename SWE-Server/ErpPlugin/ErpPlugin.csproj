@@ -58,6 +58,7 @@
     <Compile Include="Data\ObjectNotFoundException.cs" />
     <Compile Include="ErpPlugin.cs" />
     <Compile Include="IBusinessObject.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

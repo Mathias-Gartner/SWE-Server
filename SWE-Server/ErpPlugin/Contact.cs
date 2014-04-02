@@ -25,7 +25,7 @@ namespace ErpPlugin
 
         public string Suffix { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string Email { get; set; }
 
@@ -42,7 +42,14 @@ namespace ErpPlugin
             if (State != BusinessObjectState.SearchObject)
                 throw new InvalidOperationException("Only SearchObject can be used for searching");
 
-            return CurrentDalFactory.Instance.CreateDal().SearchContacts(this);
+            try
+            {
+                return CurrentDalFactory.Instance.CreateDal().SearchContacts(this);
+            }
+            catch (ObjectNotFoundException)
+            {
+                return new List<Contact>();
+            }
         }
 
         public static Contact CreateSearchObject()
