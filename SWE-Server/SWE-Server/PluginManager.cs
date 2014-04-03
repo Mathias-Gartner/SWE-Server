@@ -33,7 +33,7 @@ namespace SWE_Server
         {
             try
             {
-                foreach (string dateiname in System.IO.Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + Properties.Settings.Default.PluginPath, "*.dll", SearchOption.AllDirectories))
+				foreach (string dateiname in System.IO.Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + System.IO.Path.DirectorySeparatorChar + Properties.Settings.Default.PluginPath, "*.dll", SearchOption.AllDirectories))
                 {
                     if (dateiname != null)
                     {

@@ -25,7 +25,7 @@ namespace SWE_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\Plugins")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Plugins")]
         public string PluginPath {
             get {
                 return ((string)(this["PluginPath"]));
@@ -73,7 +73,7 @@ namespace SWE_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+		[global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool UseHttps {
             get {
                 return ((bool)(this["UseHttps"]));

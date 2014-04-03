@@ -23,8 +23,8 @@ namespace StaticFilePlugin
 
             Path = System.IO.Path.GetFullPath(Path);
 
-            if (!Path.EndsWith("\\"))
-                Path += "\\";
+			if (!Path.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
+				Path += System.IO.Path.DirectorySeparatorChar;
 
             var dictionary = new Dictionary<string, string>();
             dictionary.Add(".css", "text/css");
@@ -57,8 +57,11 @@ namespace StaticFilePlugin
             Data data = new Data();
             data.DocumentType = Data.DocumentTypeType.StandaloneFile;
 
-            var requestPath = request.Url.Path.Replace("/", "\\");
-            if (requestPath.StartsWith("\\"))
+			var requestPath = request.Url.Path;
+			if (System.IO.Path.DirectorySeparatorChar != '/')
+				requestPath = requestPath.Replace("/", System.IO.Path.DirectorySeparatorChar.ToString());
+
+			if (requestPath.StartsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
                 requestPath = requestPath.Substring(1);
 
             var path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Path, requestPath));
