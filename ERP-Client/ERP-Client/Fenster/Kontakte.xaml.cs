@@ -18,6 +18,7 @@ namespace ERP_Client.Fenster
         private void KontaktSuche(object sender, RoutedEventArgs e)
         {
             Proxy proxy = new Proxy();
+            Contact contact = new Contact();
             Contact kontakt = new Contact();
             List<Contact> liste = new List<Contact>();
             int anzahl = 0;
@@ -25,28 +26,32 @@ namespace ERP_Client.Fenster
                         
             //TODO: Use CommandViewModel
 
-            Contact contact = new Contact();
             contact.State = "SearchObject";
             contact.Firstname = ((KontaktViewModel)DataContext).Firstname;
             contact.Lastname = ((KontaktViewModel)DataContext).Lastname;
 
-            proxy.KontaktSuchen(contact);
+            liste = proxy.KontaktSuchen(contact);
 
             text = "Suchergebnis:";
 
             anzahl = liste.Count;
 
-            for (int i = 0; i < anzahl; i++)
+            if (anzahl > 0)
             {
-                kontakt = liste[i];
+                for (int i = 0; i < anzahl; i++)
+                {
+                    kontakt = liste[i];
 
-                if (kontakt.Name != null || kontakt.Uid != null)
-                    text += "\n" + kontakt.Name + " " + kontakt.Uid + " ";
-                if (kontakt.Firstname != null || kontakt.Lastname != null)
-                    text += "\n" + kontakt.Firstname + " " + kontakt.Lastname + " ";
+                    if (kontakt.Name != null || kontakt.Uid != null)
+                        text += "\n" + kontakt.Name + " " + kontakt.Uid + " ";
+                    if (kontakt.Firstname != null || kontakt.Lastname != null)
+                        text += "\n" + kontakt.Firstname + " " + kontakt.Lastname + " ";
 
-                text += kontakt.Address.Street + " " + kontakt.Address.Number + " " + kontakt.Address.PostalCode + " " + kontakt.Address.City;
+                    //text += kontakt.Address.Street + " " + kontakt.Address.Number + " " + kontakt.Address.PostalCode + " " + kontakt.Address.City;
+                }
             }
+            else
+                text += "\nKeine Kontakte gefunden.";
 
             Suchergebnis.Text = text;
         }

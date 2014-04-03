@@ -21,10 +21,8 @@ namespace ERP_Client
             WebClient client = new WebClient();
             Uri baseUri = new Uri("http://localhost:8080");
             //Uri baseUri = new Uri("http://10.128.241.99:8080");
-            List<Contact> liste = new List<Contact>();
+            List<Contact> liste = new List<Contact>();            
 
-            //hier noch "in XML"-Konverter-Aufruf
-            
             string result;
             
             try
