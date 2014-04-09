@@ -55,6 +55,8 @@
     </ApplicationDefinition>
     <Compile Include="Address.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Controls\CommandButton.cs" />
+    <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Fenster\Kontakte.xaml">
