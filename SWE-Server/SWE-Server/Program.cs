@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interface;
 using SWE_Server.Properties;
+using log4net;
 
 namespace SWE_Server
 {
@@ -14,6 +15,7 @@ namespace SWE_Server
     {
         static void Main(string[] args)
         {
+            var logger = LogManager.GetLogger(typeof(Program));
             int port = Settings.Default.Port;
             PluginManager manager = PluginManager.getInstance();
             manager.LoadPlugins();
@@ -27,16 +29,16 @@ namespace SWE_Server
             }
             catch (SocketException e)
             {
-                Console.WriteLine("FATAL: Error starting server: {0}", e.Message);
+                logger.Fatal("Error starting server", e);
                 Environment.Exit(-1);
             }
 
-            Console.WriteLine("Server started on port {0}", port);
+            logger.InfoFormat("Server started on port {0}", port);
 
             while (true)
             {
                 Socket socket = listener.AcceptSocket();     //Wartet
-                Console.WriteLine("Client connected from {0}", socket.RemoteEndPoint.ToString());
+                logger.InfoFormat("Client connected from {0}", socket.RemoteEndPoint.ToString());
                 MyThread thread = new MyThread(socket);
             }
         }

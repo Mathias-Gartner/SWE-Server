@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -10,10 +11,12 @@ namespace ErpPlugin.Data.Database
 {
     public class Dal : IDal
     {
+        ILog logger;
         IBusinessObjectDalFactory _factory;
 
         public Dal(IBusinessObjectDalFactory dalFactory)
         {
+            logger = LogManager.GetLogger(GetType());
             _factory = dalFactory;
         }
 
@@ -117,6 +120,7 @@ namespace ErpPlugin.Data.Database
 
         protected SqlCommand CreateQuery(string queryString, IEnumerable<SqlParameter> parameters)
         {
+            logger.DebugFormat("Query created: {0}", queryString);
             var query = new SqlCommand(queryString, GetConnection());
             if (parameters != null)
                 query.Parameters.AddRange(parameters.ToArray());

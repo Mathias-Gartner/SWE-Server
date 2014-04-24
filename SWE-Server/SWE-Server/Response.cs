@@ -7,16 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Interface;
 using System.Globalization;
+using log4net;
 
 namespace SWE_Server
 {
     public class Response
     {
         private Data _data;
+        private ILog logger;
 
         public Response(Data data)
         {
             _data = data;
+            logger = LogManager.GetLogger(GetType());
         }
 
         public void send(Stream stream)
@@ -97,7 +100,7 @@ namespace SWE_Server
             }
             catch (IOException e)
             {
-                ExceptionHandler.ErrorMsg(3, e);
+                logger.Error("Cannot send response", e);
             }
             finally
             {

@@ -10,16 +10,20 @@ using Interface;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using SWE_Server.Properties;
+using log4net;
 
 namespace SWE_Server
 {
     class MyThread
     {       
         private Socket socket;
+        private ILog logger;
 
         public MyThread(Socket _socket)
         {
             socket = _socket;
+            logger = LogManager.GetLogger(GetType());
+            logger.DebugFormat("New Thread for connection from {0} started", _socket.RemoteEndPoint.ToString());
 
             Thread thread = new Thread(new ThreadStart(Run));
             thread.Start();
@@ -44,7 +48,7 @@ namespace SWE_Server
             }
             catch (IOException e)
             {
-                ExceptionHandler.ErrorMsg(5, e);
+                logger.Error("Cannot create NetworkStream", e);
                 return;
             }
 

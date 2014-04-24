@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Interface;
+using log4net;
 
 namespace SWE_Server
 {
@@ -13,10 +14,12 @@ namespace SWE_Server
     {
         private List<IPlugin> plugins = null;
         private static volatile PluginManager Instance;
+        private ILog logger;
 
         private PluginManager()
         {
             plugins = new List<IPlugin>();
+            logger = LogManager.GetLogger(GetType());
         }
 
         public static PluginManager getInstance()
@@ -51,8 +54,8 @@ namespace SWE_Server
                 }
             }
 
-            catch (DirectoryNotFoundException) { ExceptionHandler.ErrorMsg(1); }
-            catch (FileNotFoundException) { ExceptionHandler.ErrorMsg(2); }
+            catch (DirectoryNotFoundException e) { logger.Error("Plugin directory not found", e); }
+            catch (FileNotFoundException e) { logger.Error("Plugin cannot be loaded", e); }
         }
 
         public List<IPlugin> PluginList
@@ -86,7 +89,7 @@ namespace SWE_Server
             {
                 data = new Data();
                 data.StatusCode = 500;
-                ExceptionHandler.ErrorMsg(4, e);
+                logger.Error("Plugin failed", e);
             }
             return data;
         }

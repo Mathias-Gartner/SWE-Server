@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -14,6 +15,7 @@ namespace Interface
     {
         private Stream _stream;
         private StreamReader _reader;
+        private ILog logger;
 
         public Url Url { get; private set; }
         public IReadOnlyDictionary<string, string> Header { get; private set; }
@@ -22,6 +24,7 @@ namespace Interface
 
         public Request(Stream stream)
         {
+            logger = LogManager.GetLogger(GetType());
             IDictionary<string, string> header = new Dictionary<string, string>();
             _stream = stream;
 
@@ -41,7 +44,7 @@ namespace Interface
                     }
                     catch (IOException e)
                     {
-                        Console.WriteLine("Error while reading request: {0}", e.Message);
+                        logger.Error("Cannot read request from client", e);
                     }
 
                     if (string.IsNullOrEmpty(line))
@@ -64,7 +67,7 @@ namespace Interface
                         }
                     }
 
-                    Console.WriteLine(line);
+                    logger.DebugFormat("Server received: {0}", line);
                 }
 
                 Header = new ReadOnlyDictionary<string, string>(header);
@@ -88,14 +91,14 @@ namespace Interface
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error receiving request: {0}\n{1}", e.Message, e.StackTrace);
+                logger.Error("Cannot receive request from client", e);
             }
             catch (NotSupportedException)
             {
                 if (Url != null && Url.Method == Url.MethodType.POST)
-                    Console.WriteLine("Content-Type not supported");
+                    logger.Warn("Content-Type not supported");
                 else
-                    Console.WriteLine("Request not supported");
+                    logger.Warn("Request not supported");
             }
             finally
             {
@@ -118,14 +121,13 @@ namespace Interface
             while (read < length)
             {
                 read += _reader.ReadBlock(text, read, length - read);
-                //Console.WriteLine("post: " + new string(text));
             }
 
             RawPostData = text;
             
             if (!Header.ContainsKey("content-type"))
             {
-                Console.WriteLine("Content-Type header is missing. Postdata is only available in RawPostData");
+                logger.Info("Content-Type header is missing. Postdata is only available in RawPostData");
                 return;
             }
 
@@ -152,7 +154,7 @@ namespace Interface
                     PostData = new ReadOnlyDictionary<string, string>(dictionary);
                     break;
                 default:
-                    Console.WriteLine("Unknown Content-Type. Postdata is only available in RawPostData");
+                    logger.Warn("Unknown Content-Type. Postdata is only available in RawPostData");
                     break;
             }
         }
