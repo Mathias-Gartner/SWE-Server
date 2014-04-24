@@ -4,6 +4,7 @@ namespace ERP_Client
 {
     public class Contact
     {
+        public string ID { get; set; }
         public string State { get; set; }
         public string Name { get; set; }
         public string Uid { get; set; }

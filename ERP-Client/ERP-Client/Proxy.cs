@@ -12,13 +12,14 @@ namespace ERP_Client
     {
         public Proxy() { }
 
+        Uri baseUri = new Uri("http://localhost:8080");
+        //Uri baseUri = new Uri("http://10.128.241.99:8080");
+
         public List<Contact> KontaktSuchen(Contact searchObject)
         {
             string xml = ToXmlString(searchObject);
 
             WebClient client = new WebClient();
-            Uri baseUri = new Uri("http://localhost:8080");
-            //Uri baseUri = new Uri("http://10.128.241.99:8080");
             List<Contact> liste = new List<Contact>();            
 
             string result;
@@ -42,6 +43,24 @@ namespace ERP_Client
             }
 
             return liste;
+        }
+
+        public string KontaktChange(Contact changeObject)
+        {
+            string xml = ToXmlString(changeObject);
+            string result;
+            WebClient client = new WebClient();
+
+            try
+            {
+                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveContact"), xml);
+            }
+            catch (WebException w)
+            {
+                result = w.Message;
+            }
+
+            return result;
         }
 
         public static List<Contact> LoadFromXMLString(string xmlText)

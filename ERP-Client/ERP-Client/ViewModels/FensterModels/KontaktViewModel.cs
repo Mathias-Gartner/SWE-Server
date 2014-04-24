@@ -14,7 +14,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 };
             }
         }
-        /*
+        
         public IEnumerable<ICommandViewModel> ChangeCommands
         {
             get
@@ -25,7 +25,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 };
             }
         }
-        */
+        
         #region Kontaktdaten
 
         #region Person
@@ -62,6 +62,41 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
         }
+
+        private string _Prefix;
+        public string Prefix
+        {
+            get
+            {
+                return _Prefix;
+            }
+            set
+            {
+                if (_Prefix != value)
+                {
+                    _Prefix = value;
+                    OnPropertyChanged("Prefix");
+                }
+            }
+        }
+
+        private string _Suffix;
+        public string Suffix
+        {
+            get
+            {
+                return _Suffix;
+            }
+            set
+            {
+                if (_Suffix != value)
+                {
+                    _Suffix = value;
+                    OnPropertyChanged("Suffix");
+                }
+            }
+        }
+
         #endregion
 
         #region Firma
@@ -119,6 +154,107 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
+        private string _Number;
+        public string Number
+        {
+            get
+            {
+                return _Number;
+            }
+            set
+            {
+                if (_Number != value)
+                {
+                    _Number = value;
+                    OnPropertyChanged("Number");
+                }
+            }
+        }
+
+        private string _PostOfficeBox;
+        public string PostOfficeBox
+        {
+            get
+            {
+                return _PostOfficeBox;
+            }
+            set
+            {
+                if (_PostOfficeBox != value)
+                {
+                    _PostOfficeBox = value;
+                    OnPropertyChanged("PostOfficeBox");
+                }
+            }
+        }
+
+        private string _PostalCode;
+        public string PostalCode
+        {
+            get
+            {
+                return _PostalCode;
+            }
+            set
+            {
+                if (_PostalCode != value)
+                {
+                    _PostalCode = value;
+                    OnPropertyChanged("PostalCode");
+                }
+            }
+        }
+
+        private string _City;
+        public string City
+        {
+            get
+            {
+                return _City;
+            }
+            set
+            {
+                if (_City != value)
+                {
+                    _City = value;
+                    OnPropertyChanged("City");
+                }
+            }
+        }
+
+        private string _Email;
+        public string Email
+        {
+            get
+            {
+                return _Email;
+            }
+            set
+            {
+                if (_Email != value)
+                {
+                    _Email = value;
+                    OnPropertyChanged("Email");
+                }
+            }
+        }
+
+        private string _State;
+        public string State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                if (_State != value)
+                {
+                    _State = value;
+                    OnPropertyChanged("State");
+                }
+            }
+        }
         #endregion
 
         private string _Suchergebnis = "Suchergebnis";
@@ -134,6 +270,23 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Suchergebnis = value;
                     OnPropertyChanged("Suchergebnis");
+                }
+            }
+        }
+
+        private string _Changeresult = "Status";
+        public string Changeresult
+        {
+            get
+            {
+                return _Changeresult;
+            }
+            set
+            {
+                if (_Changeresult != value)
+                {
+                    _Changeresult = value;
+                    OnPropertyChanged("Changeresult");
                 }
             }
         }
@@ -157,7 +310,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 return _KontaktSuche;
             }
         }
-        /*
+        
         private ICommandViewModel _KontaktChange;
         public ICommandViewModel KontaktChange
         {
@@ -166,15 +319,15 @@ namespace ERP_Client.ViewModels.FensterModels
                 if(_KontaktChange == null)
                 {
                     _KontaktChange = new ExecuteCommandViewModel(
-                        "Ändern",
-                        "Kontaktsuche ändern",
+                        "Ändern/Hinzufügen",
+                        "Kontaktdaten ändern/hinzufügen",
                         Change);
                 }
-            }
-
-            return _KontaktAendern;
+                return _KontaktChange;
+            }            
         }
-        */
+        
+        
         #endregion
 
         #region Methoden
@@ -222,7 +375,43 @@ namespace ERP_Client.ViewModels.FensterModels
         #region Kontakt ändern
         public void Change()
         {
+            Proxy proxy = new Proxy();
+            Contact contact = new Contact();
+            string result;
 
+            //contact.ID = "-1";
+
+            contact.State = "New";
+            
+            if (Firstname != null && Lastname != null)
+            {
+                contact.Firstname = Firstname;
+                contact.Lastname = Lastname;
+                contact.Prefix = Prefix;
+                contact.Suffix = Suffix;
+            }
+
+            if (Firmname != null && Uid != null)
+            {
+                contact.Name = Firmname;
+                contact.Uid = Uid;
+            }
+
+            /*
+            contact.Address = new Address();
+
+            contact.Address.Street = Streetname;
+            contact.Address.Number = Number;
+            contact.Address.PostalCode = PostalCode;
+            contact.Address.PostOfficeBox = PostOfficeBox;
+            contact.Address.City = City;
+            */
+            contact.Email = Email;
+            contact.State = State;
+
+            result = proxy.KontaktChange(contact);
+
+            Changeresult = result;
         }
         #endregion
 
