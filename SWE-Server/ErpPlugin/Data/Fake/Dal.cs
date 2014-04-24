@@ -8,6 +8,15 @@ namespace ErpPlugin.Data.Fake
 {
     public class Dal : IDal
     {
+        public static bool ContactSaved;
+        public static bool BusinessObjectSaved;
+
+        public static void Reset()
+        {
+            ContactSaved = false;
+            BusinessObjectSaved = false;
+        }
+
         IEnumerable<Contact> contacts = new[]
             {
                 new Contact(){ID = 1, Lastname = "Huber", Firstname = "Hans", DateOfBirth = DateTime.Parse("1960-01-01")},
@@ -42,7 +51,8 @@ namespace ErpPlugin.Data.Fake
 
         public bool SaveContact(Contact contact)
         {
-            throw new NotImplementedException();
+            ContactSaved = true;
+            return true;
         }
 
         public bool DeleteContact(Contact contact)
@@ -57,7 +67,8 @@ namespace ErpPlugin.Data.Fake
 
         public bool SaveBusinessObject<T>(T businessObject) where T : BusinessObject
         {
-            throw new NotImplementedException();
+            BusinessObjectSaved = true;
+            return true;
         }
 
         public bool DeleteBusinessObject<T>(T businessObject) where T : BusinessObject

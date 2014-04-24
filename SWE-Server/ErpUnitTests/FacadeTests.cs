@@ -18,6 +18,7 @@ namespace ErpUnitTests
         public void Init()
         {
             CurrentDalFactory.Instance = new FakeDalFactory();
+            ErpPlugin.Data.Fake.Dal.Reset();
             erpPlugin = new ErpPlugin.ErpPlugin();
         }
 
@@ -88,6 +89,18 @@ namespace ErpUnitTests
             Assert.IsTrue(response.Contains("<Contact"));
             Assert.IsTrue(response.Contains("<Firstname>Hans</Firstname>"));
             Assert.IsTrue(response.Contains("<Firstname>Peter</Firstname>"));
+        }
+
+        [TestMethod]
+        public void SaveContact()
+        {
+            const string c_contactSaveRequest = "<Contact xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><State>Unmodified</State><Firstname>Hans</Firstname><Lastname>Huber</Lastname><DateOfBirth>1960-01-01T00:00:00</DateOfBirth></Contact>";
+            var request = XmlRequestFromString("saveContact", c_contactSaveRequest);
+            var data = erpPlugin.CreateProduct(request);
+            var response = Encoding.Default.GetString(data.Content);
+            Assert.IsTrue(response.Contains("true"));
+            Assert.IsTrue(ErpPlugin.Data.Fake.Dal.BusinessObjectSaved);
+            Assert.IsFalse(ErpPlugin.Data.Fake.Dal.ContactSaved);
         }
     }
 }

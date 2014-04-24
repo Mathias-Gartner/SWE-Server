@@ -74,7 +74,7 @@ namespace ErpPlugin
                         break;
                     case "saveContact":
                         contact = request.RawPostData.FromXmlString<Contact>();
-                        //result = contact.Save();
+                        result = contact.Save();
                         break;
                     case "deleteContact":
                         contact = request.RawPostData.FromXmlString<Contact>();
