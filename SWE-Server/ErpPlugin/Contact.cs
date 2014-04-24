@@ -52,6 +52,11 @@ namespace ErpPlugin
             }
         }
 
+        public bool Save()
+        {
+            return CurrentDalFactory.Instance.CreateDal().SaveContact(this);
+        }
+
         public static Contact CreateSearchObject()
         {
             return CreateSearchObject<Contact>();
@@ -64,5 +69,6 @@ namespace ErpPlugin
             contact.ID = id;
             return dal.SearchContacts(contact).SingleOrDefault();
         }
+
     }
 }

@@ -40,9 +40,6 @@ namespace ErpPlugin
             return t;
         }*/
 
-        public bool Save()
-        {
-            return CurrentDalFactory.Instance.CreateDal().SaveBusinessObject(this);
-        }
+
     }
 }
