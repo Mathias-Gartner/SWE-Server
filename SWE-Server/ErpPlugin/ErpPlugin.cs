@@ -47,27 +47,8 @@ namespace ErpPlugin
                 return PutErrorMessage(data, "<h1>Postdata required</h1>");
             }
 
-            /*var xmlDoc = new XmlDocument();
-            try
-            {
-                xmlDoc.Load(xmlReader); // this also triggers schema validation
-
-                // validation succeeds if no element with erp namesapce is found, so check that too
-                if (!xmlDoc.ChildNodes.OfType<XmlNode>().Any(n => n.NamespaceURI == c_namespace))
-                    throw new XmlSchemaValidationException("XML doesn't contains the required schema with namespace " + c_namespace);
-            }
-            catch (XmlException e)
-            {
-                return PutErrorMessage(data, "<h1>Posted XML is invalid</h1>" + e.Message);
-            }
-            catch (XmlSchemaValidationException e)
-            {
-                return PutErrorMessage(data, "<h1>Postdata schema valiation failed</h1>" + e.Message);
-            }*/
-
-            //var xmlObject = request.RawPostData.FromXmlString<BusinessObject>();
-
             logger.DebugFormat("Url Parameter req={0}", request.Url.Parameters["req"]);
+
             object result = null;
             try
             {
@@ -134,12 +115,6 @@ namespace ErpPlugin
         protected virtual void Delete(Interface.Data data, XmlNode deleteNode)
         {
 
-        }*/
-
-        /*protected void Serialize(XmlWriter writer, BusinessObject businessObject)
-        {
-            var xs = new XmlSerializer(businessObject.GetType());
-            xs.Serialize(writer, businessObject);
         }*/
 
         protected bool Authenticated(XmlNode authElement)

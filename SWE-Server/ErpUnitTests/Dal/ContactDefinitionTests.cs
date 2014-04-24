@@ -2,11 +2,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ErpPlugin;
 using ErpPlugin.Data.Database;
+using ErpPlugin.Data.Definitions;
 
 namespace ErpUnitTests.Dal
 {
     [TestClass]
-    public class ContactDalTests : ErpBaseTest
+    public class ContactDefinitionTests : ErpBaseTest
     {
         [TestMethod]
         public void CreateArguments()
@@ -21,7 +22,7 @@ namespace ErpUnitTests.Dal
             contact.Suffix = "MSc";
             contact.Uid = "U12";
 
-            var dal = new ContactDal();
+            var dal = new ContactDefinition();
             var a = dal.CreateArguments(contact);
 
             Assert.AreEqual(DateTime.Parse("2014-10-11"), a["dateOfBirth"]);

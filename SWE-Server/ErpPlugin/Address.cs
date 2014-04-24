@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ErpPlugin.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,5 +20,18 @@ namespace ErpPlugin
         public string PostalCode { get; set; }
 
         public string City { get; set; }
+
+        public static Address CreateSearchObject()
+        {
+            return CreateSearchObject<Address>();
+        }
+
+        /*public static Address LoadObject(int id)
+        {
+            var dal = CurrentDalFactory.Instance.CreateDal();
+            var contact = Address.CreateSearchObject();
+            contact.ID = id;
+            return dal.SearchAddress(contact).SingleOrDefault();
+        }*/
     }
 }

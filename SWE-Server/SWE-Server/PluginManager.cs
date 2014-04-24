@@ -43,7 +43,7 @@ namespace SWE_Server
                         Assembly asm = Assembly.LoadFile(dateiname);
                         foreach (Type asmtyp in asm.GetTypes())
                         {
-                            if (asmtyp.GetInterface("IPlugin") != null)
+                            if (typeof(IPlugin).IsAssignableFrom(asmtyp))
                             {
                                 IPlugin plugin = (IPlugin)Activator.CreateInstance(asmtyp);
                                 plugins.Add(plugin);

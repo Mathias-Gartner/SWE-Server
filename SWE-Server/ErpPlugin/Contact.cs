@@ -1,4 +1,5 @@
 ﻿using ErpPlugin.Data;
+using ErpPlugin.Data.Definitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace ErpPlugin
 
         public string Email { get; set; }
 
+        public int? AddressId { get; set; }
+
         public Address Address { get; set; }
 
         public Address InvoiceAddress { get; set; }
@@ -40,7 +43,7 @@ namespace ErpPlugin
         public ICollection<Contact> Search()
         {
             if (State != BusinessObjectState.SearchObject)
-                throw new InvalidOperationException("Only SearchObject can be used for searching");
+                throw new InvalidOperationException("Only SearchObjects can be used for searching");
 
             try
             {

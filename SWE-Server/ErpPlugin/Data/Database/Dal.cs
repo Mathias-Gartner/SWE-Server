@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using ErpPlugin.Data.Definitions;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,12 +13,12 @@ namespace ErpPlugin.Data.Database
     public class Dal : IDal
     {
         ILog logger;
-        IBusinessObjectDalFactory _factory;
+        IDefinitionFactory _factory;
 
-        public Dal(IBusinessObjectDalFactory dalFactory)
+        public Dal(IDefinitionFactory definitionFactory)
         {
             logger = LogManager.GetLogger(GetType());
-            _factory = dalFactory;
+            _factory = definitionFactory;
         }
 
         public ICollection<User> SearchUsers(User searchObject)
@@ -47,132 +48,37 @@ namespace ErpPlugin.Data.Database
                 throw new InvalidOperationException("searchObject is not a SearchObject");
             }
 
-            var dal = _factory.CreateDalForType<T>();
-            var arguments = dal.CreateArguments(searchObject);
+            var definition = _factory.CreateDefinitionForType<T>();
+            var arguments = definition.CreateArguments(searchObject);
 
             ICollection<T> objects = null;
-            using (var reader = LoadObjects(dal, arguments))
+            using (var reader = SqlUtility.LoadObjects(definition, arguments))
             {
                 if (!reader.HasRows)
                     throw new ObjectNotFoundException();
 
-                objects = dal.CreateObjectsFromSqlReader(reader);
+                objects = definition.CreateBusinessObjectsFromSqlReader(reader, SqlUtility.LoadRelatedObject).Cast<T>().ToList();
             }
             return objects;
         }
 
-        /*protected SqlDataReader LoadObject(IBusinessObjectDal dal, int id)
-        {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("id", instance.ID);
-            var sb = PrepareSelect(dal);
-            AppendWhereClause(sb, arguments);
-            return ExecuteQuery(sb.ToString(), ExtractParameters(arguments));
-        }*/
-
-        protected SqlDataReader LoadObjects(IBusinessObjectDal dal, Dictionary<string, object> arguments)
-        {
-            var sb = PrepareSelect(dal);
-            AppendWhereClause(sb, arguments);
-            return ExecuteQuery(sb.ToString(), ExtractParameters(arguments));
-        }
-
         public bool SaveBusinessObject<T>(T instance) where T : BusinessObject
         {
-            string query;
-            var dal = _factory.CreateDalForType<T>();
-            var arguments = dal.CreateArguments(instance);
+            var definition = _factory.CreateDefinitionForType<T>();
 
-            if (instance.State == BusinessObject.BusinessObjectState.New)
-            {
-                query = string.Format("INSERT INTO {0}({1}) VALUES ({2})",
-                                    dal.TableName,
-                                    String.Join(", ", arguments.Keys.ToArray()),
-                                    String.Join(", ", arguments.Keys.Select(key=>String.Format("@{0}", key))));
-                // TODO: Set ID in BusinessObject
-            }
-            else if (instance.State == BusinessObject.BusinessObjectState.Modified)
-            {
-                var idArguments = new Dictionary<string, object>();
-                idArguments.Add("id", instance.ID);
-                var sb = PrepareUpdate(dal, arguments);
-                AppendWhereClause(sb, idArguments);
-                query = sb.ToString();
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    String.Format("BusinessObject is in illegal State {0}", instance.State.ToString()));
-            }
-
-            return CreateQuery(query, ExtractParameters(arguments)).ExecuteNonQuery() == 1;
+            return SqlUtility.SaveObject(definition, instance);
         }
 
         public bool DeleteBusinessObject<T>(T instance) where T : BusinessObject
         {
-            var dal = _factory.CreateDalForType<T>();
+            var definition = _factory.CreateDefinitionForType<T>();
             var arguments = new Dictionary<string, object>();
             arguments.Add("id", instance.ID);
-            var sb = PrepareDelete(dal);
-            AppendWhereClause(sb, arguments);
-            return CreateQuery(sb.ToString(), ExtractParameters(arguments)).ExecuteNonQuery() == 1;
+            var sb = SqlUtility.PrepareDelete(definition);
+            SqlUtility.AppendWhereClause(sb, arguments);
+            return SqlUtility.CreateQuery(sb.ToString(), SqlUtility.ExtractParameters(arguments)).ExecuteNonQuery() == 1;
         }
 
-        protected SqlCommand CreateQuery(string queryString, IEnumerable<SqlParameter> parameters)
-        {
-            logger.DebugFormat("Query created: {0}", queryString);
-            var query = new SqlCommand(queryString, GetConnection());
-            if (parameters != null)
-                query.Parameters.AddRange(parameters.ToArray());
 
-            return query;
-        }
-
-        protected SqlDataReader ExecuteQuery(string queryString, IEnumerable<SqlParameter> parameters = null)
-        {
-            var query = CreateQuery(queryString, parameters);
-            return query.ExecuteReader();
-        }
-
-        protected SqlConnection GetConnection()
-        {
-            var con = new SqlConnection(ConfigurationManager.ConnectionStrings["ErpConnectionString"].ConnectionString);
-            con.Open();
-            return con;
-        }
-
-        public static IEnumerable<SqlParameter> ExtractParameters(Dictionary<string, object> arguments)
-        {
-            return arguments.Keys.Select(key => new SqlParameter(String.Format("@{0}", key), arguments[key]));
-        }
-
-        public static void AppendWhereClause(StringBuilder sb, Dictionary<string, object> arguments)
-        {
-            if (arguments.Keys.Count > 0)
-                sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key=>String.Format("{0}=@{0}", key))));
-        }
-
-        public static StringBuilder PrepareSelect(IBusinessObjectDal dal)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("SELECT {0} FROM {1}", String.Join(", ", dal.Columns), dal.TableName);
-            return sb;
-        }
-
-        public static StringBuilder PrepareUpdate(IBusinessObjectDal dal, Dictionary<string, object> arguments)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("UPDATE {0} SET ", dal.TableName);
-            sb.Append(String.Join(", ", arguments.Keys.Select(key => String.Format("{0}=@{0}", key))));
-            return sb;
-        }
-
-        public static StringBuilder PrepareDelete(IBusinessObjectDal dal)
-        {
-            var sb = new StringBuilder();
-            sb.Append("DELETE FROM ");
-            sb.Append(dal.TableName);
-            return sb;
-        }
     }
 }

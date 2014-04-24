@@ -15,6 +15,7 @@ namespace SWE_Server
     {
         static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.Configure();
             var logger = LogManager.GetLogger(typeof(Program));
             int port = Settings.Default.Port;
             PluginManager manager = PluginManager.getInstance();
