@@ -4,28 +4,8 @@ namespace ERP_Client.ViewModels.FensterModels
 {
     class KontaktViewModel : ViewModel
     {
-        public IEnumerable<ICommandViewModel> SearchCommands
-        {
-            get
-            {
-                return new[] 
-                {
-                    KontaktSuche,
-                };
-            }
-        }
-        
-        public IEnumerable<ICommandViewModel> ChangeCommands
-        {
-            get
-            {
-                return new[] 
-                {
-                    KontaktChange,
-                };
-            }
-        }
-        
+        bool neu = true;
+
         #region Kontaktdaten
 
         #region Person
@@ -136,6 +116,23 @@ namespace ERP_Client.ViewModels.FensterModels
         #endregion
 
         #region weitere Angaben
+
+        private string _Id;
+        public string Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    _Id = value;
+                    OnPropertyChanged("Id");
+                }
+            }
+        }
 
         private string _Streetname;
         public string Streetname
@@ -310,7 +307,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 return _KontaktSuche;
             }
         }
-        
+
         private ICommandViewModel _KontaktChange;
         public ICommandViewModel KontaktChange
         {
@@ -347,9 +344,12 @@ namespace ERP_Client.ViewModels.FensterModels
 
             liste = proxy.KontaktSuchen(contact);
 
-            text = "Suchergebnis:";
+            text = "Suchergebnis: ";
 
-            anzahl = liste.Count;
+            if (liste != null)
+                anzahl = liste.Count;
+            else
+                anzahl = 0;
 
             if (anzahl > 0)
             {
@@ -366,7 +366,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
             else
-                text += "\nKeine Kontakte gefunden.";
+                text += "Keine Kontakte gefunden.";
 
             Suchergebnis = text;
         }
@@ -381,8 +381,14 @@ namespace ERP_Client.ViewModels.FensterModels
 
             //contact.ID = "-1";
 
-            contact.State = "New";
-            
+            if (neu)
+                contact.State = "New";
+            else
+            {
+                contact.State = "Modified";
+                contact.ID = Id;
+            }
+
             if (Firstname != null && Lastname != null)
             {
                 contact.Firstname = Firstname;
@@ -397,7 +403,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Uid = Uid;
             }
 
-            /*
+            
             contact.Address = new Address();
 
             contact.Address.Street = Streetname;
@@ -405,7 +411,7 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.Address.PostalCode = PostalCode;
             contact.Address.PostOfficeBox = PostOfficeBox;
             contact.Address.City = City;
-            */
+            
             contact.Email = Email;
             contact.State = State;
 

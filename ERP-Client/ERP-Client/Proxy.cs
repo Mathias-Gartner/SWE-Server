@@ -23,23 +23,21 @@ namespace ERP_Client
             List<Contact> liste = new List<Contact>();            
 
             string result;
-            
+
             try
             {
                 result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchContact"), xml);
+                liste = LoadFromXMLString(result);
             }
             catch (WebException)
             {
                 result = string.Empty;
+                liste = null;
             }
-
-            try
+            catch (XmlException e)
             {
-                liste = LoadFromXMLString(result); 
-            }
-            catch (XmlException)
-            {
-                // just leave list empty for now
+                result = e.Message;
+                liste = null;
             }
 
             return liste;

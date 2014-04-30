@@ -56,9 +56,16 @@
     <Compile Include="Address.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="Controls\CommandButton.cs" />
+    <Compile Include="Fenster\AddKontakt.xaml.cs">
+      <DependentUpon>AddKontakt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Page Include="Fenster\AddKontakt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Fenster\Kontakte.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
