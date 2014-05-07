@@ -55,6 +55,7 @@ CREATE TABLE [address]
 	[postOfficeBox]	[nvarchar](max)		NULL,
 	[postalCode]	[nvarchar](5)		NOT NULL,
 	[city]			[nvarchar](max)		NOT NULL,
+	[country]		[nvarchar](max)		NULL,
 	CONSTRAINT [CLIX_PK_address] PRIMARY KEY CLUSTERED ([id])
 )
 

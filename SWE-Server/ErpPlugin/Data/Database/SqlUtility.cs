@@ -40,6 +40,8 @@ namespace ErpPlugin.Data.Database
 
             string query;
             var arguments = definition.CreateArguments(instance);
+            if (arguments.Count == 0)
+                return true; // true because everything that can be saved has been saved
 
             if (instance.State == BusinessObject.BusinessObjectState.New)
             {

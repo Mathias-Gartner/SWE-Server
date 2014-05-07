@@ -21,6 +21,8 @@ namespace ErpPlugin
 
         public string City { get; set; }
 
+        public string Country { get; set; }
+
         public static Address CreateSearchObject()
         {
             return CreateSearchObject<Address>();

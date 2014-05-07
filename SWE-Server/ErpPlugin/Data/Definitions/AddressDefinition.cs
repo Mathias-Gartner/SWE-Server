@@ -17,7 +17,7 @@ namespace ErpPlugin.Data.Definitions
 
         public IEnumerable<string> Columns
         {
-            get { return new[] { "id", "name", "street", "number", "postOfficeBox", "postalCode", "city" }; }
+            get { return new[] { "id", "name", "street", "number", "postOfficeBox", "postalCode", "city", "country" }; }
         }
         
         public Dictionary<string, object> CreateArguments(BusinessObject instance)
@@ -39,6 +39,8 @@ namespace ErpPlugin.Data.Definitions
                 arguments.Add("postalCode", address.PostalCode);
             if (!String.IsNullOrEmpty(address.City))
                 arguments.Add("city", address.City);
+            if (!String.IsNullOrEmpty(address.Country))
+                arguments.Add("country", address.Country);
 
             return arguments;
         }
@@ -64,6 +66,8 @@ namespace ErpPlugin.Data.Definitions
                     address.PostalCode = reader.GetString(5);
                 if (!reader.IsDBNull(6))
                     address.City = reader.GetString(6);
+                if (!reader.IsDBNull(7))
+                    address.Country = reader.GetString(7);
 
                 users.Add(address);
             }

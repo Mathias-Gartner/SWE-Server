@@ -45,13 +45,13 @@ namespace ErpPlugin.Data.Definitions
                 arguments.Add("suffix", contact.Suffix);
 
             // relations
-            if (contact.Address != null)
+            if (contact.Address != null && contact.Address.ID >= 0)
                 arguments.Add("addressId", contact.Address.ID);
-            if (contact.DeliveryAddress != null)
+            if (contact.DeliveryAddress != null && contact.DeliveryAddress.ID >= 0)
                 arguments.Add("deliveryAddressId", contact.DeliveryAddress.ID);
-            if (contact.InvoiceAddress != null)
+            if (contact.InvoiceAddress != null && contact.InvoiceAddress.ID >= 0)
                 arguments.Add("invoiceAddressId", contact.InvoiceAddress.ID);
-            if (contact.BelongsTo != null)
+            if (contact.BelongsTo != null && contact.BelongsTo.ID >= 0)
                 arguments.Add("belongsToId", contact.BelongsTo.ID);
 
             return arguments;
