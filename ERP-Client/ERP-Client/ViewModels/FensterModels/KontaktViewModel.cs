@@ -523,7 +523,7 @@ namespace ERP_Client.ViewModels.FensterModels
         }
 
         private string _BornDate;
-        //private DateTime _Date;
+        private DateTime Date;
         public string BornDate
         {
             get
@@ -535,6 +535,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 if (_BornDate != value)
                 {
                     _BornDate = value;
+                    Date = DateTime.Parse(_BornDate);
                     OnPropertyChanged("BornDate");
                 }
             }
@@ -630,8 +631,6 @@ namespace ERP_Client.ViewModels.FensterModels
             Contact contact = new Contact();
             string result;
 
-            //contact.ID = "-1";
-
             if (neu)
                 contact.State = "New";
             else
@@ -646,6 +645,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Lastname = Lastname;
                 contact.Prefix = Prefix;
                 contact.Suffix = Suffix;
+                contact.DateOfBirth = Date;
             }
 
             if (IsFirma == true)
