@@ -1,11 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ERP_Client.Fenster;
+using System.Windows;
+using System.Windows.Input;
+
+
 namespace ERP_Client.ViewModels.FensterModels
 {
-    class KontaktViewModel : ViewModel
+    public class KontaktViewModel : ViewModel
     {
         bool neu = true;
+
+        public KontaktViewModel()
+        {
+            EditContact = new EditContactCommand();
+        }
+
+        public KontaktViewModel(Contact c)
+        {
+            EditContact = new EditContactCommand();
+            neu = false;
+            Id = c.ID;
+            Firstname = c.Firstname;
+            Lastname = c.Lastname;
+            BornDate = (c.DateOfBirth.HasValue ? c.DateOfBirth.ToString() : string.Empty);
+            Prefix = c.Prefix;
+            Suffix = c.Suffix;
+            Firmname = c.Name;
+            Uid = c.Uid;
+
+            Streetname = c.Address.Street;
+            Number = c.Address.Number;
+            PostalCode = c.Address.PostalCode;
+            PostOfficeBox = c.Address.PostOfficeBox;
+            City = c.Address.City;
+            Country = c.Address.Country;
+
+            RStreetname = c.InvoiceAddress.Street;
+            RNumber = c.InvoiceAddress.Number;
+            RPostalCode = c.InvoiceAddress.PostalCode;
+            RPostOfficeBox = c.InvoiceAddress.PostOfficeBox;
+            RCity = c.InvoiceAddress.City;
+            RCountry = c.InvoiceAddress.Country;
+
+            LStreetname = c.DeliveryAddress.Street;
+            LNumber = c.DeliveryAddress.Number;
+            LPostalCode = c.DeliveryAddress.PostalCode;
+            LPostOfficeBox = c.DeliveryAddress.PostOfficeBox;
+            LCity = c.DeliveryAddress.City;
+            LCountry = c.DeliveryAddress.Country;
+
+            Email = c.Email;
+        }
 
         #region Kontaktdaten
 
@@ -469,23 +516,6 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
         }
-
-        private string _State;
-        public string State
-        {
-            get
-            {
-                return _State;
-            }
-            set
-            {
-                if (_State != value)
-                {
-                    _State = value;
-                    OnPropertyChanged("State");
-                }
-            }
-        }
         #endregion
 
         private string _Suchergebnis = "Suchergebnis";
@@ -543,10 +573,36 @@ namespace ERP_Client.ViewModels.FensterModels
 
         #endregion
 
-        public List<Contact> Kontaktliste;
+        public IEnumerable<SingleContactViewModel> Contacts
+        {
+            get { return (IEnumerable<SingleContactViewModel>)GetValue(DPContacts); }
+            set { SetValue(DPContacts, value); }
+        }
+
+        public static readonly DependencyProperty DPContacts =
+    DependencyProperty.Register("Contacts", typeof(IEnumerable<SingleContactViewModel>), typeof(KontaktViewModel));
+
+        private IEnumerable<Contact> _kontaktliste;
+
+        public IEnumerable<Contact> Kontaktliste
+        {
+            get
+            {
+                return _kontaktliste;
+            }
+            set
+            {
+                if (_kontaktliste != value)
+                {
+                    _kontaktliste = value;
+                    Contacts = value.Select(c => new SingleContactViewModel(c));
+                    OnPropertyChanged("Kontaktliste");
+                }
+            }
+        }
 
         #region Buttons
-        
+
         private ICommandViewModel _KontaktSuche;
         public ICommandViewModel KontaktSuche
         {
@@ -557,7 +613,7 @@ namespace ERP_Client.ViewModels.FensterModels
                     _KontaktSuche = new ExecuteCommandViewModel(
                         "Suchen",
                         "Kontaktsuche starten",
-                        Suche);                   
+                        Suche);
                 }
                 return _KontaktSuche;
             }
@@ -568,7 +624,7 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             get
             {
-                if(_KontaktChange == null)
+                if (_KontaktChange == null)
                 {
                     _KontaktChange = new ExecuteCommandViewModel(
                         "Ändern/Hinzufügen",
@@ -576,16 +632,17 @@ namespace ERP_Client.ViewModels.FensterModels
                         Change);
                 }
                 return _KontaktChange;
-            }            
+            }
         }
-        
-        
+
+
         #endregion
 
         #region Methoden
 
         #region Suche
-        public void Suche() {
+        public void Suche()
+        {
             Proxy proxy = new Proxy();
             Contact contact = new Contact();
             Contact kontakt = new Contact();
@@ -603,29 +660,15 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Name = Firmname;
                 contact.Uid = Uid;
             }
-            
+
             Kontaktliste = proxy.KontaktSuchen(contact);
 
             text = "Suchergebnis: ";
 
             if (Kontaktliste != null)
-                anzahl = Kontaktliste.Count;            
+                anzahl = Kontaktliste.Count();
 
-            if (anzahl > 0)
-            {
-                for (int i = 0; i < anzahl; i++)
-                {
-                    kontakt = Kontaktliste[i];
-
-                    if (kontakt.Name != null || kontakt.Uid != null)
-                        text += "\n" + kontakt.Name + " " + kontakt.Uid + " ";
-                    if (kontakt.Firstname != null || kontakt.Lastname != null)
-                        text += "\n" + kontakt.Firstname + " " + kontakt.Lastname + " ";
-
-                    //text += kontakt.Address.Street + " " + kontakt.Address.Number + " " + kontakt.Address.PostalCode + " " + kontakt.Address.City;
-                }
-            }
-            else
+            if (anzahl < 1)
                 text += "Keine Kontakte gefunden.";
 
             Suchergebnis = text;
@@ -661,7 +704,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Name = Firmname;
                 contact.Uid = Uid;
             }
-            
+
             contact.Address = new Address();
             contact.Address.Street = Streetname;
             contact.Address.Number = Number;
@@ -687,14 +730,13 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.DeliveryAddress.Country = LCountry;
 
             contact.Email = Email;
-            contact.State = State;
 
             result = proxy.KontaktChange(contact);
 
             Changeresult = result;
         }
         #endregion
-       
+
         #endregion
 
         #region View
@@ -731,5 +773,46 @@ namespace ERP_Client.ViewModels.FensterModels
             OnPropertyChanged("CanEditFirm");
         }
         #endregion
+
+        public SingleContactViewModel SelectedContact
+        {
+            get { return (SingleContactViewModel)GetValue(DPSelectedContact); }
+            set { SetValue(DPSelectedContact, value); }
+        }
+
+        private static readonly DependencyProperty DPSelectedContact =
+            DependencyProperty.Register("SelectedContact", typeof(Contact), typeof(KontaktViewModel));
+
+        ICommand _editContact;
+        public ICommand EditContact
+        {
+            get
+            {
+                //if (_editContact == null)
+                //    _editContact = new EditContactCommand();
+                //return _editContact;
+                return (ICommand)GetValue(DPEditContact);
+            }
+            set { SetValue(DPEditContact, value); }
+        }
+
+        private static readonly DependencyProperty DPEditContact =
+            DependencyProperty.Register("EditContact", typeof(ICommand), typeof(KontaktViewModel));
+
+        private class EditContactCommand : ICommand
+        {
+            public bool CanExecute(object parameter)
+            {
+                return parameter != null;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                AddKontakt addKontakt = new AddKontakt((Contact)parameter);
+                addKontakt.ShowDialog();
+            }
+        }
     }
 }
