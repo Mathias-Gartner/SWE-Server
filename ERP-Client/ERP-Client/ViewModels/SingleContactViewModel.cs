@@ -14,7 +14,10 @@ namespace ERP_Client.ViewModels
         public SingleContactViewModel(Contact c)
         {
             Contact = c;
-            DisplayName = c.Firstname + " " + c.Lastname + " " + c.Name + " " + c.Uid;
+            if (c.Firstname != null || c.Lastname != null)
+                DisplayName = c.Firstname + " " + c.Lastname;
+            if (c.Name != null || c.Uid != null)
+                DisplayName = c.Name + " " + c.Uid;
         }
 
         public Contact Contact { get; set; }

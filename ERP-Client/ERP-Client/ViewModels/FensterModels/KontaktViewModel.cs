@@ -588,7 +588,7 @@ namespace ERP_Client.ViewModels.FensterModels
         }
 
         public static readonly DependencyProperty DPContacts =
-    DependencyProperty.Register("Contacts", typeof(IEnumerable<SingleContactViewModel>), typeof(KontaktViewModel));
+            DependencyProperty.Register("Contacts", typeof(IEnumerable<SingleContactViewModel>), typeof(KontaktViewModel));
 
         private IEnumerable<Contact> _kontaktliste;
 
@@ -643,7 +643,21 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
-
+        private ICommandViewModel _OpenAdd;
+        public ICommandViewModel OpenAdd
+        {
+            get
+            {
+                if (_OpenAdd == null)
+                {
+                    _OpenAdd = new ExecuteCommandViewModel(
+                        "Neuer Kontakt",
+                        "Neuer Kontakten erstellen",
+                        OpenAddKontakt);
+                }
+                return _OpenAdd;
+            }
+        }
         #endregion
 
         #region Methoden
@@ -746,6 +760,14 @@ namespace ERP_Client.ViewModels.FensterModels
         }
         #endregion
 
+        #region Neuer Kontakt-Fenster öffnen
+
+        public void OpenAddKontakt()
+        {
+            var dlg = new ERP_Client.Fenster.AddKontakt();
+            dlg.ShowDialog();
+        }
+        #endregion
         #endregion
 
         #region View

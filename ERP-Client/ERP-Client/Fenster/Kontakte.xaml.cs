@@ -11,12 +11,6 @@ namespace ERP_Client.Fenster
             InitializeComponent();
 
             this.DataContext = new KontaktViewModel();
-        }
-
-        private void BNeu_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new ERP_Client.Fenster.AddKontakt();
-            dlg.ShowDialog();
         }        
     }
 }

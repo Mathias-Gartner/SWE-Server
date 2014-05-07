@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ERP_Client.ViewModels.FensterModels;
 
 namespace ERP_Client
 {
@@ -7,6 +8,8 @@ namespace ERP_Client
         public Start()
         {
             InitializeComponent();
+
+            this.DataContext = new KontaktViewModel();
         }
 
         private void BKontakte_Click(object sender, RoutedEventArgs e)
