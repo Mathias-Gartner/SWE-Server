@@ -593,9 +593,17 @@ namespace ERP_Client.ViewModels.FensterModels
             string text;
 
             contact.State = "SearchObject";
-            contact.Firstname = Firstname;
-            contact.Lastname = Lastname;
-
+            if (IsFirma == false)
+            {
+                contact.Firstname = Firstname;
+                contact.Lastname = Lastname;
+            }
+            else
+            {
+                contact.Name = Firmname;
+                contact.Uid = Uid;
+            }
+            
             Kontaktliste = proxy.KontaktSuchen(contact);
 
             text = "Suchergebnis: ";
