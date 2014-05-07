@@ -141,6 +141,7 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
+        #region Adresse
         private string _Streetname;
         public string Streetname
         {
@@ -225,6 +226,232 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
         }
+
+        private string _Country;
+        public string Country
+        {
+            get
+            {
+                return _Country;
+            }
+            set
+            {
+                if (_Country != value)
+                {
+                    _Country = value;
+                    OnPropertyChanged("Country");
+                }
+            }
+        }
+        #endregion
+
+        #region Rechnungsadresse
+        private string _RStreetname;
+        public string RStreetname
+        {
+            get
+            {
+                return _RStreetname;
+            }
+            set
+            {
+                if (_RStreetname != value)
+                {
+                    _RStreetname = value;
+                    OnPropertyChanged("RStreetname");
+                }
+            }
+        }
+
+        private string _RNumber;
+        public string RNumber
+        {
+            get
+            {
+                return _RNumber;
+            }
+            set
+            {
+                if (_RNumber != value)
+                {
+                    _RNumber = value;
+                    OnPropertyChanged("RNumber");
+                }
+            }
+        }
+
+        private string _RPostOfficeBox;
+        public string RPostOfficeBox
+        {
+            get
+            {
+                return _RPostOfficeBox;
+            }
+            set
+            {
+                if (_RPostOfficeBox != value)
+                {
+                    _RPostOfficeBox = value;
+                    OnPropertyChanged("RPostOfficeBox");
+                }
+            }
+        }
+
+        private string _RPostalCode;
+        public string RPostalCode
+        {
+            get
+            {
+                return _RPostalCode;
+            }
+            set
+            {
+                if (_RPostalCode != value)
+                {
+                    _RPostalCode = value;
+                    OnPropertyChanged("RPostalCode");
+                }
+            }
+        }
+
+        private string _RCity;
+        public string RCity
+        {
+            get
+            {
+                return _RCity;
+            }
+            set
+            {
+                if (_RCity != value)
+                {
+                    _RCity = value;
+                    OnPropertyChanged("RCity");
+                }
+            }
+        }
+
+        private string _RCountry;
+        public string RCountry
+        {
+            get
+            {
+                return _RCountry;
+            }
+            set
+            {
+                if (_RCountry != value)
+                {
+                    _RCountry = value;
+                    OnPropertyChanged("RCountry");
+                }
+            }
+        }
+        #endregion
+
+        #region Lieferadresse
+        private string _LStreetname;
+        public string LStreetname
+        {
+            get
+            {
+                return _LStreetname;
+            }
+            set
+            {
+                if (_LStreetname != value)
+                {
+                    _LStreetname = value;
+                    OnPropertyChanged("LStreetname");
+                }
+            }
+        }
+
+        private string _LNumber;
+        public string LNumber
+        {
+            get
+            {
+                return _LNumber;
+            }
+            set
+            {
+                if (_LNumber != value)
+                {
+                    _LNumber = value;
+                    OnPropertyChanged("LNumber");
+                }
+            }
+        }
+
+        private string _LPostOfficeBox;
+        public string LPostOfficeBox
+        {
+            get
+            {
+                return _LPostOfficeBox;
+            }
+            set
+            {
+                if (_LPostOfficeBox != value)
+                {
+                    _LPostOfficeBox = value;
+                    OnPropertyChanged("LPostOfficeBox");
+                }
+            }
+        }
+
+        private string _LPostalCode;
+        public string LPostalCode
+        {
+            get
+            {
+                return _LPostalCode;
+            }
+            set
+            {
+                if (_LPostalCode != value)
+                {
+                    _LPostalCode = value;
+                    OnPropertyChanged("LPostalCode");
+                }
+            }
+        }
+
+        private string _LCity;
+        public string LCity
+        {
+            get
+            {
+                return _LCity;
+            }
+            set
+            {
+                if (_LCity != value)
+                {
+                    _LCity = value;
+                    OnPropertyChanged("LCity");
+                }
+            }
+        }
+
+        private string _LCountry;
+        public string LCountry
+        {
+            get
+            {
+                return _LCountry;
+            }
+            set
+            {
+                if (_LCountry != value)
+                {
+                    _LCountry = value;
+                    OnPropertyChanged("LCountry");
+                }
+            }
+        }
+        #endregion
 
         private string _Email;
         public string Email
@@ -433,7 +660,24 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.Address.PostalCode = PostalCode;
             contact.Address.PostOfficeBox = PostOfficeBox;
             contact.Address.City = City;
-            
+            contact.Address.Country = Country;
+
+            contact.InvoiceAddress = new Address();
+            contact.InvoiceAddress.Street = RStreetname;
+            contact.InvoiceAddress.Number = RNumber;
+            contact.InvoiceAddress.PostalCode = RPostalCode;
+            contact.InvoiceAddress.PostOfficeBox = RPostOfficeBox;
+            contact.InvoiceAddress.City = RCity;
+            contact.InvoiceAddress.Country = RCountry;
+
+            contact.DeliveryAddress = new Address();
+            contact.DeliveryAddress.Street = LStreetname;
+            contact.DeliveryAddress.Number = LNumber;
+            contact.DeliveryAddress.PostalCode = LPostalCode;
+            contact.DeliveryAddress.PostOfficeBox = LPostOfficeBox;
+            contact.DeliveryAddress.City = LCity;
+            contact.DeliveryAddress.Country = LCountry;
+
             contact.Email = Email;
             contact.State = State;
 

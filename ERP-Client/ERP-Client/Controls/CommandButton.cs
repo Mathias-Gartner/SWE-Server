@@ -6,8 +6,6 @@ using ERP_Client.ViewModels;
 
 namespace ERP_Client.Controls
 {
-    
-
     public class CommandButton : Button
     {
         public CommandButton()
