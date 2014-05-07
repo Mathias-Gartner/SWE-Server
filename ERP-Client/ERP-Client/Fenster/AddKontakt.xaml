@@ -1,0 +1,75 @@
+﻿<Window x:Class="ERP_Client.Fenster.AddKontakt"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctrls="clr-namespace:ERP_Client.Controls"
+        Title="Micro ERP - Neuer Kontakte"
+        WindowStartupLocation="CenterScreen"
+        Height="600"
+        Width="800">
+
+    <Grid Background="#FFE5E5E5">
+        <GroupBox Header="Person" Margin="5,0,5,0" VerticalAlignment="Top" Height="105" IsEnabled="{Binding CanEditPerson}">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Vorname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,0,0,0" TextWrapping="Wrap" Text="{Binding Firstname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="680"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" Text="Nachname:" VerticalAlignment="Top" Width="69"/>
+                <TextBox  Margin="70,30,0,0" TextWrapping="Wrap" Text="{Binding Lastname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="680"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,63,0,0" TextWrapping="Wrap" Text="Geburtsdatum:" VerticalAlignment="Top"/>
+                <ToggleButton Name="bKalender" Margin="85,60,0,0" Height="22" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding BornDate}"/>
+                </ToggleButton>
+                <Popup IsOpen="{Binding IsChecked, ElementName=bKalender}">
+                    <Grid>
+                        <Calendar Name="GebDatum" SelectionMode="SingleDate" SelectedDate="{Binding BornDate}" Language="de-AT"/>
+                    </Grid>
+                </Popup>
+
+                <TextBlock HorizontalAlignment="Left" Margin="272,63,0,0" TextWrapping="Wrap" Text="Prefix:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="315,60,0,0" TextWrapping="Wrap" Text="{Binding Prefix, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="180"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="530,63,0,0" TextWrapping="Wrap" Text="Suffix:" VerticalAlignment="Top"/>
+                <TextBox  Margin="570,60,20,0" TextWrapping="Wrap" Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Firma" Margin="5,105,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditFirm}">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Firmenname:" VerticalAlignment="Top" Width="69"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,0,0,0" TextWrapping="Wrap" Text="{Binding Firmname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="680"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" Text="UID:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,30,0,0" TextWrapping="Wrap" Text="{Binding Uid, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="680"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Informationen" Margin="5,185,5,0" VerticalAlignment="Top" Height="130">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Straße:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,0,0,0" TextWrapping="Wrap" Text="{Binding Streetname}" VerticalAlignment="Top" Height="22" Width="270"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="350,3,0,0" TextWrapping="Wrap" Text="Hausnr.:" VerticalAlignment="Top" RenderTransformOrigin="0.442,0.437"/>
+                <TextBox  Margin="400,0,180,0" TextWrapping="Wrap" Text="{Binding Number}" VerticalAlignment="Top" Height="22"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="605,3,0,0" TextWrapping="Wrap" Text="Postfach:" VerticalAlignment="Top"/>
+                <TextBox  Margin="670,0,20,0" TextWrapping="Wrap" Text="{Binding PostOfficeBox}" VerticalAlignment="Top" Height="22"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,38,0,0" TextWrapping="Wrap" Text="PLZ:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,35,0,0" TextWrapping="Wrap" Text="{Binding PostalCode}" VerticalAlignment="Top" Height="22" Width="100"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="190,38,0,0" TextWrapping="Wrap" Text="Ort:" VerticalAlignment="Top" RenderTransformOrigin="0.442,0.437"/>
+                <TextBox  Margin="230,35,310,0" TextWrapping="Wrap" Text="{Binding City}" VerticalAlignment="Top" Height="22"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="490,38,0,0" TextWrapping="Wrap" Text="Staat:" VerticalAlignment="Top" RenderTransformOrigin="0.442,0.437"/>
+                <TextBox  Margin="537,35,20,0" TextWrapping="Wrap" Text="{Binding State}" VerticalAlignment="Top" Height="22"/>
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,73,0,0" TextWrapping="Wrap" Text="E-Mail:" VerticalAlignment="Top"/>
+                <TextBox  Margin="70,70,20,0" TextWrapping="Wrap" Text="{Binding Email}" VerticalAlignment="Top" Height="22"/>
+            </Grid>
+        </GroupBox>
+
+        <TextBlock Name="Changeresult" Margin="20,0,0,15" TextWrapping="Wrap" Text="{Binding Changeresult}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="450" Height="50" VerticalAlignment="Bottom"/>
+
+        <ctrls:CommandButton CommandViewModel="{Binding KontaktChange}" HorizontalAlignment="Right" Margin="0,0,20,10" VerticalAlignment="Bottom" Height="30" Width="120"/>
+    </Grid>
+</Window>

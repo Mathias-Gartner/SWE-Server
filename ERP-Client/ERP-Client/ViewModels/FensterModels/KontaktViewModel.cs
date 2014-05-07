@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ERP_Client.Fenster;
 namespace ERP_Client.ViewModels.FensterModels
 {
@@ -21,7 +22,8 @@ namespace ERP_Client.ViewModels.FensterModels
                 if (_Firstname != value)
                 {
                     _Firstname = value;
-                    OnPropertyChanged("Firstname");                    
+                    OnPropertyChanged("Firstname");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -39,6 +41,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Lastname = value;
                     OnPropertyChanged("Lastname");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -56,6 +59,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Prefix = value;
                     OnPropertyChanged("Prefix");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -73,6 +77,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Suffix = value;
                     OnPropertyChanged("Suffix");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -93,6 +98,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Firmname = value;
                     OnPropertyChanged("Firmname");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -110,6 +116,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 {
                     _Uid = value;
                     OnPropertyChanged("Uid");
+                    NotifyStateChanged();
                 }
             }
         }
@@ -288,7 +295,27 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
+        private string _BornDate;
+        //private DateTime _Date;
+        public string BornDate
+        {
+            get
+            {
+                return _BornDate;
+            }
+            set
+            {
+                if (_BornDate != value)
+                {
+                    _BornDate = value;
+                    OnPropertyChanged("BornDate");
+                }
+            }
+        }
+
         #endregion
+
+        public List<Contact> Kontaktliste;
 
         #region Buttons
         
@@ -334,7 +361,6 @@ namespace ERP_Client.ViewModels.FensterModels
             Proxy proxy = new Proxy();
             Contact contact = new Contact();
             Contact kontakt = new Contact();
-            List<Contact> liste = new List<Contact>();
             int anzahl = 0;
             string text;
 
@@ -342,20 +368,18 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.Firstname = Firstname;
             contact.Lastname = Lastname;
 
-            liste = proxy.KontaktSuchen(contact);
+            Kontaktliste = proxy.KontaktSuchen(contact);
 
             text = "Suchergebnis: ";
 
-            if (liste != null)
-                anzahl = liste.Count;
-            else
-                anzahl = 0;
+            if (Kontaktliste != null)
+                anzahl = Kontaktliste.Count;            
 
             if (anzahl > 0)
             {
                 for (int i = 0; i < anzahl; i++)
                 {
-                    kontakt = liste[i];
+                    kontakt = Kontaktliste[i];
 
                     if (kontakt.Name != null || kontakt.Uid != null)
                         text += "\n" + kontakt.Name + " " + kontakt.Uid + " ";
@@ -389,7 +413,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.ID = Id;
             }
 
-            if (Firstname != null && Lastname != null)
+            if (IsFirma == false)
             {
                 contact.Firstname = Firstname;
                 contact.Lastname = Lastname;
@@ -397,15 +421,13 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Suffix = Suffix;
             }
 
-            if (Firmname != null && Uid != null)
+            if (IsFirma == true)
             {
                 contact.Name = Firmname;
                 contact.Uid = Uid;
             }
-
             
             contact.Address = new Address();
-
             contact.Address.Street = Streetname;
             contact.Address.Number = Number;
             contact.Address.PostalCode = PostalCode;
@@ -420,7 +442,42 @@ namespace ERP_Client.ViewModels.FensterModels
             Changeresult = result;
         }
         #endregion
+       
+        #endregion
 
+        #region View
+        public bool? IsFirma
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Lastname) && string.IsNullOrWhiteSpace(Firstname) && string.IsNullOrWhiteSpace(Firmname) && string.IsNullOrWhiteSpace(Uid)
+                    && string.IsNullOrWhiteSpace(Prefix) && string.IsNullOrWhiteSpace(Suffix)) return null;
+                return !(string.IsNullOrWhiteSpace(Firmname) && string.IsNullOrWhiteSpace(Uid));
+            }
+        }
+
+        public bool CanEditPerson
+        {
+            get
+            {
+                return IsFirma == null || IsFirma == false;
+            }
+        }
+
+        public bool CanEditFirm
+        {
+            get
+            {
+                return IsFirma == null || IsFirma == true;
+            }
+        }
+
+        private void NotifyStateChanged()
+        {
+            OnPropertyChanged("IsFirma");
+            OnPropertyChanged("CanEditPerson");
+            OnPropertyChanged("CanEditFirm");
+        }
         #endregion
     }
 }

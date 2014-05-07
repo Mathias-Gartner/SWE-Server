@@ -8,19 +8,30 @@
         Width="800">
 
     <Grid Background="#FFE5E5E5">
-        <TextBlock HorizontalAlignment="Left" Margin="20,23,0,0" TextWrapping="Wrap" Text="Vorname:" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  Margin="90,20,0,0" TextWrapping="Wrap" Text="{Binding Firstname}" VerticalAlignment="Top" Height="22" Width="580"/>
+        <GroupBox Header="Personsuche" Margin="5,0,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditPerson}">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Vorname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,0,0,0" TextWrapping="Wrap" Text="{Binding Firstname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="580"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="20,53,0,0" TextWrapping="Wrap" Text="Nachname:" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  Margin="90,50,0,0" TextWrapping="Wrap" Text="{Binding Lastname}" VerticalAlignment="Top" Height="22" Width="580"/>
-        
-        <!--Noch machen: Suche nach Firma-->
-        
-        <ctrls:CommandButton CommandViewModel="{Binding KontaktSuche}" HorizontalAlignment="Right" Margin="0,20,20,0" VerticalAlignment="Top" Height="54" Width="75"/>
-        <Button Name="BNeu" Content="Neuer Kontakt" ToolTip="Neuer Kontakten erstellen" Click="BNeu_Click" HorizontalAlignment="Left" Margin="20,90,0,0" VerticalAlignment="Top" Height="22" Width="100"/>
+                <TextBlock HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" Text="Nachname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,30,0,0" TextWrapping="Wrap" Text="{Binding Lastname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="580"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Firmensuche" Margin="5,75,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditFirm}">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Firmenname:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,0,0,0" TextWrapping="Wrap" Text="{Binding Firmname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="580"/>
 
-        <TextBlock Name="Suchergebnis" Margin="20,125,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="400" VerticalAlignment="Top"/>
-        <!--Noch machen: Height = "22"-->
-        
-    </Grid>        
+                <TextBlock HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" Text="UID:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left"  Margin="70,30,0,0" TextWrapping="Wrap" Text="{Binding Uid, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="580"/>
+            </Grid>
+        </GroupBox>
+
+        <ctrls:CommandButton CommandViewModel="{Binding KontaktSuche}" HorizontalAlignment="Right" Margin="0,15,20,0" VerticalAlignment="Top" Height="54" Width="90"/>
+        <Button Name="BNeu" Content="Neuer Kontakt" ToolTip="Neuer Kontakten erstellen" Click="BNeu_Click" HorizontalAlignment="Right" Margin="0,90,20,0" VerticalAlignment="Top" Height="54" Width="90"/>
+
+        <TextBlock Name="Suchergebnis" Margin="20,155,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="22" VerticalAlignment="Top"/>
+
+        <ListView Margin="5,180,5,5" ItemsSource="{Binding Kontaktliste}"/>
+    </Grid>
 </Window>
