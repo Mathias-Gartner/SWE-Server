@@ -14,12 +14,10 @@ namespace ERP_Client.ViewModels.FensterModels
 
         public KontaktViewModel()
         {
-            EditContact = new EditContactCommand();
         }
 
         public KontaktViewModel(Contact c)
         {
-            EditContact = new EditContactCommand();
             neu = false;
             Id = c.ID;
             Firstname = c.Firstname;
@@ -30,26 +28,35 @@ namespace ERP_Client.ViewModels.FensterModels
             Firmname = c.Name;
             Uid = c.Uid;
 
-            Streetname = c.Address.Street;
-            Number = c.Address.Number;
-            PostalCode = c.Address.PostalCode;
-            PostOfficeBox = c.Address.PostOfficeBox;
-            City = c.Address.City;
-            Country = c.Address.Country;
+            if (c.Address != null)
+            {
+                Streetname = c.Address.Street;
+                Number = c.Address.Number;
+                PostalCode = c.Address.PostalCode;
+                PostOfficeBox = c.Address.PostOfficeBox;
+                City = c.Address.City;
+                Country = c.Address.Country;
+            }
 
-            RStreetname = c.InvoiceAddress.Street;
-            RNumber = c.InvoiceAddress.Number;
-            RPostalCode = c.InvoiceAddress.PostalCode;
-            RPostOfficeBox = c.InvoiceAddress.PostOfficeBox;
-            RCity = c.InvoiceAddress.City;
-            RCountry = c.InvoiceAddress.Country;
+            if (c.InvoiceAddress != null)
+            {
+                RStreetname = c.InvoiceAddress.Street;
+                RNumber = c.InvoiceAddress.Number;
+                RPostalCode = c.InvoiceAddress.PostalCode;
+                RPostOfficeBox = c.InvoiceAddress.PostOfficeBox;
+                RCity = c.InvoiceAddress.City;
+                RCountry = c.InvoiceAddress.Country;
+            }
 
-            LStreetname = c.DeliveryAddress.Street;
-            LNumber = c.DeliveryAddress.Number;
-            LPostalCode = c.DeliveryAddress.PostalCode;
-            LPostOfficeBox = c.DeliveryAddress.PostOfficeBox;
-            LCity = c.DeliveryAddress.City;
-            LCountry = c.DeliveryAddress.Country;
+            if (c.DeliveryAddress != null)
+            {
+                LStreetname = c.DeliveryAddress.Street;
+                LNumber = c.DeliveryAddress.Number;
+                LPostalCode = c.DeliveryAddress.PostalCode;
+                LPostOfficeBox = c.DeliveryAddress.PostOfficeBox;
+                LCity = c.DeliveryAddress.City;
+                LCountry = c.DeliveryAddress.Country;
+            }
 
             Email = c.Email;
         }
@@ -565,7 +572,8 @@ namespace ERP_Client.ViewModels.FensterModels
                 if (_BornDate != value)
                 {
                     _BornDate = value;
-                    Date = DateTime.Parse(_BornDate);
+                    if (!string.IsNullOrEmpty(_BornDate))
+                        Date = DateTime.Parse(_BornDate);
                     OnPropertyChanged("BornDate");
                 }
             }
@@ -696,7 +704,8 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Lastname = Lastname;
                 contact.Prefix = Prefix;
                 contact.Suffix = Suffix;
-                contact.DateOfBirth = Date;
+                if (!string.IsNullOrEmpty(BornDate))
+                    contact.DateOfBirth = Date;
             }
 
             if (IsFirma == true)
@@ -782,37 +791,5 @@ namespace ERP_Client.ViewModels.FensterModels
 
         private static readonly DependencyProperty DPSelectedContact =
             DependencyProperty.Register("SelectedContact", typeof(Contact), typeof(KontaktViewModel));
-
-        ICommand _editContact;
-        public ICommand EditContact
-        {
-            get
-            {
-                //if (_editContact == null)
-                //    _editContact = new EditContactCommand();
-                //return _editContact;
-                return (ICommand)GetValue(DPEditContact);
-            }
-            set { SetValue(DPEditContact, value); }
-        }
-
-        private static readonly DependencyProperty DPEditContact =
-            DependencyProperty.Register("EditContact", typeof(ICommand), typeof(KontaktViewModel));
-
-        private class EditContactCommand : ICommand
-        {
-            public bool CanExecute(object parameter)
-            {
-                return parameter != null;
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                AddKontakt addKontakt = new AddKontakt((Contact)parameter);
-                addKontakt.ShowDialog();
-            }
-        }
     }
 }

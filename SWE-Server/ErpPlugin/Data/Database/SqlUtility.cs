@@ -51,7 +51,14 @@ namespace ErpPlugin.Data.Database
             {
                 var idArguments = new Dictionary<string, object>();
                 idArguments.Add("id", instance.ID);
-                var sb = SqlUtility.PrepareUpdate(definition, arguments);
+                var updateArguments = new Dictionary<string,object>();
+                foreach(var argument in arguments)
+                {
+                    if (argument.Key != "id")
+                        updateArguments.Add(argument.Key, argument.Value);
+                }
+
+                var sb = SqlUtility.PrepareUpdate(definition, updateArguments);
                 SqlUtility.AppendWhereClause(sb, idArguments);
                 query = sb.ToString();
             }

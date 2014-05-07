@@ -7,20 +7,6 @@
         WindowStartupLocation="CenterScreen"
         Height="600"
         Width="800">
-
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type contacts:SingleContactViewModel}">
-            <Button Command="{Binding EditContact}" CommandParameter="{Binding SelectedContact}" Content="{Binding DisplayName}">
-                <!--<Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <DockPanel>
-                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding DisplayName}" />
-                        </DockPanel>
-                    </ControlTemplate>
-                </Button.Template>-->
-            </Button>
-        </DataTemplate>
-    </Window.Resources>
     
     <Grid Background="#FFE5E5E5">
         <GroupBox Header="Personsuche" Margin="5,0,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditPerson}">
@@ -47,19 +33,19 @@
 
         <TextBlock Name="Suchergebnis" Margin="20,155,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="22" VerticalAlignment="Top"/>
 
-        <ListView Margin="5,180,5,5" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}" />
-        <!--<ListView Margin="5,180,5,5" ItemsSource="{Binding Kontaktliste}">
-
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        --><!--<CheckBox DockPanel.Dock="Left"
-                                                          IsChecked="{Binding IsChecked, Mode=OneWay}" />--><!--
-                        <TextBlock Text="{Binding LastName, Mode=OneWay}"
-                                                           Margin="5,0,0,0" />
-                    </DockPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
+        <ListView Margin="5,180,5,5" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Bearbeiten" HeaderStringFormat="Bearbeiten">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding EditContact}" Content="Bearbeiten" Width="100"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Kontakt" HeaderStringFormat="Kontakt" DisplayMemberBinding="{Binding DisplayName}" Width="300"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
