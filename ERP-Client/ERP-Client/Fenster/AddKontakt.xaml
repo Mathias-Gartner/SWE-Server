@@ -33,12 +33,7 @@
                 <TextBox  Margin="570,60,20,0" TextWrapping="Wrap" Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
 
                 <TextBlock HorizontalAlignment="Left" Margin="0,93,0,0" TextWrapping="Wrap" Text="Firma:" VerticalAlignment="Top"/>
-
-                <TextBox Text="{Binding FirmSuche, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left"  Margin="70,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="680"><!--x:Class="QuickZip.Controls.SelectFolderTextBox"-->
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding KontaktSuche}" Key="Enter"/>
-                    </TextBox.InputBindings>
-                </TextBox>
+                <ctrls:AutoComplete AutoCompleteSource="{Binding FirmaAutoCompleteSource}" SelectedItem="{Binding BelongsTo, Mode=TwoWay}" HorizontalAlignment="Left"  Margin="70,90,0,0" VerticalAlignment="Top" Height="22" Width="680"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Firma" Margin="5,135,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditFirm}">
@@ -50,8 +45,6 @@
                 <TextBox HorizontalAlignment="Left"  Margin="70,30,0,0" TextWrapping="Wrap" Text="{Binding Uid, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="680"/>
             </Grid>
         </GroupBox>
-
-        <ctrls:AutoComplete AutoCompleteSource="{Binding FirmaAutoCompleteSource}" SelectedItem="{Binding BelongsTo}" />
         
         <GroupBox Header="Adresse" Margin="5,215,5,0" VerticalAlignment="Top" Height="115">
             <Grid>
@@ -71,7 +64,7 @@
                 <TextBox  Margin="230,35,310,0" TextWrapping="Wrap" Text="{Binding City}" VerticalAlignment="Top" Height="22"/>
 
                 <TextBlock HorizontalAlignment="Left" Margin="490,38,0,0" TextWrapping="Wrap" Text="Staat:" VerticalAlignment="Top" RenderTransformOrigin="0.442,0.437"/>
-                <TextBox  Margin="537,35,20,0" TextWrapping="Wrap" Text="{Binding State}" VerticalAlignment="Top" Height="22"/>
+                <TextBox  Margin="537,35,20,0" TextWrapping="Wrap" Text="{Binding Country}" VerticalAlignment="Top" Height="22"/>
 
                 <TextBlock HorizontalAlignment="Left" Margin="0,73,0,0" TextWrapping="Wrap" Text="E-Mail:" VerticalAlignment="Top"/>
                 <TextBox  Margin="70,70,20,0" TextWrapping="Wrap" Text="{Binding Email}" VerticalAlignment="Top" Height="22"/>
