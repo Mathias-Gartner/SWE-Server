@@ -166,13 +166,18 @@ namespace ERP_Client.Controls
             set
             {
                 SetValue(SelectedItemProperty, value);
-                if (SelectedItem != null)
-                    textBox.Text = SelectedItem.ToString();
             }
         }
 
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(object), typeof(AutoComplete));
+            DependencyProperty.Register("SelectedItem", typeof(object), typeof(AutoComplete), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedItem_Changed));
+
+        private static void SelectedItem_Changed(DependencyObject autoComplete, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (AutoComplete) autoComplete;
+            if (e.NewValue != null)
+                control.textBox.Text = e.NewValue.ToString();
+        }
     }
 
     public interface IAutoCompleteSource

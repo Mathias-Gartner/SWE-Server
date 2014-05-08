@@ -59,8 +59,8 @@ namespace ErpPlugin.Data.Database
             {
                 var idArguments = new Dictionary<string, object>();
                 idArguments.Add("id", instance.ID);
-                var updateArguments = new Dictionary<string,object>();
-                foreach(var argument in arguments)
+                var updateArguments = new Dictionary<string, object>();
+                foreach (var argument in arguments)
                 {
                     if (argument.Key != "id")
                         updateArguments.Add(argument.Key, argument.Value);
@@ -70,6 +70,8 @@ namespace ErpPlugin.Data.Database
                 SqlUtility.AppendWhereClause(sb, idArguments);
                 query = sb.ToString();
             }
+            else if (instance.State == BusinessObject.BusinessObjectState.Unmodified)
+                return true;
             else
             {
                 throw new InvalidOperationException(

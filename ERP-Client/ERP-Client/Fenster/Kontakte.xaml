@@ -48,7 +48,7 @@
 
         <TextBlock Name="Suchergebnis" Margin="20,155,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="22" VerticalAlignment="Top"/>
 
-        <ListView Margin="5,180,5,5" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}">
+        <ListView Margin="5,180,5,5" ItemsSource="{Binding Contacts}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Bearbeiten" HeaderStringFormat="Bearbeiten">

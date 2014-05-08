@@ -743,7 +743,7 @@ namespace ERP_Client.ViewModels.FensterModels
 
             if (IsFirma == true)
                 contact.Name = FirmSuche;
-                
+
             Kontaktliste = proxy.KontaktSuchen(contact);
 
             if (Kontaktliste != null)
@@ -808,9 +808,9 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.DeliveryAddress.City = LCity;
             contact.DeliveryAddress.Country = LCountry;
 
-            if (_belongsTo != null)
+            if (BelongsTo != null && BelongsTo is Contact)
             {
-                contact.BelongsTo = _belongsTo;
+                contact.BelongsTo = (Contact)BelongsTo;
             }
 
             contact.Email = Email;
@@ -866,15 +866,6 @@ namespace ERP_Client.ViewModels.FensterModels
         }
         #endregion
 
-        public SingleContactViewModel SelectedContact
-        {
-            get { return (SingleContactViewModel)GetValue(DPSelectedContact); }
-            set { SetValue(DPSelectedContact, value); }
-        }
-
-        private static readonly DependencyProperty DPSelectedContact =
-            DependencyProperty.Register("SelectedContact", typeof(Contact), typeof(KontaktViewModel));
-
         private FirmaAutoCompleteSource _firmaAutoCompleteSource;
         public FirmaAutoCompleteSource FirmaAutoCompleteSource
         {
@@ -886,18 +877,21 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
-        private Contact _belongsTo;
         public object BelongsTo
         {
             get { return GetValue(DPBelongsTo); }
-            set
-            {
-                _belongsTo = value as Contact;
-                SetValue(DPBelongsTo, value);
-            }
+            set { SetValue(DPBelongsTo, value); }
         }
 
         public static readonly DependencyProperty DPBelongsTo =
             DependencyProperty.Register("BelongsTo", typeof(object), typeof(KontaktViewModel));
+        //, new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, BelongsTo_Changed));
+
+        /*private static void BelongsTo_Changed(DependencyObject autoComplete, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (AutoComplete) autoComplete;
+            if (e.NewValue != null)
+                control.textBox.Text = e.NewValue.ToString();
+        }*/
     }
 }
