@@ -33,7 +33,12 @@
                 <TextBox  Margin="570,60,20,0" TextWrapping="Wrap" Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
 
                 <TextBlock HorizontalAlignment="Left" Margin="0,93,0,0" TextWrapping="Wrap" Text="Firma:" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left"  Margin="70,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="680"/>
+
+                <TextBox Text="{Binding FirmSuche, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left"  Margin="70,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="680"><!--x:Class="QuickZip.Controls.SelectFolderTextBox"-->
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding KontaktSuche}" Key="Enter"/>
+                    </TextBox.InputBindings>
+                </TextBox>
             </Grid>
         </GroupBox>
         <GroupBox Header="Firma" Margin="5,135,5,0" VerticalAlignment="Top" Height="75" IsEnabled="{Binding CanEditFirm}">

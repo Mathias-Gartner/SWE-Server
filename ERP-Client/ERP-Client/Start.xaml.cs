@@ -21,8 +21,6 @@ namespace ERP_Client
         private void NotImplement(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Dieses Feature wurde noch nicht implementiert!", "Noch nicht implementiert");
-        }
-
-        
+        }        
     }
 }

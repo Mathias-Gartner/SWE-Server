@@ -4,6 +4,8 @@ using System.Linq;
 using ERP_Client.Fenster;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 
 namespace ERP_Client.ViewModels.FensterModels
@@ -523,6 +525,23 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
         }
+
+        private string _FirmSuche;
+        public string FirmSuche
+        {
+            get
+            {
+                return _FirmSuche;
+            }
+            set
+            {
+                if (_FirmSuche != value)
+                {
+                    _FirmSuche = value;
+                    OnPropertyChanged("FirmSuche");
+                }
+            }
+        }
         #endregion
 
         private string _Suchergebnis = "Suchergebnis";
@@ -627,6 +646,22 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
+        private ICommandViewModel _FirmaSuche;
+        public ICommandViewModel FirmaSuche
+        {
+            get
+            {
+                if (_FirmaSuche == null)
+                {
+                    _FirmaSuche = new ExecuteCommandViewModel(
+                        "Suchen",
+                        "Kontaktsuche starten",
+                        SucheFirma);
+                }
+                return _FirmaSuche;
+            }
+        }
+
         private ICommandViewModel _KontaktChange;
         public ICommandViewModel KontaktChange
         {
@@ -667,7 +702,6 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             Proxy proxy = new Proxy();
             Contact contact = new Contact();
-            Contact kontakt = new Contact();
             int anzahl = 0;
             string text;
 
@@ -694,6 +728,25 @@ namespace ERP_Client.ViewModels.FensterModels
                 text += "Keine Kontakte gefunden.";
 
             Suchergebnis = text;
+        }
+
+        public void SucheFirma()
+        {
+            Proxy proxy = new Proxy();
+            Contact contact = new Contact();
+            int anzahl = 0;
+
+            contact.State = "SearchObject";
+
+            if (IsFirma == true)
+                contact.Name = FirmSuche;
+                
+            Kontaktliste = proxy.KontaktSuchen(contact);
+
+            if (Kontaktliste != null)
+                anzahl = Kontaktliste.Count();
+
+            //if (anzahl < 1)
         }
         #endregion
 
