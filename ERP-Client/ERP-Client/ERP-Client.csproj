@@ -55,6 +55,7 @@
     </ApplicationDefinition>
     <Compile Include="Address.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Controls\AutoComplete.cs" />
     <Compile Include="Controls\CommandButton.cs" />
     <Compile Include="Fenster\AddKontakt.xaml.cs">
       <DependentUpon>AddKontakt.xaml</DependentUpon>
@@ -62,6 +63,7 @@
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\StartViewModel.cs" />
+    <Compile Include="ViewModels\FirmaAutoCompleteSource.cs" />
     <Compile Include="ViewModels\SingleContactViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Fenster\AddKontakt.xaml">

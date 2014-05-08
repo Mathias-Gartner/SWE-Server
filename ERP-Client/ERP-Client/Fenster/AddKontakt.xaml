@@ -51,6 +51,8 @@
             </Grid>
         </GroupBox>
 
+        <ctrls:AutoComplete AutoCompleteSource="{Binding FirmaAutoCompleteSource}" SelectedItem="{Binding BelongsTo}" />
+        
         <GroupBox Header="Adresse" Margin="5,215,5,0" VerticalAlignment="Top" Height="115">
             <Grid>
                 <TextBlock HorizontalAlignment="Left" Margin="0,3,0,0" TextWrapping="Wrap" Text="Straße:" VerticalAlignment="Top"/>

@@ -60,6 +60,9 @@ namespace ERP_Client.ViewModels.FensterModels
                 LCountry = c.DeliveryAddress.Country;
             }
 
+            if (c.BelongsTo != null)
+                BelongsTo = c.BelongsTo;
+
             Email = c.Email;
         }
 
@@ -805,6 +808,11 @@ namespace ERP_Client.ViewModels.FensterModels
             contact.DeliveryAddress.City = LCity;
             contact.DeliveryAddress.Country = LCountry;
 
+            if (_belongsTo != null)
+            {
+                contact.BelongsTo = _belongsTo;
+            }
+
             contact.Email = Email;
 
             result = proxy.KontaktChange(contact);
@@ -866,5 +874,30 @@ namespace ERP_Client.ViewModels.FensterModels
 
         private static readonly DependencyProperty DPSelectedContact =
             DependencyProperty.Register("SelectedContact", typeof(Contact), typeof(KontaktViewModel));
+
+        private FirmaAutoCompleteSource _firmaAutoCompleteSource;
+        public FirmaAutoCompleteSource FirmaAutoCompleteSource
+        {
+            get
+            {
+                if (_firmaAutoCompleteSource == null)
+                    _firmaAutoCompleteSource = new FirmaAutoCompleteSource();
+                return _firmaAutoCompleteSource;
+            }
+        }
+
+        private Contact _belongsTo;
+        public object BelongsTo
+        {
+            get { return GetValue(DPBelongsTo); }
+            set
+            {
+                _belongsTo = value as Contact;
+                SetValue(DPBelongsTo, value);
+            }
+        }
+
+        public static readonly DependencyProperty DPBelongsTo =
+            DependencyProperty.Register("BelongsTo", typeof(object), typeof(KontaktViewModel));
     }
 }

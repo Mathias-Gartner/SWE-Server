@@ -14,6 +14,14 @@ namespace ErpPlugin.Data.Database
     {
         static ILog logger = LogManager.GetLogger(typeof(SqlUtility));
 
+        public static SqlDataReader SearchObjects(IDefinition dal, Dictionary<string, object> arguments)
+        {
+            var sb = PrepareSelect(dal);
+            AppendLikeWhereClause(sb, arguments);
+            var query = CreateQuery(sb.ToString(), ExtractParameters(arguments));
+            return query.ExecuteReader();
+        }
+
         public static SqlDataReader LoadObjects(IDefinition dal, Dictionary<string, object> arguments)
         {
             var sb = PrepareSelect(dal);
@@ -105,6 +113,12 @@ namespace ErpPlugin.Data.Database
         {
             if (arguments.Keys.Count > 0)
                 sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key => String.Format("{0}=@{0}", key))));
+        }
+
+        public static void AppendLikeWhereClause(StringBuilder sb, Dictionary<string, object> arguments)
+        {
+            if (arguments.Keys.Count > 0)
+                sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key => String.Format("{0} like @{0}+'%'", key))));
         }
 
         public static StringBuilder PrepareSelect(IDefinition definition)

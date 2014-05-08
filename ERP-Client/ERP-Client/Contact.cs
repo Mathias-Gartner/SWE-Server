@@ -18,5 +18,12 @@ namespace ERP_Client
         public Address InvoiceAddress { get; set; }
         public Address DeliveryAddress { get; set; }
         public Contact BelongsTo { get; set; }
+
+        public override string ToString()
+        {
+            if (String.IsNullOrEmpty(Name))
+                return String.Join(" ", new[] { Firstname, Lastname });
+            return Name;
+        }
     }
 }
