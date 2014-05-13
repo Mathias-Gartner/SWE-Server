@@ -75,5 +75,20 @@ namespace ErpPlugin.Data.Fake
         {
             throw new NotImplementedException();
         }
+
+        public ICollection<Invoice> SearchInvoice(Invoice searchObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveInvoice(Invoice invoice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteInvoice(Invoice invoice)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

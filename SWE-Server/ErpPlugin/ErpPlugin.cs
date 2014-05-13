@@ -73,6 +73,20 @@ namespace ErpPlugin
                         //result = contact.Delete();
                         logger.DebugFormat("Contact deleted, success={0}", result);
                         break;
+                    case "searchInvoice":
+                        var invoice = request.RawPostData.FromXmlString<Invoice>();
+                        result = invoice.Search();
+                        if (logger.IsDebugEnabled)
+                        {
+                            var list = (IEnumerable<Invoice>)result;
+                            logger.DebugFormat("Invoices searched, {0} results", list.Count());
+                        }
+                        break;
+                    case "saveInvoice":
+                        invoice = request.RawPostData.FromXmlString<Invoice>();
+                        result = invoice.Save();
+                        logger.DebugFormat("Invoice saved, success={0}", result);
+                        break;
                 }
             }
             catch (InvalidOperationException e)

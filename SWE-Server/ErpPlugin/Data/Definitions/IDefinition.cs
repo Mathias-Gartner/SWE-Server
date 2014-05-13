@@ -9,15 +9,15 @@ namespace ErpPlugin.Data.Definitions
 
     public interface IDefinition
     {
+        string TableName { get; }
+
+        IEnumerable<string> Columns { get; }
+
         //    Column name, value
         Dictionary<string, object> CreateArguments(BusinessObject instance);
 
         ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(SqlDataReader reader, RelationLoader relationLoader);
 
         bool SaveRelations(BusinessObject instance, RelationSaver relationSaver);
-
-        string TableName { get; }
-
-        IEnumerable<string> Columns { get; }
     }
 }

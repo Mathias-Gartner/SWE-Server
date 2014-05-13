@@ -23,22 +23,37 @@ namespace ErpPlugin.Data.Database
 
         public ICollection<User> SearchUsers(User searchObject)
         {
-            return SearchBusinessObject<User>(searchObject);
+            return SearchBusinessObject(searchObject);
         }
 
         public ICollection<Contact> SearchContacts(Contact searchObject)
         {
-            return SearchBusinessObject<Contact>(searchObject);
+            return SearchBusinessObject(searchObject);
         }
 
         public bool SaveContact(Contact contact)
         {
-            return SaveBusinessObject<Contact>(contact);
+            return SaveBusinessObject(contact);
         }
 
         public bool DeleteContact(Contact contact)
         {
-            return DeleteBusinessObject<Contact>(contact);
+            return DeleteBusinessObject(contact);
+        }
+
+        public ICollection<Invoice> SearchInvoice(Invoice searchObject)
+        {
+            return SearchBusinessObject(searchObject);
+        }
+
+        public bool SaveInvoice(Invoice invoice)
+        {
+            return SaveBusinessObject(invoice);
+        }
+
+        public bool DeleteInvoice(Invoice invoice)
+        {
+            return DeleteBusinessObject(invoice);
         }
 
         public ICollection<T> SearchBusinessObject<T>(T searchObject) where T : BusinessObject
@@ -78,7 +93,5 @@ namespace ErpPlugin.Data.Database
             SqlUtility.AppendWhereClause(sb, arguments);
             return SqlUtility.CreateQuery(sb.ToString(), SqlUtility.ExtractParameters(arguments)).ExecuteNonQuery() == 1;
         }
-
-
     }
 }

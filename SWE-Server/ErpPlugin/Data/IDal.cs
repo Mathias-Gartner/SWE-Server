@@ -17,5 +17,9 @@ namespace ErpPlugin.Data
         ICollection<Contact> SearchContacts(Contact searchObject);
         bool SaveContact(Contact contact);
         bool DeleteContact(Contact contact);
+
+        ICollection<Invoice> SearchInvoice(Invoice searchObject);
+        bool SaveInvoice(Invoice invoice);
+        bool DeleteInvoice(Invoice invoice);
     }
 }

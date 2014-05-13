@@ -6,6 +6,7 @@ using ErpPlugin.Data.Fake;
 
 namespace ErpUnitTests
 {
+    //Integration Tests
     [TestClass]
     public class FacadeTests : ErpBaseTest
     {

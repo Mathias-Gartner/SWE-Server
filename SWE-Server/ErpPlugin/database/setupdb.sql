@@ -134,6 +134,7 @@ CREATE TABLE [invoices]
 CREATE TABLE [invoiceEntries]
 (
 	[id]			[int] IDENTITY(1,1)	NOT NULL,
+	[invoiceId]		[int]				NOT NULL REFERENCES [invoices],
 	[description]	[varchar](max)		NOT NULL,
 	[amount]		[int]				NOT NULL DEFAULT 1,
 	[price]			[money]				NOT NULL,

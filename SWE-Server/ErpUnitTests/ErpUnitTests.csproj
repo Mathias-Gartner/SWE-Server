@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ContactTests.cs" />
     <Compile Include="Dal\ContactDefinitionTests.cs" />
     <Compile Include="ErpBaseTest.cs" />
     <Compile Include="Dal\SqlUtilityTests.cs" />
