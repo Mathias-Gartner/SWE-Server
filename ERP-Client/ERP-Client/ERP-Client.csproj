@@ -60,10 +60,18 @@
     <Compile Include="Fenster\AddKontakt.xaml.cs">
       <DependentUpon>AddKontakt.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Fenster\Rechnung.xaml.cs">
+      <DependentUpon>Rechnung.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Fenster\SearchFirma.xaml.cs">
+      <DependentUpon>SearchFirma.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
+    <Compile Include="ViewModels\FensterModels\RechnungViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\StartViewModel.cs" />
     <Compile Include="ViewModels\FirmaAutoCompleteSource.cs" />
+    <Compile Include="ViewModels\KontaktAutoCompleteSource.cs" />
     <Compile Include="ViewModels\SingleContactViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Fenster\AddKontakt.xaml">
@@ -71,6 +79,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Fenster\Kontakte.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fenster\Rechnung.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fenster\SearchFirma.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

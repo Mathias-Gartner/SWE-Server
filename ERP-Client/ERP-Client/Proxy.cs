@@ -12,10 +12,11 @@ namespace ERP_Client
     {
         public Proxy() { }
 
-        //Uri baseUri = new Uri("http://localhost:8080");
+        Uri baseUri = new Uri("http://localhost:8080");
         //Uri baseUri = new Uri("http://10.128.241.99:8080");
-        Uri baseUri = new Uri("http://10.201.92.108:8080");
+        //Uri baseUri = new Uri("http://10.201.92.108:8080");
 
+        #region Kontakte
         public List<Contact> KontaktSuchen(Contact searchObject)
         {
             string xml = ToXmlString(searchObject);
@@ -61,6 +62,15 @@ namespace ERP_Client
 
             return result;
         }
+        #endregion
+
+        #region Rechnungen
+        public void RechnungSuche()
+        { }
+
+        public void RechnungErstellen()
+        { }
+        #endregion
 
         public static List<Contact> LoadFromXMLString(string xmlText)
         {

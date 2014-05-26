@@ -10,33 +10,20 @@
     
     <UniformGrid Columns="2"  Name="StartList" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
         <UniformGrid.Resources>
-            <Style TargetType="Button">
-                <Setter Property="Margin" Value="5"></Setter>
-                <Setter Property="Width" Value="100"></Setter>
-                <Setter Property="Height" Value="60"></Setter>
-            </Style>
             <Style TargetType="ctrls:CommandButton">
                 <Setter Property="Margin" Value="5"></Setter>
                 <Setter Property="Width" Value="100"></Setter>
                 <Setter Property="Height" Value="60"></Setter>
             </Style>
         </UniformGrid.Resources>
-        
-        <Button Name="BKontakte" Content="Kontakte" ToolTip="Verwalten von Kontakten" Click="BKontakte_Click"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Kontakte}"/>-->
-        <Button Name="BRechnungen" Content="Rechnungen" ToolTip="Verwalten von Rechnungen" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Rechnungen}"/>-->
-        <Button Name="BProjekte" Content="Projekte" ToolTip="Verwalten von Projekten" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Projekte}"/>-->
-        <Button Name="BAngebote" Content="Angebote" ToolTip="Verwalten von Angeboten" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Angebote}"/>-->
-        <Button Name="BZeiterfassung" Content="Zeiterfassung" ToolTip="Zeiterfassung" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Zeiterfassung}"/>-->
-        <Button Name="BAngestellte" Content="Angestellte" ToolTip="Verwalten von Angestellten" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Angestellte}"/>-->
-        <Button Name="BBankkonto" Content="Bankkonto" ToolTip="Verwalten des Bankkontos" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Bankkonto}"/>-->
-        <Button Name="BLogin" Content="Login" ToolTip="Mit seinem Account anmelden" Click="NotImplement"/>
-        <!--<ctrls:CommandButton CommandViewModel="{Binding Login}"/>-->
+                
+        <ctrls:CommandButton CommandViewModel="{Binding Kontakte}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Rechnungen}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Projekte}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Angebote}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Zeiterfassung}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Angestellte}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Bankkonto}"/>
+        <ctrls:CommandButton CommandViewModel="{Binding Login}"/>
     </UniformGrid>
 </Window>

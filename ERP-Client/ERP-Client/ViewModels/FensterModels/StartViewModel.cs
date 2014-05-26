@@ -36,7 +36,7 @@ namespace ERP_Client.ViewModels.FensterModels
                     _Rechnungen = new ExecuteCommandViewModel(
                         "Rechnungen",
                         "Verwalten von Rechnungen",
-                        NotImplement);
+                        OpenRechnung);
                 }
                 return _Rechnungen;
             }
@@ -68,7 +68,7 @@ namespace ERP_Client.ViewModels.FensterModels
                     _Angebote = new ExecuteCommandViewModel(
                         "Angebote",
                         "Verwalten von Angeboten",
-                        OpenKontakte);
+                        NotImplement);
                 }
                 return _Angebote;
             }
@@ -142,6 +142,12 @@ namespace ERP_Client.ViewModels.FensterModels
         public void OpenKontakte()
         {
             var dlg = new ERP_Client.Fenster.Kontakte();
+            dlg.ShowDialog();
+        }
+
+        public void OpenRechnung()
+        {
+            var dlg = new ERP_Client.Fenster.Rechnung();
             dlg.ShowDialog();
         }
 

@@ -14,9 +14,7 @@ namespace ERP_Client.ViewModels.FensterModels
     {
         bool neu = true;
 
-        public KontaktViewModel()
-        {
-        }
+        public KontaktViewModel() { }
 
         public KontaktViewModel(Contact c)
         {
@@ -24,7 +22,7 @@ namespace ERP_Client.ViewModels.FensterModels
             Id = c.ID;
             Firstname = c.Firstname;
             Lastname = c.Lastname;
-            BornDate = (c.DateOfBirth.HasValue ? c.DateOfBirth.ToString() : string.Empty);
+            BornDate = (c.DateOfBirth.HasValue ? c.DateOfBirth.Value : DateTime.Now.Date);
             Prefix = c.Prefix;
             Suffix = c.Suffix;
             Firmname = c.Name;
@@ -67,7 +65,6 @@ namespace ERP_Client.ViewModels.FensterModels
         }
 
         #region Kontaktdaten
-
         #region Person
         private string _Firstname;
         public string Firstname
@@ -581,9 +578,8 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
-        private string _BornDate;
-        private DateTime Date;
-        public string BornDate
+        private DateTime _BornDate = DateTime.Now.Date;
+        public DateTime BornDate
         {
             get
             {
@@ -593,9 +589,7 @@ namespace ERP_Client.ViewModels.FensterModels
             {
                 if (_BornDate != value)
                 {
-                    _BornDate = value;
-                    if (!string.IsNullOrEmpty(_BornDate))
-                        Date = DateTime.Parse(_BornDate);
+                    _BornDate = value;                   
                     OnPropertyChanged("BornDate");
                 }
             }
@@ -643,7 +637,7 @@ namespace ERP_Client.ViewModels.FensterModels
                     _KontaktSuche = new ExecuteCommandViewModel(
                         "Suchen",
                         "Kontaktsuche starten",
-                        Suche);
+                        SucheKontakt);
                 }
                 return _KontaktSuche;
             }
@@ -701,7 +695,7 @@ namespace ERP_Client.ViewModels.FensterModels
         #region Methoden
 
         #region Suche
-        public void Suche()
+        public void SucheKontakt()
         {
             Proxy proxy = new Proxy();
             Contact contact = new Contact();
@@ -753,7 +747,7 @@ namespace ERP_Client.ViewModels.FensterModels
         }
         #endregion
 
-        #region Kontakt ändern
+        #region Kontakt ändern/hinzufügen
         public void Change()
         {
             Proxy proxy = new Proxy();
@@ -774,8 +768,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Lastname = Lastname;
                 contact.Prefix = Prefix;
                 contact.Suffix = Suffix;
-                if (!string.IsNullOrEmpty(BornDate))
-                    contact.DateOfBirth = Date;
+                contact.DateOfBirth = BornDate;
             }
 
             if (IsFirma == true)
