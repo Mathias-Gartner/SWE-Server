@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace ErpPlugin
+namespace ERP_Client
 {
-    public class InvoiceEntry : BusinessObject
+    public class InvoiceEntry
     {
         public string Description { get; set; }
 

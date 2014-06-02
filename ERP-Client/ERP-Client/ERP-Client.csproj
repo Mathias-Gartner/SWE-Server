@@ -66,6 +66,8 @@
     <Compile Include="Fenster\SearchFirma.xaml.cs">
       <DependentUpon>SearchFirma.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Invoice.cs" />
+    <Compile Include="InvoiceEntry.cs" />
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\RechnungViewModel.cs" />

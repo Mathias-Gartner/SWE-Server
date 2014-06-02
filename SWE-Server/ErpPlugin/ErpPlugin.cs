@@ -87,6 +87,12 @@ namespace ErpPlugin
                         result = invoice.Save();
                         logger.DebugFormat("Invoice saved, success={0}", result);
                         break;
+                    case "generateInvoiceDocument":
+                        invoice = request.RawPostData.FromXmlString<Invoice>();
+                        var invoices = (IEnumerable<Invoice>)invoice.Search();
+                        data.Content = invoices.Single().GenerateInvoiceDocument();
+                        data.Contenttype = "application/pdf";
+                        return data;
                 }
             }
             catch (InvalidOperationException e)

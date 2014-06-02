@@ -29,7 +29,7 @@ namespace ERP_Client
             try
             {
                 result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchContact"), xml);
-                liste = LoadFromXMLString(result);
+                liste = LoadFromXMLString<Contact>(result);
             }
             catch (WebException)
             {
@@ -65,22 +65,91 @@ namespace ERP_Client
         #endregion
 
         #region Rechnungen
-        public void RechnungSuche()
-        { }
 
-        public void RechnungErstellen()
-        { }
+        public List<Invoice> RechnungSuchen(Invoice searchObject)
+        {
+            string xml = ToXmlString(searchObject);
+
+            WebClient client = new WebClient();
+            List<Invoice> liste = new List<Invoice>();
+
+            string result;
+
+            try
+            {
+                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchInvoice"), xml);
+                liste = LoadFromXMLString<Invoice>(result);
+            }
+            catch (WebException)
+            {
+                result = string.Empty;
+                liste = null;
+            }
+            catch (XmlException e)
+            {
+                result = e.Message;
+                liste = null;
+            }
+
+            return liste;
+        }
+
+        public string RechnungChange(Contact changeObject)
+        {
+            string xml = ToXmlString(changeObject);
+            string result;
+            WebClient client = new WebClient();
+
+            try
+            {
+                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveInvoice"), xml);
+            }
+            catch (WebException w)
+            {
+                result = w.Message;
+            }
+
+            return result;
+        }
+
+        public string RechnungPdf(Contact searchObject)
+        {
+            string xml = ToXmlString(searchObject);
+            byte[] result;
+            WebClient client = new WebClient();
+
+            try
+            {
+                result = client.UploadData(new Uri(baseUri, "?action=Erp&req=generateInvoiceDocument"), Encoding.UTF8.GetBytes(xml));
+            }
+            catch(WebException)
+            {
+                return null;
+            }
+
+            try
+            {
+                var file = Path.GetTempFileName();
+                File.WriteAllBytes(file, result);
+                return file;
+            }
+            catch (IOException)
+            {
+                return null;
+            }
+        }
+
         #endregion
 
-        public static List<Contact> LoadFromXMLString(string xmlText)
+        public static List<T> LoadFromXMLString<T>(string xmlText)
         {
             var stringReader = new StringReader(xmlText);
             var s = new XmlReaderSettings();
             s.CheckCharacters = true;
             s.ValidationType = ValidationType.None;
             var xmlReader = XmlReader.Create(stringReader, s); // XmlReader for validating xml as it throws nicer exceptions
-            var serializer = new XmlSerializer(typeof(List<Contact>));
-            return serializer.Deserialize(xmlReader) as List<Contact>;
+            var serializer = new XmlSerializer(typeof(List<T>));
+            return serializer.Deserialize(xmlReader) as List<T>;
         }
 
         public static string ToXmlString(object obj)
