@@ -26,7 +26,7 @@ namespace ErpPlugin.Data.Definitions
 
             if (invoiceEntry.ID >= 0)
                 arguments.Add("id", invoiceEntry.ID);
-            if (!String.IsNullOrEmpty(invoiceEntry.Description))
+            if (!String.IsNullOrEmpty(invoiceEntry.Description) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("description", invoiceEntry.Description);
             if (invoiceEntry.Amount >= 0)
                 arguments.Add("amount", invoiceEntry.Amount);
@@ -37,6 +37,8 @@ namespace ErpPlugin.Data.Definitions
             //relations
             if (invoiceEntry.Invoice != null && invoiceEntry.Invoice.ID >= 0)
                 arguments.Add("invoiceId", invoiceEntry.Invoice.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("invoiceId", null);
 
             return arguments;
         }

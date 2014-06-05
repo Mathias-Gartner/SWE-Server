@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ERP_Client.ViewModels
 {
-    public class FirmaAutoCompleteSource : IAutoCompleteSource
+    public class FirmaAutoCompleteSource : KontaktAutoCompleteSource
     {
-        public IEnumerable GetItems(string searchExpression)
+        public override IEnumerable GetItems(string searchExpression)
         {
             Proxy proxy = new Proxy();
             Contact contact = new Contact();

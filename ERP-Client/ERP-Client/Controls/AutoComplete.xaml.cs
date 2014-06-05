@@ -1,25 +1,29 @@
-﻿using System;
+﻿using ERP_Client.ViewModels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace ERP_Client.Controls
 {
-    public class AutoComplete : Canvas
+    /// <summary>
+    /// Interaction logic for AutoComplete.xaml
+    /// </summary>
+    public partial class AutoComplete : UserControl
     {
-        #region MSDN Control http://code.msdn.microsoft.com/windowsdesktop/WPF-Autocomplete-Textbox-df2f1791/sourcecode?fileId=48301&pathId=1237367252
+        #region Control based on MSDN example http://code.msdn.microsoft.com/windowsdesktop/WPF-Autocomplete-Textbox-df2f1791/sourcecode?fileId=48301&pathId=1237367252
         #region Members
-        private VisualCollection controls;
-        private TextBox textBox;
-        private ComboBox comboBox;
         private System.Timers.Timer keypressTimer;
         private delegate void TextChangedCallback();
         private bool insertText;
@@ -30,7 +34,13 @@ namespace ERP_Client.Controls
         #region Constructor
         public AutoComplete()
         {
-            controls = new VisualCollection(this);
+            InitializeComponent();
+
+            setIcon.DataContext = this;
+            unsetIcon.DataContext = this;
+            textBox.DataContext = this;
+
+            searchButton.DataContext = this;
 
             searchThreshold = 2;        // default threshold to 2 char
 
@@ -39,17 +49,12 @@ namespace ERP_Client.Controls
             keypressTimer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
 
             // set up the text box and the combo box
-            comboBox = new ComboBox();
             comboBox.IsSynchronizedWithCurrentItem = true;
             comboBox.IsTabStop = false;
             comboBox.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
 
-            textBox = new TextBox();
             textBox.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
             textBox.VerticalContentAlignment = VerticalAlignment.Center;
-
-            controls.Add(comboBox);
-            controls.Add(textBox);
         }
         #endregion
 
@@ -83,6 +88,7 @@ namespace ERP_Client.Controls
                 insertText = true;
                 ComboBoxItem cbItem = (ComboBoxItem)comboBox.SelectedItem;
                 textBox.Text = cbItem.Content.ToString();
+                IsSet = true;
                 SelectedItem = cbItem.Tag;
             }
         }
@@ -91,6 +97,7 @@ namespace ERP_Client.Controls
         {
             try
             {
+                IsSet = false;
                 comboBox.Items.Clear();
                 SelectedItem = null;
                 if (textBox.Text.Length >= searchThreshold)
@@ -99,6 +106,16 @@ namespace ERP_Client.Controls
                         comboBox.Items.Add(new ComboBoxItem() { Content = o.ToString(), Tag = o });
 
                     comboBox.IsDropDownOpen = comboBox.HasItems;
+
+                    if (comboBox.Items.Count == 1 && ((string)comboBox.Items.OfType<ComboBoxItem>().Single().Content).ToLower() == textBox.Text.ToLower())
+                    {
+                        var cursor = textBox.SelectionStart;
+                        var content = comboBox.Items.OfType<ComboBoxItem>().Single().Tag;
+                        textBox.Text = content.ToString();
+                        textBox.SelectionStart = cursor;
+                        IsSet = true;
+                        SelectedItem = content;
+                    }
                 }
                 else
                 {
@@ -132,24 +149,38 @@ namespace ERP_Client.Controls
             }
         }
 
-        protected override Size ArrangeOverride(Size arrangeSize)
-        {
-            textBox.Arrange(new Rect(arrangeSize));
-            comboBox.Arrange(new Rect(arrangeSize));
-            return base.ArrangeOverride(arrangeSize);
-        }
-
-        protected override Visual GetVisualChild(int index)
-        {
-            return controls[index];
-        }
-
-        protected override int VisualChildrenCount
-        {
-            get { return controls.Count; }
-        }
         #endregion
         #endregion
+
+        private ICommandViewModel _search;
+        public ICommandViewModel Search
+        {
+            get
+            {
+                if (_search == null)
+                {
+                    _search = new ExecuteCommandViewModel(
+                        "Suchen",
+                        "Suche in einem neuen Fenster ausführen",
+                        () =>
+                        {
+                            var result = AutoCompleteSource.SearchInWindow(textBox.Text);
+                            if (!String.IsNullOrEmpty(result))
+                                textBox.Text = result;
+                        });
+                }
+                return _search;
+            }
+        }
+
+        public bool IsSet
+        {
+            get { return (bool)GetValue(IsSetProperty); }
+            protected set { SetValue(IsSetProperty, value); }
+        }
+
+        protected static readonly DependencyProperty IsSetProperty =
+            DependencyProperty.Register("IsSet", typeof(bool), typeof(AutoComplete));
 
         public IAutoCompleteSource AutoCompleteSource
         {
@@ -165,7 +196,10 @@ namespace ERP_Client.Controls
             get { return GetValue(SelectedItemProperty); }
             set
             {
-                SetValue(SelectedItemProperty, value);
+                if (IsSet)
+                    SetValue(SelectedItemProperty, value);
+                else
+                    SetValue(SelectedItemProperty, null);
             }
         }
 
@@ -174,7 +208,7 @@ namespace ERP_Client.Controls
 
         private static void SelectedItem_Changed(DependencyObject autoComplete, DependencyPropertyChangedEventArgs e)
         {
-            var control = (AutoComplete) autoComplete;
+            var control = (AutoComplete)autoComplete;
             if (e.NewValue != null)
                 control.textBox.Text = e.NewValue.ToString();
         }
@@ -183,5 +217,7 @@ namespace ERP_Client.Controls
     public interface IAutoCompleteSource
     {
         IEnumerable GetItems(string searchExpression);
+
+        string SearchInWindow(string searchString);
     }
 }

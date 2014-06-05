@@ -44,7 +44,7 @@
         </GroupBox>
 
         <ctrls:CommandButton CommandViewModel="{Binding KontaktSuche}" HorizontalAlignment="Right" Margin="0,15,20,0" VerticalAlignment="Top" Height="54" Width="90"/>
-        <ctrls:CommandButton CommandViewModel="{Binding OpenAdd}" HorizontalAlignment="Right" Margin="0,90,20,0" VerticalAlignment="Top" Height="54" Width="90"/>
+        <ctrls:CommandButton CommandViewModel="{Binding OpenAdd}"  Visibility="{Binding SearchMode, Converter={StaticResource BooleanToInvisibilityConverter}}" HorizontalAlignment="Right" Margin="0,90,20,0" VerticalAlignment="Top" Height="54" Width="90"/>
 
         <TextBlock Name="Suchergebnis" Margin="20,155,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="22" VerticalAlignment="Top"/>
 
@@ -54,7 +54,10 @@
                     <GridViewColumn Width="Auto" Header="Bearbeiten" HeaderStringFormat="Bearbeiten">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Command="{Binding EditContact}" Content="Bearbeiten" Width="100"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Command="{Binding SetSearchResult}" Visibility="{Binding SearchMode, Converter={StaticResource BooleanToVisibilityConverter}}" Content="Übernehmen" Width="100" />
+                                    <Button Command="{Binding EditContact}" Visibility="{Binding SearchMode, Converter={StaticResource BooleanToInvisibilityConverter}}" Content="Bearbeiten" Width="100" />
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -12,57 +12,39 @@ namespace ERP_Client.ViewModels.FensterModels
 {
     public class KontaktViewModel : ViewModel
     {
-        bool neu = true;
+        protected bool neu = true;
 
-        public KontaktViewModel() { }
+        public KontaktViewModel() : this(null) { }
 
-        public KontaktViewModel(Contact c)
+        public KontaktViewModel(Action closeAction) : this(closeAction, false, null) { }
+
+        public KontaktViewModel(Action closeAction, bool searchMode, string searchString)
         {
-            neu = false;
-            Id = c.ID;
-            Firstname = c.Firstname;
-            Lastname = c.Lastname;
-            BornDate = (c.DateOfBirth.HasValue ? c.DateOfBirth.Value : DateTime.Now.Date);
-            Prefix = c.Prefix;
-            Suffix = c.Suffix;
-            Firmname = c.Name;
-            Uid = c.Uid;
-
-            if (c.Address != null)
-            {
-                Streetname = c.Address.Street;
-                Number = c.Address.Number;
-                PostalCode = c.Address.PostalCode;
-                PostOfficeBox = c.Address.PostOfficeBox;
-                City = c.Address.City;
-                Country = c.Address.Country;
-            }
-
-            if (c.InvoiceAddress != null)
-            {
-                RStreetname = c.InvoiceAddress.Street;
-                RNumber = c.InvoiceAddress.Number;
-                RPostalCode = c.InvoiceAddress.PostalCode;
-                RPostOfficeBox = c.InvoiceAddress.PostOfficeBox;
-                RCity = c.InvoiceAddress.City;
-                RCountry = c.InvoiceAddress.Country;
-            }
-
-            if (c.DeliveryAddress != null)
-            {
-                LStreetname = c.DeliveryAddress.Street;
-                LNumber = c.DeliveryAddress.Number;
-                LPostalCode = c.DeliveryAddress.PostalCode;
-                LPostOfficeBox = c.DeliveryAddress.PostOfficeBox;
-                LCity = c.DeliveryAddress.City;
-                LCountry = c.DeliveryAddress.Country;
-            }
-
-            if (c.BelongsTo != null)
-                BelongsTo = c.BelongsTo;
-
-            Email = c.Email;
+            CloseAction = closeAction;
+            SearchMode = searchMode;
+            if (!String.IsNullOrEmpty(searchString))
+                Firmname = searchString;
         }
+
+        public Action CloseAction { get; set; }
+
+        public bool SearchMode
+        {
+            get { return (bool)GetValue(SearchModeProperty); }
+            protected set { SetValue(SearchModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty SearchModeProperty =
+            DependencyProperty.Register("SearchMode", typeof(bool), typeof(KontaktViewModel));
+
+        public void SetSearchResult(Contact result)
+        {
+            Result = result.ToString();
+            if (CloseAction != null)
+                CloseAction();
+        }
+
+        public string Result { get; protected set; }
 
         #region Kontaktdaten
         #region Person
@@ -561,23 +543,6 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
-        private string _Changeresult = "Status";
-        public string Changeresult
-        {
-            get
-            {
-                return _Changeresult;
-            }
-            set
-            {
-                if (_Changeresult != value)
-                {
-                    _Changeresult = value;
-                    OnPropertyChanged("Changeresult");
-                }
-            }
-        }
-
         private DateTime _BornDate = DateTime.Now.Date;
         public DateTime BornDate
         {
@@ -619,7 +584,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 if (_kontaktliste != value)
                 {
                     _kontaktliste = value;
-                    Contacts = value.Select(c => new SingleContactViewModel(c));
+                    Contacts = value.Select(c => new SingleContactViewModel(this, c));
                     OnPropertyChanged("Kontaktliste");
                 }
             }
@@ -656,22 +621,6 @@ namespace ERP_Client.ViewModels.FensterModels
                         SucheFirma);
                 }
                 return _FirmaSuche;
-            }
-        }
-
-        private ICommandViewModel _KontaktChange;
-        public ICommandViewModel KontaktChange
-        {
-            get
-            {
-                if (_KontaktChange == null)
-                {
-                    _KontaktChange = new ExecuteCommandViewModel(
-                        "Ändern/Hinzufügen",
-                        "Kontaktdaten ändern/hinzufügen",
-                        Change);
-                }
-                return _KontaktChange;
             }
         }
 
@@ -747,73 +696,6 @@ namespace ERP_Client.ViewModels.FensterModels
         }
         #endregion
 
-        #region Kontakt ändern/hinzufügen
-        public void Change()
-        {
-            Proxy proxy = new Proxy();
-            Contact contact = new Contact();
-            string result;
-
-            if (neu)
-                contact.State = "New";
-            else
-            {
-                contact.State = "Modified";
-                contact.ID = Id;
-            }
-
-            if (IsFirma == false)
-            {
-                contact.Firstname = Firstname;
-                contact.Lastname = Lastname;
-                contact.Prefix = Prefix;
-                contact.Suffix = Suffix;
-                contact.DateOfBirth = BornDate;
-            }
-
-            if (IsFirma == true)
-            {
-                contact.Name = Firmname;
-                contact.Uid = Uid;
-            }
-
-            contact.Address = new Address();
-            contact.Address.Street = Streetname;
-            contact.Address.Number = Number;
-            contact.Address.PostalCode = PostalCode;
-            contact.Address.PostOfficeBox = PostOfficeBox;
-            contact.Address.City = City;
-            contact.Address.Country = Country;
-
-            contact.InvoiceAddress = new Address();
-            contact.InvoiceAddress.Street = RStreetname;
-            contact.InvoiceAddress.Number = RNumber;
-            contact.InvoiceAddress.PostalCode = RPostalCode;
-            contact.InvoiceAddress.PostOfficeBox = RPostOfficeBox;
-            contact.InvoiceAddress.City = RCity;
-            contact.InvoiceAddress.Country = RCountry;
-
-            contact.DeliveryAddress = new Address();
-            contact.DeliveryAddress.Street = LStreetname;
-            contact.DeliveryAddress.Number = LNumber;
-            contact.DeliveryAddress.PostalCode = LPostalCode;
-            contact.DeliveryAddress.PostOfficeBox = LPostOfficeBox;
-            contact.DeliveryAddress.City = LCity;
-            contact.DeliveryAddress.Country = LCountry;
-
-            if (BelongsTo != null && BelongsTo is Contact)
-            {
-                contact.BelongsTo = (Contact)BelongsTo;
-            }
-
-            contact.Email = Email;
-
-            result = proxy.KontaktChange(contact);
-
-            Changeresult = result;
-        }
-        #endregion
-
         #region Neuer Kontakt-Fenster öffnen
 
         public void OpenAddKontakt()
@@ -858,33 +740,5 @@ namespace ERP_Client.ViewModels.FensterModels
             OnPropertyChanged("CanEditFirm");
         }
         #endregion
-
-        private FirmaAutoCompleteSource _firmaAutoCompleteSource;
-        public FirmaAutoCompleteSource FirmaAutoCompleteSource
-        {
-            get
-            {
-                if (_firmaAutoCompleteSource == null)
-                    _firmaAutoCompleteSource = new FirmaAutoCompleteSource();
-                return _firmaAutoCompleteSource;
-            }
-        }
-
-        public object BelongsTo
-        {
-            get { return GetValue(DPBelongsTo); }
-            set { SetValue(DPBelongsTo, value); }
-        }
-
-        public static readonly DependencyProperty DPBelongsTo =
-            DependencyProperty.Register("BelongsTo", typeof(object), typeof(KontaktViewModel));
-        //, new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, BelongsTo_Changed));
-
-        /*private static void BelongsTo_Changed(DependencyObject autoComplete, DependencyPropertyChangedEventArgs e)
-        {
-            var control = (AutoComplete) autoComplete;
-            if (e.NewValue != null)
-                control.textBox.Text = e.NewValue.ToString();
-        }*/
     }
 }

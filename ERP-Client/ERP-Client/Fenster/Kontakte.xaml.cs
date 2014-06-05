@@ -6,11 +6,22 @@ namespace ERP_Client.Fenster
 {
     public partial class Kontakte : Window
     {
-        public Kontakte()
+        private KontaktViewModel kontaktViewModel;
+
+        public Kontakte() : this(false, null)
+        { }
+
+        public Kontakte(bool searchMode, string searchString)
         {
             InitializeComponent();
 
-            this.DataContext = new KontaktViewModel();
-        }        
+            kontaktViewModel = new KontaktViewModel(() => this.Close(), searchMode, searchString);
+            this.DataContext = kontaktViewModel;
+        }
+
+        public string Result
+        {
+            get { return kontaktViewModel.Result; }
+        }
     }
 }

@@ -27,32 +27,40 @@ namespace ErpPlugin.Data.Definitions
 
             if (contact.ID >= 0)
                 arguments.Add("id", contact.ID);
-            if (!String.IsNullOrEmpty(contact.Lastname))
+            if (!String.IsNullOrEmpty(contact.Lastname) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("lastname", contact.Lastname);
-            if (!String.IsNullOrEmpty(contact.Firstname))
+            if (!String.IsNullOrEmpty(contact.Firstname) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("firstname", contact.Firstname);
-            if (contact.DateOfBirth != null)
+            if (contact.DateOfBirth != null || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("dateOfBirth", contact.DateOfBirth);
-            if (!String.IsNullOrEmpty(contact.Email))
+            if (!String.IsNullOrEmpty(contact.Email) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("email", contact.Email);
-            if (!String.IsNullOrEmpty(contact.Name))
+            if (!String.IsNullOrEmpty(contact.Name) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("name", contact.Name);
-            if (!String.IsNullOrEmpty(contact.Uid))
+            if (!String.IsNullOrEmpty(contact.Uid) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("uid", contact.Uid);
-            if (!String.IsNullOrEmpty(contact.Prefix))
+            if (!String.IsNullOrEmpty(contact.Prefix) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("prefix", contact.Prefix);
-            if (!String.IsNullOrEmpty(contact.Suffix))
+            if (!String.IsNullOrEmpty(contact.Suffix) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("suffix", contact.Suffix);
 
             // relations
             if (contact.Address != null && contact.Address.ID >= 0)
                 arguments.Add("addressId", contact.Address.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("addressId", null);
             if (contact.DeliveryAddress != null && contact.DeliveryAddress.ID >= 0)
                 arguments.Add("deliveryAddressId", contact.DeliveryAddress.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("deliveryAddressId", null);
             if (contact.InvoiceAddress != null && contact.InvoiceAddress.ID >= 0)
                 arguments.Add("invoiceAddressId", contact.InvoiceAddress.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("invoiceAddressId", null);
             if (contact.BelongsTo != null && contact.BelongsTo.ID >= 0)
                 arguments.Add("belongsToId", contact.BelongsTo.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("belongsToId", null);
 
             return arguments;
         }

@@ -12,14 +12,14 @@ namespace ERP_Client.Fenster
         {
             InitializeComponent();
 
-            this.DataContext = new KontaktViewModel();
+            this.DataContext = new AddKontaktViewModel();
         }
 
         public AddKontakt(Contact c)
         {
             InitializeComponent();
 
-            this.DataContext = new KontaktViewModel(c);
+            this.DataContext = new AddKontaktViewModel(c);
         }
     }
 }

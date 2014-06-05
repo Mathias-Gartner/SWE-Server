@@ -26,20 +26,24 @@ namespace ErpPlugin.Data.Definitions
 
             if (invoice.ID >= 0)
                 arguments.Add("id", invoice.ID);
-            arguments.Add("outgoingInvoice", invoice.Outgoing);
+            if (invoice.Outgoing.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("outgoingInvoice", invoice.Outgoing);
             if (invoice.InvoiceNumber >= 0)
                 arguments.Add("invoiceNumber", invoice.InvoiceNumber);
-            arguments.Add("invoiceDate", invoice.InvoiceDate);
-            if (invoice.DueDate.HasValue)
+            if (invoice.InvoiceDate.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("invoiceDate", invoice.InvoiceDate);
+            if (invoice.DueDate.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("dueDate", invoice.DueDate);
-            if (!String.IsNullOrEmpty(invoice.Message))
+            if (!String.IsNullOrEmpty(invoice.Message) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("message", invoice.Message);
-            if (!String.IsNullOrEmpty(invoice.Comment))
+            if (!String.IsNullOrEmpty(invoice.Comment) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("comment", invoice.Comment);
 
             // relations
             if (invoice.Contact != null && invoice.Contact.ID >= 0)
                 arguments.Add("contactId", invoice.Contact.ID);
+            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+                arguments.Add("contactId", null);
 
             return arguments;
         }

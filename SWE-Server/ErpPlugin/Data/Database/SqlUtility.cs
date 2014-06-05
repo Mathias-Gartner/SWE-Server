@@ -48,7 +48,7 @@ namespace ErpPlugin.Data.Database
 
             string query;
             var arguments = definition.CreateArguments(instance);
-            if (arguments.Count == 0)
+            if (arguments.Count == 0 || arguments.Values.All(v => v == null))
                 return true; // true because everything that can be saved has been saved
 
             if (instance.State == BusinessObject.BusinessObjectState.New)
@@ -108,7 +108,7 @@ namespace ErpPlugin.Data.Database
 
         public static IEnumerable<SqlParameter> ExtractParameters(Dictionary<string, object> arguments)
         {
-            return arguments.Keys.Select(key => new SqlParameter(String.Format("@{0}", key), arguments[key]));
+            return arguments.Keys.Select(key => new SqlParameter(String.Format("@{0}", key), arguments[key] == null ? DBNull.Value : arguments[key]));
         }
 
         public static void AppendWhereClause(StringBuilder sb, Dictionary<string, object> arguments)

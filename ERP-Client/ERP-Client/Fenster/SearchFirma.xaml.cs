@@ -9,7 +9,7 @@ namespace ERP_Client.Fenster
         {
             InitializeComponent();
 
-            this.DataContext = new KontaktViewModel();
+            this.DataContext = new KontaktViewModel(() => this.Close(), true, null);
         }
     }
 }

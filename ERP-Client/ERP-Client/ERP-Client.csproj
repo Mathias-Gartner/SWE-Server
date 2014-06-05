@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,8 +56,11 @@
     </ApplicationDefinition>
     <Compile Include="Address.cs" />
     <Compile Include="Contact.cs" />
-    <Compile Include="Controls\AutoComplete.cs" />
+    <Compile Include="Controls\AutoComplete.xaml.cs">
+      <DependentUpon>AutoComplete.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CommandButton.cs" />
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Fenster\AddKontakt.xaml.cs">
       <DependentUpon>AddKontakt.xaml</DependentUpon>
     </Compile>
@@ -75,6 +79,7 @@
     <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceEntry.cs" />
     <Compile Include="ViewModels\CommandViewModel.cs" />
+    <Compile Include="ViewModels\FensterModels\AddKontaktViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\KontaktViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\RechnungViewModel.cs" />
     <Compile Include="ViewModels\FensterModels\StartViewModel.cs" />
@@ -82,6 +87,10 @@
     <Compile Include="ViewModels\KontaktAutoCompleteSource.cs" />
     <Compile Include="ViewModels\SingleContactViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Page Include="Controls\AutoComplete.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Fenster\AddKontakt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,7 +159,22 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ios7-checkmark.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ios7-help.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ios7-checkmark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ios7-help.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
