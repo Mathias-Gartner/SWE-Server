@@ -94,7 +94,7 @@ namespace ERP_Client
             return liste;
         }
 
-        public string RechnungChange(Contact changeObject)
+        public string RechnungChange(Invoice changeObject)
         {
             string xml = ToXmlString(changeObject);
             string result;

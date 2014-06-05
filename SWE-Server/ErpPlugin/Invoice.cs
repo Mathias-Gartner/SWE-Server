@@ -13,11 +13,15 @@ namespace ErpPlugin
 {
     public class Invoice : BusinessObject
     {
-        public bool Outgoing { get; set; }
+        public bool? Outgoing { get; set; }
 
         public int InvoiceNumber { get; set; }
 
-        public DateTime InvoiceDate { get; set; }
+        public DateTime? InvoiceDate { get; set; }
+
+        public DateTime? InvoiceDateFrom { get; set; }
+
+        public DateTime? InvoiceDateTo { get; set; }
 
         public DateTime? DueDate { get; set; }
 
@@ -27,7 +31,13 @@ namespace ErpPlugin
 
         public Contact Contact { get; set; }
 
-        public IList<InvoiceEntry> Entries { get; set; }
+        public List<InvoiceEntry> Entries { get; set; }
+
+        public decimal Sum { get { return Entries == null ? 0 : Entries.Sum(e => e.Amount * e.Price); } }
+
+        public decimal? SumFrom { get; set; }
+
+        public decimal? SumTo { get; set; }
 
         public ICollection<Invoice> Search()
         {
@@ -46,12 +56,17 @@ namespace ErpPlugin
 
         public bool Save()
         {
+            if (State != BusinessObjectState.New)
+                return false;
+
             return CurrentDalFactory.Instance.CreateDal().SaveInvoice(this);
         }
 
         public static Invoice CreateSearchObject()
         {
-            return CreateSearchObject<Invoice>();
+            var searchObject = CreateSearchObject<Invoice>();
+            searchObject.InvoiceNumber = -1;
+            return searchObject;
         }
 
         public byte[] GenerateInvoiceDocument()

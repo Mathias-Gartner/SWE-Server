@@ -320,7 +320,9 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             Proxy proxy = new Proxy();
 
-           // proxy.RechnungSuche();
+            var invoice = new Invoice();
+            invoice.State = "SearchObject";
+            proxy.RechnungSuchen(invoice);
         }
 
         public void ErstelleRechnung()

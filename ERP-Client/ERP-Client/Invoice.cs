@@ -8,11 +8,24 @@ namespace ERP_Client
 {
     public class Invoice
     {
-        public bool Outgoing { get; set; }
+        public Invoice()
+        {
+            this.InvoiceNumber = -1;
+        }
+
+        public string ID { get; set; }
+
+        public string State { get; set; }
+
+        public bool? Outgoing { get; set; }
 
         public int InvoiceNumber { get; set; }
 
-        public DateTime InvoiceDate { get; set; }
+        public DateTime? InvoiceDate { get; set; }
+
+        public DateTime? InvoiceDateFrom { get; set; }
+
+        public DateTime? InvoiceDateTo { get; set; }
 
         public DateTime? DueDate { get; set; }
 
@@ -23,5 +36,11 @@ namespace ERP_Client
         public Contact Contact { get; set; }
 
         public List<InvoiceEntry> Entries { get; set; }
+
+        public decimal Sum { get { return Entries == null ? 0 : Entries.Sum(e => e.Amount * e.Price); } }
+
+        public decimal? SumFrom { get; set; }
+
+        public decimal? SumTo { get; set; }
     }
 }
