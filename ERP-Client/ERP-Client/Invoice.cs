@@ -22,6 +22,6 @@ namespace ERP_Client
 
         public Contact Contact { get; set; }
 
-        public IList<InvoiceEntry> Entries { get; set; }
+        public List<InvoiceEntry> Entries { get; set; }
     }
 }

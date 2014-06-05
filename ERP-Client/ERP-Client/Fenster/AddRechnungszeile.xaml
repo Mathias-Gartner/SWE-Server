@@ -18,7 +18,7 @@
         <TextBox HorizontalAlignment="Left"  Margin="210,35,0,0" TextWrapping="Wrap" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="100"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="325,38,0,0" TextWrapping="Wrap" Text="USt.:" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  Margin="360,35,0,0" TextWrapping="Wrap" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="70"/>
+        <TextBox HorizontalAlignment="Left"  Margin="360,35,0,0" TextWrapping="Wrap" Text="{Binding Ust, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="70"/>
         
         <ctrls:CommandButton CommandViewModel="{Binding AddRechnungszeile}" HorizontalAlignment="Left" Margin="15,80,0,0" VerticalAlignment="Top" Height="25" Width="100"/>
     </Grid>

@@ -147,6 +147,23 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
+        private string _Ust;
+        public string Ust
+        {
+            get
+            {
+                return _Ust;
+            }
+            set
+            {
+                if (_Ust != value)
+                {
+                    _Ust = value;
+                    OnPropertyChanged("Ust");
+                }
+            }
+        }
+
         private string _Message;
         public string Message
         {
