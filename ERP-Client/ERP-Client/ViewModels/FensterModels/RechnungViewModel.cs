@@ -95,6 +95,125 @@ namespace ERP_Client.ViewModels.FensterModels
                 }
             }
         }
+
+        private string _Productname;
+        public string Productname
+        {
+            get
+            {
+                return _Productname;
+            }
+            set
+            {
+                if (_Productname != value)
+                {
+                    _Productname = value;
+                    OnPropertyChanged("Productname");
+                }
+            }
+        }
+
+        private string _Amount;
+        public string Amount
+        {
+            get
+            {
+                return _Amount;
+            }
+            set
+            {
+                if (_Amount != value)
+                {
+                    _Amount = value;
+                    OnPropertyChanged("Amount");
+                }
+            }
+        }
+
+        private string _Price;
+        public string Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                if (_Price != value)
+                {
+                    _Price = value;
+                    OnPropertyChanged("Price");
+                }
+            }
+        }
+
+        private string _Message;
+        public string Message
+        {
+            get
+            {
+                return _Message;
+            }
+            set
+            {
+                if (_Message != value)
+                {
+                    _Message = value;
+                    OnPropertyChanged("Message");
+                }
+            }
+        }
+
+        private string _Comment;
+        public string Comment
+        {
+            get
+            {
+                return _Comment;
+            }
+            set
+            {
+                if (_Comment != value)
+                {
+                    _Comment = value;
+                    OnPropertyChanged("Comment");
+                }
+            }
+        }
+
+        private DateTime _InvoiceDate = DateTime.Now.Date;
+        public DateTime InvoiceDate
+        {
+            get
+            {
+                return _InvoiceDate;
+            }
+            set
+            {
+                if (_InvoiceDate != value)
+                {
+                    _InvoiceDate = value;
+                    OnPropertyChanged("InvoiceDate");
+                }
+            }
+        }
+
+        private DateTime _DueDate = DateTime.Now.Date;
+        public DateTime DueDate
+        {
+            get
+            {
+                return _DueDate;
+            }
+            set
+            {
+                if (_DueDate != value)
+                {
+                    _DueDate = value;
+                    OnPropertyChanged("DueDate");
+                }
+            }
+        }
         #endregion
 
         #region Buttons
@@ -129,6 +248,54 @@ namespace ERP_Client.ViewModels.FensterModels
                 return _OpenCreate;
             }
         }
+
+        private ICommandViewModel _NewRechnungszeile;
+        public ICommandViewModel NewRechnungszeile
+        {
+            get
+            {
+                if (_NewRechnungszeile == null)
+                {
+                    _NewRechnungszeile = new ExecuteCommandViewModel(
+                        "Neue Rechnungszeile",
+                        "Neue Rechnungszeile erstellen",
+                        ErstelleRechnungszeile);
+                }
+                return _NewRechnungszeile;
+            }
+        }
+
+        private ICommandViewModel _AddRechnungszeile;
+        public ICommandViewModel AddRechnungszeile
+        {
+            get
+            {
+                if (_AddRechnungszeile == null)
+                {
+                    _AddRechnungszeile = new ExecuteCommandViewModel(
+                        "Hinzufügen",
+                        "Rechnungszeile hinzufügen",
+                        RechnungszeileHinzufügen);
+                }
+                return _AddRechnungszeile;
+            }
+        }
+
+        private ICommandViewModel _SaveRechnung;
+        public ICommandViewModel SaveRechnung
+        {
+            get
+            {
+                if (_SaveRechnung == null)
+                {
+                    _SaveRechnung = new ExecuteCommandViewModel(
+                        "Speichern",
+                        "Rechnung speichern",
+                        RechnungSpeichern);
+                }
+                return _SaveRechnung;
+            }
+        }
         #endregion
 
         #region Methoden
@@ -136,15 +303,26 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             Proxy proxy = new Proxy();
 
-            proxy.RechnungSuche();
+           // proxy.RechnungSuche();
         }
 
         public void ErstelleRechnung()
         {
-            Proxy proxy = new Proxy();
-
-            proxy.RechnungErstellen();
+            var dlg = new ERP_Client.Fenster.NewRechnung();
+            dlg.ShowDialog();
         }
+
+        public void ErstelleRechnungszeile()
+        {
+            var dlg = new ERP_Client.Fenster.AddRechnungszeile();
+            dlg.ShowDialog();
+        }
+
+        public void RechnungszeileHinzufügen()
+        { }
+
+        public void RechnungSpeichern()
+        { }
         #endregion
 
         private KontaktAutoCompleteSource _kontaktAutoCompleteSource;

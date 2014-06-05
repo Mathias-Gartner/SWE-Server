@@ -60,6 +60,12 @@
     <Compile Include="Fenster\AddKontakt.xaml.cs">
       <DependentUpon>AddKontakt.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Fenster\AddRechnungszeile.xaml.cs">
+      <DependentUpon>AddRechnungszeile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Fenster\NewRechnung.xaml.cs">
+      <DependentUpon>NewRechnung.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Fenster\Rechnung.xaml.cs">
       <DependentUpon>Rechnung.xaml</DependentUpon>
     </Compile>
@@ -80,7 +86,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Fenster\AddRechnungszeile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Fenster\Kontakte.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fenster\NewRechnung.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
