@@ -67,7 +67,7 @@ namespace ErpPlugin.Data.Database
             var arguments = definition.CreateArguments(searchObject);
 
             ICollection<T> objects = null;
-            using (var reader = SqlUtility.SearchObjects(definition, arguments))
+            using (var reader = SqlUtility.SearchObjects(searchObject, definition, arguments))
             {
                 if (!reader.HasRows)
                     throw new ObjectNotFoundException();

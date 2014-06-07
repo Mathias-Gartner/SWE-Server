@@ -70,6 +70,7 @@
     <Compile Include="Data\Definitions\IDefinition.cs" />
     <Compile Include="Data\Definitions\InvoiceDefinition.cs" />
     <Compile Include="Data\Definitions\InvoiceEntryDefinition.cs" />
+    <Compile Include="Data\Definitions\IQueryManipulatingDefinition.cs" />
     <Compile Include="Data\Definitions\UserDefinition.cs" />
     <Compile Include="Data\Fake\Dal.cs" />
     <Compile Include="Data\Fake\FakeDalFactory.cs" />

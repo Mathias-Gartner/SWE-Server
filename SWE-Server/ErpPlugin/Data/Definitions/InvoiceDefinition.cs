@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ErpPlugin.Data.Definitions
 {
-    public class InvoiceDefinition : IDefinition
+    public class InvoiceDefinition : IDefinition, IQueryManipulatingDefinition
     {
         public string TableName
         {
@@ -28,7 +28,7 @@ namespace ErpPlugin.Data.Definitions
                 arguments.Add("id", invoice.ID);
             if (invoice.Outgoing.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("outgoingInvoice", invoice.Outgoing);
-            if (invoice.InvoiceNumber >= 0)
+            if (invoice.InvoiceNumber >= 0 || invoice.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("invoiceNumber", invoice.InvoiceNumber);
             if (invoice.InvoiceDate.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
                 arguments.Add("invoiceDate", invoice.InvoiceDate);
@@ -88,6 +88,64 @@ namespace ErpPlugin.Data.Definitions
             }
 
             return relationSaver(new ContactDefinition(), invoice.Contact);
+        }
+
+        public string FinalizeSearchQuery(BusinessObject instance, string query, IDictionary<string, object> arguments)
+        {
+            var invoice = (Invoice)instance;
+            var sb = new StringBuilder(query);
+
+            if (invoice.InvoiceDateFrom.HasValue)
+            {
+                AddWhereCondition(sb, "invoiceDate >= %invoiceDateFrom%");
+                arguments.Add("invoiceDateFrom", invoice.InvoiceDateFrom);
+            }
+            if (invoice.InvoiceDateTo.HasValue)
+            {
+                AddWhereCondition(sb, "invoiceDate <= %invoiceDateTo%");
+                arguments.Add("invoiceDateTo", invoice.InvoiceDateTo);
+            }
+
+            var newQuery = sb.ToString();
+
+            if (invoice.InvoiceNumber < 1 && query.Contains("%invoiceNumber%"))
+            {
+                newQuery = newQuery.Replace("%invoiceNumber%", "(SELECT MAX(InvoiceNumber)+1 FROM invoices)");
+            }
+            
+            if (invoice.SumFrom.HasValue || invoice.SumTo.HasValue)
+            {
+                var index = newQuery.IndexOf(" WHERE");
+                if (index < 0) index = newQuery.Length;
+                newQuery = newQuery.Insert(index, "JOIN invoiceEntries e ON e.invoiceId = invoice.id")
+                    + " GROUP BY " + newQuery.Substring(7, newQuery.IndexOf(" FROM") - 7)
+                    + " HAVING ";
+
+                if (invoice.SumFrom.HasValue)
+                {
+                    newQuery = newQuery + "sum(e.price * e.amount) >= %sumFrom% and ";
+                    arguments.Add("sumFrom", invoice.SumFrom);
+                }
+                if (invoice.SumTo.HasValue)
+                {
+                    newQuery = newQuery + "sum(e.price * e.amount) <= %sumTo% and ";
+                    arguments.Add("sumTo", invoice.SumTo);
+                }
+
+                newQuery = newQuery.Substring(0, newQuery.Length - 5);
+            }
+
+            return newQuery;
+        }
+
+        private void AddWhereCondition(StringBuilder sb, string condition)
+        {
+            if (sb.ToString().Contains("WHERE"))
+                sb.Append(" and ");
+            else
+                sb.Append(" WHERE ");
+
+            sb.Append(condition);
         }
     }
 }

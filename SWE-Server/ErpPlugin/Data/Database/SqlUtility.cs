@@ -14,11 +14,16 @@ namespace ErpPlugin.Data.Database
     {
         static ILog logger = LogManager.GetLogger(typeof(SqlUtility));
 
-        public static SqlDataReader SearchObjects(IDefinition dal, Dictionary<string, object> arguments)
+        public static SqlDataReader SearchObjects(BusinessObject searchObject, IDefinition dal, Dictionary<string, object> arguments)
         {
             var sb = PrepareSelect(dal);
             AppendLikeWhereClause(sb, arguments);
-            var query = CreateQuery(sb.ToString(), ExtractParameters(arguments));
+            var queryString = sb.ToString();
+            if (dal is IQueryManipulatingDefinition)
+            {
+                queryString = (dal as IQueryManipulatingDefinition).FinalizeSearchQuery(searchObject, queryString, arguments);
+            }
+            var query = CreateQuery(queryString, ExtractParameters(arguments));
             return query.ExecuteReader();
         }
 
@@ -126,7 +131,7 @@ namespace ErpPlugin.Data.Database
         public static StringBuilder PrepareSelect(IDefinition definition)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("SELECT {0} FROM {1}", String.Join(", ", definition.Columns), definition.TableName);
+            sb.AppendFormat("SELECT {0} FROM {1}", String.Join(", ", definition.Columns.Select(c=>definition.TableName + "." + c)), definition.TableName);
             return sb;
         }
 

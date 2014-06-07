@@ -39,7 +39,7 @@ namespace ErpUnitTests.Dal
         public void PrepareSelect()
         {
             var sb = SqlUtility.PrepareSelect(new UserDefinition());
-            Assert.AreEqual("SELECT id, username, password, passwordSalt FROM users", sb.ToString());
+            Assert.AreEqual("SELECT users.id, users.username, users.password, users.passwordSalt FROM users", sb.ToString());
         }
 
         [TestMethod]
