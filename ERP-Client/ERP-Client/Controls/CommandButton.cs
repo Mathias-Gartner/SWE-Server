@@ -2,24 +2,26 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using ERP_Client.ViewModels;
+using ERPClient.ViewModels;
 
-namespace ERP_Client.Controls
+namespace ERPClient.Controls
 {
     public class CommandButton : Button
     {
         public CommandButton()
         {
+            var self = RelativeSource.Self;
+
             var bCmd = new Binding("CommandViewModel");
-            bCmd.RelativeSource = RelativeSource.Self;
+            bCmd.RelativeSource = self;
             this.SetBinding(CommandProperty, bCmd);
 
             var bLabel = new Binding("CommandViewModel.Label");
-            bLabel.RelativeSource = RelativeSource.Self;
+            bLabel.RelativeSource = self;
             this.SetBinding(ContentProperty, bLabel);
 
             var bTooltip = new Binding("CommandViewModel.ToolTip");
-            bTooltip.RelativeSource = RelativeSource.Self;
+            bTooltip.RelativeSource = self;
             this.SetBinding(ToolTipProperty, bTooltip);
 
             this.SetValue(ToolTipService.ShowOnDisabledProperty, true);

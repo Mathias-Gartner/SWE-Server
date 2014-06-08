@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using ERP_Client.ViewModels.FensterModels;
+using ERPClient.ViewModels.FensterModels;
 
-namespace ERP_Client
+namespace ERPClient
 {
     public partial class Start : Window
     {

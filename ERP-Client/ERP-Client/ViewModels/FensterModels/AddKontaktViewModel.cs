@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ERP_Client.ViewModels.FensterModels
+namespace ERPClient.ViewModels.FensterModels
 {
     public class AddKontaktViewModel : KontaktViewModel
     {
@@ -13,7 +13,10 @@ namespace ERP_Client.ViewModels.FensterModels
 
         public AddKontaktViewModel(Contact c)
         {
-            neu = false;
+            if (c == null)
+                throw new ArgumentNullException("Contact cannot be null");
+
+            Neu = false;
             Id = c.ID;
             Firstname = c.Firstname;
             Lastname = c.Lastname;
@@ -99,7 +102,7 @@ namespace ERP_Client.ViewModels.FensterModels
             Contact contact = new Contact();
             string result;
 
-            if (neu)
+            if (Neu)
                 contact.State = "New";
             else
             {
@@ -115,8 +118,7 @@ namespace ERP_Client.ViewModels.FensterModels
                 contact.Suffix = Suffix;
                 contact.DateOfBirth = BornDate;
             }
-
-            if (IsFirma == true)
+            else
             {
                 contact.Name = Firmname;
                 contact.Uid = Uid;

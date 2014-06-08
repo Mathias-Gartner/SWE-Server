@@ -23,9 +23,12 @@ namespace ErpPlugin.Data.Fake
                 new Contact(){ID = 2, Lastname = "Huber", Firstname = "Peter", DateOfBirth = DateTime.Parse("1950-01-01")}
             };
 
-        public ICollection<User> SearchUsers(User searchObject)
+        public ICollection<User> Search(User searchObject)
         {
-            if (searchObject.State == BusinessObject.BusinessObjectState.SearchObject && searchObject.Username == "User1")
+            if (searchObject == null)
+                throw new ArgumentNullException("searchObject");
+
+            if (searchObject.State == BusinessObjectState.SearchObject && searchObject.Username == "User1")
             {
                 var salt = User.CreateSalt();
                 return new[] { new User() { ID = 1, PasswordSalt = salt, PasswordHash = User.CreatePasswordHash("123456", salt), Username = "User1" } };
@@ -33,9 +36,9 @@ namespace ErpPlugin.Data.Fake
             return new User[] { };
         }
 
-        public ICollection<Contact> SearchContacts(Contact searchObject)
+        public ICollection<Contact> Search(Contact searchObject)
         {
-            if (searchObject.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (searchObject.State != BusinessObjectState.SearchObject)
             {
                 throw new InvalidOperationException("searchObject is not a SearchObject");
             }
@@ -49,13 +52,13 @@ namespace ErpPlugin.Data.Fake
             throw new ObjectNotFoundException();
         }
 
-        public bool SaveContact(Contact contact)
+        public bool Save(Contact contact)
         {
             ContactSaved = true;
             return true;
         }
 
-        public bool DeleteContact(Contact contact)
+        public bool Delete(Contact contact)
         {
             throw new NotImplementedException();
         }
@@ -81,12 +84,12 @@ namespace ErpPlugin.Data.Fake
             throw new NotImplementedException();
         }
 
-        public bool SaveInvoice(Invoice invoice)
+        public bool Save(Invoice invoice)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteInvoice(Invoice invoice)
+        public bool Delete(Invoice invoice)
         {
             throw new NotImplementedException();
         }

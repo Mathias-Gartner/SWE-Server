@@ -15,7 +15,7 @@ namespace ErpUnitTests.Dal
         [TestInitialize]
         public void Init()
         {
-            CurrentDalFactory.Instance = new FakeDalFactory();
+            CurrentDalFactory.Instance = new DalFactory();
             fakeDal = CurrentDalFactory.Instance.CreateDal();
         }
 
@@ -24,7 +24,7 @@ namespace ErpUnitTests.Dal
         {
             var contact = Contact.CreateSearchObject();
             contact.Lastname = "Huber";
-            var contacts = fakeDal.SearchContacts(contact);
+            var contacts = fakeDal.Search(contact);
             Assert.AreEqual(2, contacts.Count);
             Assert.IsTrue(contacts.Any(c => c.Lastname == "Huber" && c.Firstname == "Hans"));
             Assert.IsTrue(contacts.Any(c => c.Lastname == "Huber" && c.Firstname == "Peter"));

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace ErpPlugin.Xml
+namespace ErpPlugin
 {
     public static class ObjectExtensions
     {

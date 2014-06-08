@@ -12,14 +12,14 @@ namespace ErpPlugin.Data
         bool SaveBusinessObject<T>(T businessObject) where T : BusinessObject;
         bool DeleteBusinessObject<T>(T businessObject) where T : BusinessObject;
 
-        ICollection<User> SearchUsers(User searchObject);
+        ICollection<User> Search(User searchObject);
 
-        ICollection<Contact> SearchContacts(Contact searchObject);
-        bool SaveContact(Contact contact);
-        bool DeleteContact(Contact contact);
+        ICollection<Contact> Search(Contact searchObject);
+        bool Save(Contact contact);
+        bool Delete(Contact contact);
 
         ICollection<Invoice> SearchInvoice(Invoice searchObject);
-        bool SaveInvoice(Invoice invoice);
-        bool DeleteInvoice(Invoice invoice);
+        bool Save(Invoice invoice);
+        bool Delete(Invoice invoice);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ErpPlugin.Data.Database
 {
-    public class DatabaseDalFactory : IDalFactory
+    public class DalFactory : IDalFactory
     {
         public IDal CreateDal()
         {

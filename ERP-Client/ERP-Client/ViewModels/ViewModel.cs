@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace ERP_Client.ViewModels
+namespace ERPClient.ViewModels
 {
     public abstract class ViewModel : DependencyObject, INotifyPropertyChanged
     {

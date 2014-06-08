@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -37,13 +38,13 @@ namespace ErpPlugin.Data.Definitions
             return arguments;
         }
 
-        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(SqlDataReader reader, RelationLoader relationLoader)
+        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(DbDataReader reader, RelationLoader relationLoader)
         {
             var users = new List<BusinessObject>();
             while (reader.Read())
             {
                 var user = new User();
-                user.State = BusinessObject.BusinessObjectState.Unmodified;
+                user.State = BusinessObjectState.Unmodified;
 
                 user.ID = reader.GetInt32(0);
                 if (!reader.IsDBNull(1))

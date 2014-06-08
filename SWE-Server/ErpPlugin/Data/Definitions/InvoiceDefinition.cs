@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -26,35 +27,35 @@ namespace ErpPlugin.Data.Definitions
 
             if (invoice.ID >= 0)
                 arguments.Add("id", invoice.ID);
-            if (invoice.Outgoing.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (invoice.Outgoing.HasValue || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("outgoingInvoice", invoice.Outgoing);
-            if (invoice.InvoiceNumber >= 0 || invoice.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (invoice.InvoiceNumber >= 0 || invoice.State != BusinessObjectState.SearchObject)
                 arguments.Add("invoiceNumber", invoice.InvoiceNumber);
-            if (invoice.InvoiceDate.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (invoice.InvoiceDate.HasValue || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("invoiceDate", invoice.InvoiceDate);
-            if (invoice.DueDate.HasValue || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (invoice.DueDate.HasValue || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("dueDate", invoice.DueDate);
-            if (!String.IsNullOrEmpty(invoice.Message) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(invoice.Message) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("message", invoice.Message);
-            if (!String.IsNullOrEmpty(invoice.Comment) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(invoice.Comment) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("comment", invoice.Comment);
 
             // relations
             if (invoice.Contact != null && invoice.Contact.ID >= 0)
                 arguments.Add("contactId", invoice.Contact.ID);
-            else if (instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            else if (instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("contactId", null);
 
             return arguments;
         }
 
-        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(SqlDataReader reader, RelationLoader relationLoader)
+        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(DbDataReader reader, RelationLoader relationLoader)
         {
             var invoices = new List<BusinessObject>();
             while (reader.Read())
             {
                 var invoice = new Invoice();
-                invoice.State = BusinessObject.BusinessObjectState.Unmodified;
+                invoice.State = BusinessObjectState.Unmodified;
 
                 invoice.ID = reader.GetInt32(0);
                 if (!reader.IsDBNull(1))
@@ -138,7 +139,7 @@ namespace ErpPlugin.Data.Definitions
             return newQuery;
         }
 
-        private void AddWhereCondition(StringBuilder sb, string condition)
+        private static void AddWhereCondition(StringBuilder sb, string condition)
         {
             if (sb.ToString().Contains("WHERE"))
                 sb.Append(" and ");

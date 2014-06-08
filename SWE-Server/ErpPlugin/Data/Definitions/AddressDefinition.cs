@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -27,31 +28,31 @@ namespace ErpPlugin.Data.Definitions
 
             if (address.ID >= 0)
                 arguments.Add("id", address.ID);
-            if (!String.IsNullOrEmpty(address.Name) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.Name) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("name", address.Name);
-            if (!String.IsNullOrEmpty(address.Street) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.Street) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("street", address.Street);
-            if (!String.IsNullOrEmpty(address.Number) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.Number) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("number", address.Number);
-            if (!String.IsNullOrEmpty(address.PostOfficeBox) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.PostOfficeBox) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("postOfficeBox", address.PostOfficeBox);
-            if (!String.IsNullOrEmpty(address.PostalCode) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.PostalCode) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("postalCode", address.PostalCode);
-            if (!String.IsNullOrEmpty(address.City) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.City) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("city", address.City);
-            if (!String.IsNullOrEmpty(address.Country) || instance.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (!String.IsNullOrEmpty(address.Country) || instance.State != BusinessObjectState.SearchObject)
                 arguments.Add("country", address.Country);
 
             return arguments;
         }
         
-        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(SqlDataReader reader, RelationLoader relationLoader)
+        public ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(DbDataReader reader, RelationLoader relationLoader)
         {
             var users = new List<BusinessObject>();
             while (reader.Read())
             {
                 var address = new Address();
-                address.State = BusinessObject.BusinessObjectState.Unmodified;
+                address.State = BusinessObjectState.Unmodified;
 
                 address.ID = reader.GetInt32(0);
                 if (!reader.IsDBNull(1))

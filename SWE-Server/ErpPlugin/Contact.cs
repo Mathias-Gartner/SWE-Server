@@ -47,7 +47,7 @@ namespace ErpPlugin
 
             try
             {
-                return CurrentDalFactory.Instance.CreateDal().SearchContacts(this);
+                return CurrentDalFactory.Instance.CreateDal().Search(this);
             }
             catch (ObjectNotFoundException)
             {
@@ -57,7 +57,7 @@ namespace ErpPlugin
 
         public bool Save()
         {
-            return CurrentDalFactory.Instance.CreateDal().SaveContact(this);
+            return CurrentDalFactory.Instance.CreateDal().Save(this);
         }
 
         public static Contact CreateSearchObject()
@@ -70,7 +70,7 @@ namespace ErpPlugin
             var dal = CurrentDalFactory.Instance.CreateDal();
             var contact = Contact.CreateSearchObject();
             contact.ID = id;
-            return dal.SearchContacts(contact).SingleOrDefault();
+            return dal.Search(contact).SingleOrDefault();
         }
 
     }

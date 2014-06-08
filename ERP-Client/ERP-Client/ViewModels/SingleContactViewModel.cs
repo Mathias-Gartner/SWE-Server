@@ -1,5 +1,5 @@
-﻿using ERP_Client.Fenster;
-using ERP_Client.ViewModels.FensterModels;
+﻿using ERPClient.Fenster;
+using ERPClient.ViewModels.FensterModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace ERP_Client.ViewModels
+namespace ERPClient.ViewModels
 {
     public class SingleContactViewModel : ViewModel
     {
@@ -62,11 +62,11 @@ namespace ERP_Client.ViewModels
         private abstract class SingleContactCommand : ICommand
         {
             protected Contact contact;
-            protected SingleContactViewModel singleContactViewModel;
+            protected SingleContactViewModel _singleContactViewModel;
 
-            public SingleContactCommand(SingleContactViewModel singleContactViewModel, Contact contact)
+            protected SingleContactCommand(SingleContactViewModel singleContactViewModel, Contact contact)
             {
-                this.singleContactViewModel = singleContactViewModel;
+                this._singleContactViewModel = singleContactViewModel;
                 this.contact = contact;
             }
 
@@ -80,7 +80,7 @@ namespace ERP_Client.ViewModels
             public abstract void Execute(object parameter);
         }
 
-        private class EditContactCommand : SingleContactCommand
+        private sealed class EditContactCommand : SingleContactCommand
         {
             public EditContactCommand(SingleContactViewModel singleContactViewModel, Contact contact)
                 : base(singleContactViewModel, contact)
@@ -90,11 +90,11 @@ namespace ERP_Client.ViewModels
             {
                 AddKontakt addKontakt = new AddKontakt(contact);
                 addKontakt.ShowDialog();
-                singleContactViewModel.Parent.SucheKontakt();
+                _singleContactViewModel.Parent.SucheKontakt();
             }
         }
 
-        private class SetSearchResultCommand : SingleContactCommand
+        private sealed class SetSearchResultCommand : SingleContactCommand
         {
             public SetSearchResultCommand(SingleContactViewModel singleContactViewModel, Contact contact)
                 : base(singleContactViewModel, contact)
@@ -102,7 +102,7 @@ namespace ERP_Client.ViewModels
 
             public override void Execute(object parameter)
             {
-                singleContactViewModel.Parent.SetSearchResult(contact);
+                _singleContactViewModel.Parent.SetSearchResult(contact);
             }
         }
     }

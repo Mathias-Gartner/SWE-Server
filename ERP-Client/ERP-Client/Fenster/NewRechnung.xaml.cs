@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using ERP_Client.ViewModels.FensterModels;
+using ERPClient.ViewModels.FensterModels;
 
-namespace ERP_Client.Fenster
+namespace ERPClient.Fenster
 {
     public partial class NewRechnung : Window
     {

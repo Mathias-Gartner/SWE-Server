@@ -9,14 +9,14 @@ namespace ErpPlugin.Data
 {
     public static class CurrentDalFactory
     {
-        private static IDalFactory _instance = null;
+        private static IDalFactory _instance;
 
         public static IDalFactory Instance
         {
             get
             {
                 if (_instance == null)
-                    _instance = new DatabaseDalFactory();
+                    _instance = new DalFactory();
 
                 return _instance;
             }

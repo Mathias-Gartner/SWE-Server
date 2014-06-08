@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ERP_Client.Controls;
-using ERP_Client.Fenster;
+using ERPClient.Controls;
+using ERPClient.Fenster;
 
-namespace ERP_Client.ViewModels
+namespace ERPClient.ViewModels
 {
     public class KontaktAutoCompleteSource : IAutoCompleteSource
     {
@@ -26,7 +26,7 @@ namespace ERP_Client.ViewModels
             contact.Lastname = null;
             contact.Name = searchExpression;
 
-            list.AddRange(proxy.KontaktSuchen(contact));
+            list.Concat(proxy.KontaktSuchen(contact));
 
             return list;
         }

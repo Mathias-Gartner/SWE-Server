@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace ErpPlugin.Data.Definitions
         //    Column name, value
         Dictionary<string, object> CreateArguments(BusinessObject instance);
 
-        ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(SqlDataReader reader, RelationLoader relationLoader);
+        ICollection<BusinessObject> CreateBusinessObjectsFromSqlReader(DbDataReader reader, RelationLoader relationLoader);
 
         bool SaveRelations(BusinessObject instance, RelationSaver relationSaver);
     }

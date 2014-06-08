@@ -14,37 +14,49 @@ namespace ErpPlugin.Data.Database
     {
         static ILog logger = LogManager.GetLogger(typeof(SqlUtility));
 
-        public static SqlDataReader SearchObjects(BusinessObject searchObject, IDefinition dal, Dictionary<string, object> arguments)
+        public static SqlDataReader SearchObjects(BusinessObject searchObject, IDefinition definition, Dictionary<string, object> arguments)
         {
-            var sb = PrepareSelect(dal);
+            var sb = PrepareSelect(definition);
             AppendLikeWhereClause(sb, arguments);
             var queryString = sb.ToString();
-            if (dal is IQueryManipulatingDefinition)
+
+            var queryManipulationingDefinition = definition as IQueryManipulatingDefinition;
+            if (queryManipulationingDefinition != null)
             {
-                queryString = (dal as IQueryManipulatingDefinition).FinalizeSearchQuery(searchObject, queryString, arguments);
+                queryString = queryManipulationingDefinition.FinalizeSearchQuery(searchObject, queryString, arguments);
             }
-            var query = CreateQuery(queryString, ExtractParameters(arguments));
-            return query.ExecuteReader();
+
+            using (var query = CreateQuery(queryString, ExtractParameters(arguments)))
+            {
+                return query.ExecuteReader();
+            }
         }
 
-        public static SqlDataReader LoadObjects(IDefinition dal, Dictionary<string, object> arguments)
+        public static SqlDataReader LoadObjects(IDefinition definition, Dictionary<string, object> arguments)
         {
-            var sb = PrepareSelect(dal);
+            var sb = PrepareSelect(definition);
             AppendWhereClause(sb, arguments);
-            var query = CreateQuery(sb.ToString(), ExtractParameters(arguments));
-            return query.ExecuteReader();
+            using (var query = CreateQuery(sb.ToString(), ExtractParameters(arguments)))
+            {
+                return query.ExecuteReader();
+            }
         }
 
         public static object LoadRelatedObject(IDefinition definition, int id)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("id", id);
-            var reader = LoadObjects(definition, arguments);
-            return definition.CreateBusinessObjectsFromSqlReader(reader, LoadRelatedObject).Single();
+            using (var reader = LoadObjects(definition, arguments))
+            {
+                return definition.CreateBusinessObjectsFromSqlReader(reader, LoadRelatedObject).Single();
+            }
         }
 
         public static bool SaveObject(IDefinition definition, BusinessObject instance)
         {
+            if (definition == null)
+                throw new ArgumentNullException("IDefinition cannot be null");
+
             if (instance == null)
                 return true; // true because everything that can be saved has been saved
 
@@ -56,11 +68,11 @@ namespace ErpPlugin.Data.Database
             if (arguments.Count == 0 || arguments.Values.All(v => v == null))
                 return true; // true because everything that can be saved has been saved
 
-            if (instance.State == BusinessObject.BusinessObjectState.New)
+            if (instance.State == BusinessObjectState.New)
             {
                 query = SqlUtility.PrepareInsert(definition, arguments).ToString();
             }
-            else if (instance.State == BusinessObject.BusinessObjectState.Modified)
+            else if (instance.State == BusinessObjectState.Modified)
             {
                 var idArguments = new Dictionary<string, object>();
                 idArguments.Add("id", instance.ID);
@@ -75,7 +87,7 @@ namespace ErpPlugin.Data.Database
                 SqlUtility.AppendWhereClause(sb, idArguments);
                 query = sb.ToString();
             }
-            else if (instance.State == BusinessObject.BusinessObjectState.Unmodified)
+            else if (instance.State == BusinessObjectState.Unmodified)
                 return true;
             else
             {
@@ -83,13 +95,15 @@ namespace ErpPlugin.Data.Database
                     String.Format("BusinessObject is in illegal State {0}", instance.State.ToString()));
             }
 
-            var command = SqlUtility.CreateQuery(query, SqlUtility.ExtractParameters(arguments));
-            var id = command.ExecuteScalar();
-            if (id is DBNull)
-                return false;
+            using (var command = SqlUtility.CreateQuery(query, SqlUtility.ExtractParameters(arguments)))
+            {
+                var id = command.ExecuteScalar();
+                if (id is DBNull)
+                    return false;
 
-            instance.ID = (int)id;
-            instance.State = BusinessObject.BusinessObjectState.Unmodified;
+                instance.ID = (int)id;
+                instance.State = BusinessObjectState.Unmodified;
+            }
 
             return true;
         }
@@ -118,25 +132,37 @@ namespace ErpPlugin.Data.Database
 
         public static void AppendWhereClause(StringBuilder sb, Dictionary<string, object> arguments)
         {
-            if (arguments.Keys.Count > 0)
+            if (sb == null)
+                throw new ArgumentNullException("StringBuilder cannot be null");
+
+            if (arguments != null && arguments.Keys.Count > 0)
                 sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key => String.Format("{0}=@{0}", key))));
         }
 
         public static void AppendLikeWhereClause(StringBuilder sb, Dictionary<string, object> arguments)
         {
-            if (arguments.Keys.Count > 0)
+            if (sb == null)
+                throw new ArgumentNullException("StringBuilder cannot be null");
+
+            if (arguments != null && arguments.Keys.Count > 0)
                 sb.AppendFormat(" WHERE {0}", String.Join(" and ", arguments.Keys.Select(key => String.Format("{0} like @{0}+'%'", key))));
         }
 
         public static StringBuilder PrepareSelect(IDefinition definition)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("SELECT {0} FROM {1}", String.Join(", ", definition.Columns.Select(c=>definition.TableName + "." + c)), definition.TableName);
+            sb.AppendFormat("SELECT {0} FROM {1}", String.Join(", ", definition.Columns.Select(c => definition.TableName + "." + c)), definition.TableName);
             return sb;
         }
 
         public static StringBuilder PrepareInsert(IDefinition definition, Dictionary<string, object> arguments)
         {
+            if (definition == null)
+                throw new ArgumentNullException("IDefinition cannot be null");
+
+            if (arguments == null || arguments.Keys.Count < 1)
+                throw new InvalidOperationException("Cannot build valid statement without arguments");
+
             var sb = new StringBuilder();
             sb = sb.AppendFormat("INSERT INTO {0}({1}) OUTPUT INSERTED.id VALUES ({2})",
                                     definition.TableName,
@@ -147,6 +173,12 @@ namespace ErpPlugin.Data.Database
 
         public static StringBuilder PrepareUpdate(IDefinition definition, Dictionary<string, object> arguments)
         {
+            if (definition == null)
+                throw new ArgumentNullException("IDefinition cannot be null");
+
+            if (arguments == null || arguments.Keys.Count < 1)
+                throw new InvalidOperationException("Cannot build valid statement without arguments");
+
             var sb = new StringBuilder();
             sb.AppendFormat("UPDATE {0} SET ", definition.TableName);
             sb.Append(String.Join(", ", arguments.Keys.Select(key => String.Format("{0}=@{0}", key))));
@@ -156,6 +188,9 @@ namespace ErpPlugin.Data.Database
 
         public static StringBuilder PrepareDelete(IDefinition definition)
         {
+            if (definition == null)
+                throw new ArgumentNullException("IDefinition cannot be null");
+
             var sb = new StringBuilder();
             sb.Append("DELETE FROM ");
             sb.Append(definition.TableName);

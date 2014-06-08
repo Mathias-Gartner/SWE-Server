@@ -1,4 +1,4 @@
-﻿using ERP_Client.ViewModels;
+﻿using ERPClient.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ERP_Client.Controls
+namespace ERPClient.Controls
 {
     /// <summary>
     /// Interaction logic for AutoComplete.xaml
@@ -25,7 +25,6 @@ namespace ERP_Client.Controls
         #region Control based on MSDN example http://code.msdn.microsoft.com/windowsdesktop/WPF-Autocomplete-Textbox-df2f1791/sourcecode?fileId=48301&pathId=1237367252
         #region Members
         private System.Timers.Timer keypressTimer;
-        private delegate void TextChangedCallback();
         private bool insertText;
         private int delayTime;
         private int searchThreshold;
@@ -51,9 +50,9 @@ namespace ERP_Client.Controls
             // set up the text box and the combo box
             comboBox.IsSynchronizedWithCurrentItem = true;
             comboBox.IsTabStop = false;
-            comboBox.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            comboBox.SelectionChanged += new SelectionChangedEventHandler(ComboBox_SelectionChanged);
 
-            textBox.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            textBox.TextChanged += new TextChangedEventHandler(TextBox_TextChanged);
             textBox.VerticalContentAlignment = VerticalAlignment.Center;
         }
         #endregion
@@ -81,7 +80,7 @@ namespace ERP_Client.Controls
             set { searchThreshold = value; }
         }
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (null != comboBox.SelectedItem)
             {
@@ -95,44 +94,42 @@ namespace ERP_Client.Controls
 
         private void TextChanged()
         {
-            try
+            IsSet = false;
+            var items = comboBox.Items;
+            items.Clear();
+            SelectedItem = null;
+            if (textBox.Text.Length >= searchThreshold)
             {
-                IsSet = false;
-                comboBox.Items.Clear();
-                SelectedItem = null;
-                if (textBox.Text.Length >= searchThreshold)
-                {
-                    foreach (object o in AutoCompleteSource.GetItems(textBox.Text))
-                        comboBox.Items.Add(new ComboBoxItem() { Content = o.ToString(), Tag = o });
+                foreach (object o in AutoCompleteSource.GetItems(textBox.Text))
+                    items.Add(new ComboBoxItem() { Content = o.ToString(), Tag = o });
 
-                    comboBox.IsDropDownOpen = comboBox.HasItems;
+                comboBox.IsDropDownOpen = comboBox.HasItems;
 
-                    if (comboBox.Items.Count == 1 && ((string)comboBox.Items.OfType<ComboBoxItem>().Single().Content).ToLower() == textBox.Text.ToLower())
-                    {
-                        var cursor = textBox.SelectionStart;
-                        var content = comboBox.Items.OfType<ComboBoxItem>().Single().Tag;
-                        textBox.Text = content.ToString();
-                        textBox.SelectionStart = cursor;
-                        IsSet = true;
-                        SelectedItem = content;
-                    }
-                }
-                else
+                if (items.Count == 1 && ((string)items.OfType<ComboBoxItem>().Single().Content).ToLower() == textBox.Text.ToLower())
                 {
+                    var cursor = textBox.SelectionStart;
+                    var content = items.OfType<ComboBoxItem>().Single().Tag;
+                    textBox.Text = content.ToString();
+                    textBox.SelectionStart = cursor;
+                    IsSet = true;
+                    SelectedItem = content;
                     comboBox.IsDropDownOpen = false;
                 }
             }
-            catch { }
+            else
+            {
+                comboBox.IsDropDownOpen = false;
+            }
         }
 
         private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
         {
             keypressTimer.Stop();
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-                new TextChangedCallback(this.TextChanged));
+                new Action(this.TextChanged));
         }
 
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // text was not typed, do nothing and consume the flag
             if (insertText == true) insertText = false;
@@ -209,8 +206,9 @@ namespace ERP_Client.Controls
         private static void SelectedItem_Changed(DependencyObject autoComplete, DependencyPropertyChangedEventArgs e)
         {
             var control = (AutoComplete)autoComplete;
-            if (e.NewValue != null)
-                control.textBox.Text = e.NewValue.ToString();
+            var value = e.NewValue;
+            if (value != null)
+                control.textBox.Text = value.ToString();
         }
     }
 

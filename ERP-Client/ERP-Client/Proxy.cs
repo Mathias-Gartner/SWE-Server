@@ -5,8 +5,9 @@ using System.Net;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Collections.ObjectModel;
 
-namespace ERP_Client
+namespace ERPClient
 {
     public class Proxy
     {
@@ -17,29 +18,29 @@ namespace ERP_Client
         //Uri baseUri = new Uri("http://10.201.92.108:8080");
 
         #region Kontakte
-        public List<Contact> KontaktSuchen(Contact searchObject)
+        public ICollection<Contact> KontaktSuchen(Contact searchObject)
         {
             string xml = ToXmlString(searchObject);
-
-            WebClient client = new WebClient();
-            List<Contact> liste = new List<Contact>();            
-
+            ICollection<Contact> liste = new List<Contact>();            
             string result;
 
-            try
+            using (var client = new WebClient())
             {
-                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchContact"), xml);
-                liste = LoadFromXMLString<Contact>(result);
-            }
-            catch (WebException)
-            {
-                result = string.Empty;
-                liste = null;
-            }
-            catch (XmlException e)
-            {
-                result = e.Message;
-                liste = null;
+                try
+                {
+                    result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchContact"), xml);
+                    liste = LoadFromXMLString<Contact>(result);
+                }
+                catch (WebException)
+                {
+                    result = string.Empty;
+                    liste = null;
+                }
+                catch (XmlException e)
+                {
+                    result = e.Message;
+                    liste = null;
+                }
             }
 
             return liste;
@@ -49,15 +50,17 @@ namespace ERP_Client
         {
             string xml = ToXmlString(changeObject);
             string result;
-            WebClient client = new WebClient();
 
-            try
+            using (var client = new WebClient())
             {
-                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveContact"), xml);
-            }
-            catch (WebException w)
-            {
-                result = w.Message;
+                try
+                {
+                    result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveContact"), xml);
+                }
+                catch (WebException w)
+                {
+                    result = w.Message;
+                }
             }
 
             return result;
@@ -66,29 +69,29 @@ namespace ERP_Client
 
         #region Rechnungen
 
-        public List<Invoice> RechnungSuchen(Invoice searchObject)
+        public ICollection<Invoice> RechnungSuchen(Invoice searchObject)
         {
             string xml = ToXmlString(searchObject);
-
-            WebClient client = new WebClient();
-            List<Invoice> liste = new List<Invoice>();
-
+            ICollection<Invoice> liste = new List<Invoice>();
             string result;
 
-            try
+            using (var client = new WebClient())
             {
-                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchInvoice"), xml);
-                liste = LoadFromXMLString<Invoice>(result);
-            }
-            catch (WebException)
-            {
-                result = string.Empty;
-                liste = null;
-            }
-            catch (XmlException e)
-            {
-                result = e.Message;
-                liste = null;
+                try
+                {
+                    result = client.UploadString(new Uri(baseUri, "?action=Erp&req=searchInvoice"), xml);
+                    liste = LoadFromXMLString<Invoice>(result);
+                }
+                catch (WebException)
+                {
+                    result = string.Empty;
+                    liste = null;
+                }
+                catch (XmlException e)
+                {
+                    result = e.Message;
+                    liste = null;
+                }
             }
 
             return liste;
@@ -98,15 +101,17 @@ namespace ERP_Client
         {
             string xml = ToXmlString(changeObject);
             string result;
-            WebClient client = new WebClient();
 
-            try
+            using (var client = new WebClient())
             {
-                result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveInvoice"), xml);
-            }
-            catch (WebException w)
-            {
-                result = w.Message;
+                try
+                {
+                    result = client.UploadString(new Uri(baseUri, "?action=Erp&req=saveInvoice"), xml);
+                }
+                catch (WebException w)
+                {
+                    result = w.Message;
+                }
             }
 
             return result;
@@ -116,15 +121,17 @@ namespace ERP_Client
         {
             string xml = ToXmlString(searchObject);
             byte[] result;
-            WebClient client = new WebClient();
 
-            try
+            using (var client = new WebClient())
             {
-                result = client.UploadData(new Uri(baseUri, "?action=Erp&req=generateInvoiceDocument"), Encoding.UTF8.GetBytes(xml));
-            }
-            catch(WebException)
-            {
-                return null;
+                try
+                {
+                    result = client.UploadData(new Uri(baseUri, "?action=Erp&req=generateInvoiceDocument"), Encoding.UTF8.GetBytes(xml));
+                }
+                catch (WebException)
+                {
+                    return null;
+                }
             }
 
             try
@@ -141,15 +148,17 @@ namespace ERP_Client
 
         #endregion
 
-        public static List<T> LoadFromXMLString<T>(string xmlText)
+        public static ICollection<T> LoadFromXMLString<T>(string xmlText)
         {
-            var stringReader = new StringReader(xmlText);
-            var s = new XmlReaderSettings();
-            s.CheckCharacters = true;
-            s.ValidationType = ValidationType.None;
-            var xmlReader = XmlReader.Create(stringReader, s); // XmlReader for validating xml as it throws nicer exceptions
-            var serializer = new XmlSerializer(typeof(List<T>));
-            return serializer.Deserialize(xmlReader) as List<T>;
+            using (var stringReader = new StringReader(xmlText))
+            {
+                var s = new XmlReaderSettings();
+                s.CheckCharacters = true;
+                s.ValidationType = ValidationType.None;
+                var xmlReader = XmlReader.Create(stringReader, s); // XmlReader for validating xml as it throws nicer exceptions
+                var serializer = new XmlSerializer(typeof(List<T>));
+                return serializer.Deserialize(xmlReader) as List<T>;
+            }
         }
 
         public static string ToXmlString(object obj)

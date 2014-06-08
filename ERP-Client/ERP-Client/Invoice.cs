@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ERP_Client
+namespace ERPClient
 {
     public class Invoice
     {
@@ -35,7 +36,7 @@ namespace ERP_Client
 
         public Contact Contact { get; set; }
 
-        public List<InvoiceEntry> Entries { get; set; }
+        public Collection<InvoiceEntry> Entries { get; set; }
 
         public decimal Sum { get { return Entries == null ? 0 : Entries.Sum(e => e.Amount * e.Price); } }
 

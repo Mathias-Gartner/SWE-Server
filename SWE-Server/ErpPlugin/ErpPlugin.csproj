@@ -64,7 +64,7 @@
     <Compile Include="Data\Database\SqlUtility.cs" />
     <Compile Include="Data\Definitions\AddressDefinition.cs" />
     <Compile Include="Data\Definitions\DefinitionFactory.cs" />
-    <Compile Include="Data\Database\DatabaseDalFactory.cs" />
+    <Compile Include="Data\Database\DalFactory.cs" />
     <Compile Include="Data\Definitions\ContactDefinition.cs" />
     <Compile Include="Data\Database\Dal.cs" />
     <Compile Include="Data\Definitions\IDefinition.cs" />
@@ -73,12 +73,11 @@
     <Compile Include="Data\Definitions\IQueryManipulatingDefinition.cs" />
     <Compile Include="Data\Definitions\UserDefinition.cs" />
     <Compile Include="Data\Fake\Dal.cs" />
-    <Compile Include="Data\Fake\FakeDalFactory.cs" />
+    <Compile Include="Data\Fake\DalFactory.cs" />
     <Compile Include="Data\IDal.cs" />
     <Compile Include="Data\IDalFactory.cs" />
     <Compile Include="Data\ObjectNotFoundException.cs" />
     <Compile Include="ErpPlugin.cs" />
-    <Compile Include="IBusinessObject.cs" />
     <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceEntry.cs" />
     <Compile Include="ObjectExtensions.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ERP_Client.ViewModels.FensterModels
+namespace ERPClient.ViewModels.FensterModels
 {
     class RechnungViewModel : ViewModel
     {
@@ -327,13 +327,13 @@ namespace ERP_Client.ViewModels.FensterModels
 
         public void ErstelleRechnung()
         {
-            var dlg = new ERP_Client.Fenster.NewRechnung();
+            var dlg = new ERPClient.Fenster.NewRechnung();
             dlg.ShowDialog();
         }
 
         public void ErstelleRechnungszeile()
         {
-            var dlg = new ERP_Client.Fenster.AddRechnungszeile();
+            var dlg = new ERPClient.Fenster.AddRechnungszeile();
             dlg.ShowDialog();
         }
 

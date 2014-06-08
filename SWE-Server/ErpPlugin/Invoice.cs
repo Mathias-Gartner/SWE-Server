@@ -4,6 +4,7 @@ using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace ErpPlugin
 
         public Contact Contact { get; set; }
 
-        public List<InvoiceEntry> Entries { get; set; }
+        public Collection<InvoiceEntry> Entries { get; set; }
 
         public decimal Sum { get { return Entries == null ? 0 : Entries.Sum(e => e.Amount * e.Price); } }
 
@@ -59,7 +60,7 @@ namespace ErpPlugin
             if (State != BusinessObjectState.New)
                 return false;
 
-            return CurrentDalFactory.Instance.CreateDal().SaveInvoice(this);
+            return CurrentDalFactory.Instance.CreateDal().Save(this);
         }
 
         public static Invoice CreateSearchObject()
@@ -139,7 +140,7 @@ namespace ErpPlugin
             return stream.ToArray();
         }
 
-        private void AddCell(Row row, string content)
+        private static void AddCell(Row row, string content)
         {
             var cell = new Cell();
             cell.AddParagraph(content);

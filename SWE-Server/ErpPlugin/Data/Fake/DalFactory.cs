@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ErpPlugin.Data.Fake
 {
-    public class FakeDalFactory : IDalFactory
+    public class DalFactory : IDalFactory
     {
         public IDal CreateDal()
         {

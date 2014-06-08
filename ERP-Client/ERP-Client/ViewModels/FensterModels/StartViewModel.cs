@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ERP_Client.ViewModels.FensterModels
+namespace ERPClient.ViewModels.FensterModels
 {
     public class StartViewModel : ViewModel
     {
@@ -122,36 +122,36 @@ namespace ERP_Client.ViewModels.FensterModels
             }
         }
 
-        private ICommandViewModel _Login;
-        public ICommandViewModel Login
+        private ICommandViewModel _Logon;
+        public ICommandViewModel Logon
         {
             get
             {
-                if (_Login == null)
+                if (_Logon == null)
                 {
-                    _Login = new ExecuteCommandViewModel(
+                    _Logon = new ExecuteCommandViewModel(
                         "Login",
                         "Mit seinem Account anmelden",
                         NotImplement);
                 }
-                return _Login;
+                return _Logon;
             }
         }
         #endregion
 
-        public void OpenKontakte()
+        public static void OpenKontakte()
         {
-            var dlg = new ERP_Client.Fenster.Kontakte();
+            var dlg = new ERPClient.Fenster.Kontakte();
             dlg.ShowDialog();
         }
 
-        public void OpenRechnung()
+        public static void OpenRechnung()
         {
-            var dlg = new ERP_Client.Fenster.Rechnung();
+            var dlg = new ERPClient.Fenster.Rechnung();
             dlg.ShowDialog();
         }
 
-        public void NotImplement()
+        public static void NotImplement()
         {
             MessageBox.Show("Dieses Feature wurde noch nicht implementiert!", "Noch nicht implementiert");
         }

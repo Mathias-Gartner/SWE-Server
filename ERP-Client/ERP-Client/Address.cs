@@ -1,4 +1,4 @@
-﻿namespace ERP_Client
+﻿namespace ERPClient
 {
     public class Address
     {

@@ -1,6 +1,5 @@
 ﻿using ErpPlugin.Data;
 using ErpPlugin.Data.Database;
-using ErpPlugin.Xml;
 using Interface;
 using log4net;
 using System;
@@ -37,11 +36,15 @@ namespace ErpPlugin
 
         public virtual Interface.Data CreateProduct(Interface.Request request)
         {
+            if (request == null)
+                throw new ArgumentNullException("Request cannot be null");
+
+            var debugEnabled = logger.IsDebugEnabled;
             var data = new Interface.Data();
             data.Contenttype = "text/xml";
             data.DocumentType = Interface.Data.DocumentTypeType.StandaloneFile;
 
-            if (request.RawPostData == null || request.RawPostData.Count() < 1)
+            if (request.RawPostData == null || request.RawPostData.Length < 1)
             {
                 logger.Warn("Erp request contains no postdata. Aborting.");
                 return PutErrorMessage(data, "<h1>Postdata required</h1>");
@@ -57,7 +60,7 @@ namespace ErpPlugin
                     case "searchContact":
                         var contact = request.RawPostData.FromXmlString<Contact>();
                         result = contact.Search();
-                        if (logger.IsDebugEnabled)
+                        if (debugEnabled)
                         {
                             var list = (IEnumerable<Contact>)result;
                             logger.DebugFormat("Contacts searched, {0} results", list.Count());
@@ -76,7 +79,7 @@ namespace ErpPlugin
                     case "searchInvoice":
                         var invoice = request.RawPostData.FromXmlString<Invoice>();
                         result = invoice.Search();
-                        if (logger.IsDebugEnabled)
+                        if (debugEnabled)
                         {
                             var list = (IEnumerable<Invoice>)result;
                             logger.DebugFormat("Invoices searched, {0} results", list.Count());
@@ -137,7 +140,7 @@ namespace ErpPlugin
 
         }*/
 
-        protected bool Authenticated(XmlNode authElement)
+        /*protected static bool Authenticated(XmlNode authElement)
         {
             var searchUser = User.CreateSearchObject();
             searchUser.Username = authElement.ChildNodes.OfType<XmlNode>().Single(n => n.Name == "username").InnerText;
@@ -149,10 +152,13 @@ namespace ErpPlugin
             var user = users.Single();
             var hash = User.CreatePasswordHash(authElement.ChildNodes.OfType<XmlNode>().Single(n => n.Name == "password").InnerText, user.PasswordSalt);
             return user.PasswordHash == hash;
-        }
+        }*/
 
-        protected Interface.Data PutErrorMessage(Interface.Data data, string message, int statuscode = 400)
+        protected static Interface.Data PutErrorMessage(Interface.Data data, string message, int statuscode = 400)
         {
+            if (data == null)
+                throw new ArgumentNullException("Data cannot be null");
+
             data.StatusCode = statuscode;
             data.Contenttype = "text/html";
             data.SetContent(message);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERP_Client
+namespace ERPClient
 {
     public class Contact
     {

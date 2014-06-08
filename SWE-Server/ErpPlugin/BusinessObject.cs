@@ -7,21 +7,22 @@ using System.Threading.Tasks;
 
 namespace ErpPlugin
 {
+    [Serializable]
+    public enum BusinessObjectState
+    {
+        New,
+        Modified,
+        Unmodified,
+        Deleted,
+        SearchObject
+    }
+
     public abstract class BusinessObject
     {
         protected BusinessObject()
         {
             State = BusinessObjectState.New;
             ID = -1;
-        }
-
-        public enum BusinessObjectState
-        {
-            New,
-            Modified,
-            Unmodified,
-            Deleted,
-            SearchObject
         }
 
         public BusinessObjectState State { get; /*protected */set; }

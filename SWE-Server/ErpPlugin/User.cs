@@ -34,7 +34,7 @@ namespace ErpPlugin
             if (State != BusinessObjectState.SearchObject)
                 throw new InvalidOperationException("Only SearchObject can be used for searching");
 
-            return CurrentDalFactory.Instance.CreateDal().SearchUsers(this);
+            return CurrentDalFactory.Instance.CreateDal().Search(this);
         }
 
         public static User CreateSearchObject()
@@ -44,10 +44,12 @@ namespace ErpPlugin
 
         public static string CreateSalt()
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[64];
-            rng.GetBytes(buffer);
-            return Convert.ToBase64String(buffer);
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                byte[] buffer = new byte[64];
+                rng.GetBytes(buffer);
+                return Convert.ToBase64String(buffer);
+            }
         }
 
         public static string CreatePasswordHash(string password, string salt)

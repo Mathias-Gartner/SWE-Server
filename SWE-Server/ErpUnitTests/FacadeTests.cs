@@ -18,7 +18,7 @@ namespace ErpUnitTests
         [TestInitialize]
         public void Init()
         {
-            CurrentDalFactory.Instance = new FakeDalFactory();
+            CurrentDalFactory.Instance = new DalFactory();
             ErpPlugin.Data.Fake.Dal.Reset();
             erpPlugin = new ErpPlugin.ErpPlugin();
         }

@@ -21,22 +21,22 @@ namespace ErpPlugin.Data.Database
             _factory = definitionFactory;
         }
 
-        public ICollection<User> SearchUsers(User searchObject)
+        public ICollection<User> Search(User searchObject)
         {
             return SearchBusinessObject(searchObject);
         }
 
-        public ICollection<Contact> SearchContacts(Contact searchObject)
+        public ICollection<Contact> Search(Contact searchObject)
         {
             return SearchBusinessObject(searchObject);
         }
 
-        public bool SaveContact(Contact contact)
+        public bool Save(Contact contact)
         {
             return SaveBusinessObject(contact);
         }
 
-        public bool DeleteContact(Contact contact)
+        public bool Delete(Contact contact)
         {
             return DeleteBusinessObject(contact);
         }
@@ -46,19 +46,19 @@ namespace ErpPlugin.Data.Database
             return SearchBusinessObject(searchObject);
         }
 
-        public bool SaveInvoice(Invoice invoice)
+        public bool Save(Invoice invoice)
         {
             return SaveBusinessObject(invoice);
         }
 
-        public bool DeleteInvoice(Invoice invoice)
+        public bool Delete(Invoice invoice)
         {
             return DeleteBusinessObject(invoice);
         }
 
         public ICollection<T> SearchBusinessObject<T>(T searchObject) where T : BusinessObject
         {
-            if (searchObject.State != BusinessObject.BusinessObjectState.SearchObject)
+            if (searchObject == null || searchObject.State != BusinessObjectState.SearchObject)
             {
                 throw new InvalidOperationException("searchObject is not a SearchObject");
             }
@@ -77,21 +77,27 @@ namespace ErpPlugin.Data.Database
             return objects;
         }
 
-        public bool SaveBusinessObject<T>(T instance) where T : BusinessObject
+        public bool SaveBusinessObject<T>(T businessObject) where T : BusinessObject
         {
             var definition = _factory.CreateDefinitionForType<T>();
 
-            return SqlUtility.SaveObject(definition, instance);
+            return SqlUtility.SaveObject(definition, businessObject);
         }
 
-        public bool DeleteBusinessObject<T>(T instance) where T : BusinessObject
+        public bool DeleteBusinessObject<T>(T businessObject) where T : BusinessObject
         {
+            if (businessObject == null)
+                return true;
+
             var definition = _factory.CreateDefinitionForType<T>();
             var arguments = new Dictionary<string, object>();
-            arguments.Add("id", instance.ID);
+            arguments.Add("id", businessObject.ID);
             var sb = SqlUtility.PrepareDelete(definition);
             SqlUtility.AppendWhereClause(sb, arguments);
-            return SqlUtility.CreateQuery(sb.ToString(), SqlUtility.ExtractParameters(arguments)).ExecuteNonQuery() == 1;
+            using (var query = SqlUtility.CreateQuery(sb.ToString(), SqlUtility.ExtractParameters(arguments)))
+            {
+                return query.ExecuteNonQuery() == 1;
+            }
         }
     }
 }

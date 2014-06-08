@@ -15,7 +15,7 @@ namespace ErpUnitTests
         [TestInitialize]
         public void Init()
         {
-            CurrentDalFactory.Instance = new FakeDalFactory();
+            CurrentDalFactory.Instance = new DalFactory();
             ErpPlugin.Data.Fake.Dal.Reset();
         }
 
@@ -24,7 +24,7 @@ namespace ErpUnitTests
         {
             var contact = new Contact() { Firstname = "John", Lastname = "Doe" };
             contact.Save();
-            Assert.AreEqual(BusinessObject.BusinessObjectState.Unmodified, contact.State);
+            Assert.AreEqual(BusinessObjectState.Unmodified, contact.State);
             Assert.IsTrue(ErpPlugin.Data.Fake.Dal.ContactSaved);
         }
     }

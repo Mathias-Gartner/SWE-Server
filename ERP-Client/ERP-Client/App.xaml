@@ -1,7 +1,7 @@
-﻿<Application x:Class="ERP_Client.App"
+﻿<Application x:Class="ERPClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converter="clr-namespace:ERP_Client.Converter"
+             xmlns:converter="clr-namespace:ERPClient.Converter"
              StartupUri="Start.xaml">
     <Application.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

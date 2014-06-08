@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace ERP_Client.ViewModels
+namespace ERPClient.ViewModels
 {
     public interface ICommandViewModel : ICommand
     {

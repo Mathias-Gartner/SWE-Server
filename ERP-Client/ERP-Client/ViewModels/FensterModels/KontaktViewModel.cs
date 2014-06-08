@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ERP_Client.Fenster;
+using ERPClient.Fenster;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 
-namespace ERP_Client.ViewModels.FensterModels
+namespace ERPClient.ViewModels.FensterModels
 {
     public class KontaktViewModel : ViewModel
     {
-        protected bool neu = true;
-
         public KontaktViewModel() : this(null) { }
 
         public KontaktViewModel(Action closeAction) : this(closeAction, false, null) { }
@@ -39,12 +37,18 @@ namespace ERP_Client.ViewModels.FensterModels
 
         public void SetSearchResult(Contact result)
         {
-            Result = result.ToString();
+            if (result == null)
+                Result = null;
+            else
+                Result = result.ToString();
+
             if (CloseAction != null)
                 CloseAction();
         }
 
         public string Result { get; protected set; }
+
+        protected bool Neu { get; set; }
 
         #region Kontaktdaten
         #region Person
@@ -554,7 +558,7 @@ namespace ERP_Client.ViewModels.FensterModels
             {
                 if (_BornDate != value)
                 {
-                    _BornDate = value;                   
+                    _BornDate = value;
                     OnPropertyChanged("BornDate");
                 }
             }
@@ -698,9 +702,9 @@ namespace ERP_Client.ViewModels.FensterModels
 
         #region Neuer Kontakt-Fenster öffnen
 
-        public void OpenAddKontakt()
+        public static void OpenAddKontakt()
         {
-            var dlg = new ERP_Client.Fenster.AddKontakt();
+            var dlg = new ERPClient.Fenster.AddKontakt();
             dlg.ShowDialog();
         }
         #endregion
@@ -721,7 +725,7 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             get
             {
-                return IsFirma == null || IsFirma == false;
+                return IsFirma != true;
             }
         }
 
@@ -729,7 +733,7 @@ namespace ERP_Client.ViewModels.FensterModels
         {
             get
             {
-                return IsFirma == null || IsFirma == true;
+                return IsFirma != false;
             }
         }
 
