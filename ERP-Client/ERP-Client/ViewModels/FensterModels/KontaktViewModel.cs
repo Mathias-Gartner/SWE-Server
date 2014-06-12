@@ -637,7 +637,7 @@ namespace ERPClient.ViewModels.FensterModels
                 {
                     _OpenAdd = new ExecuteCommandViewModel(
                         "Neuer Kontakt",
-                        "Neuer Kontakten erstellen",
+                        "Neuen Kontakt erstellen",
                         OpenAddKontakt);
                 }
                 return _OpenAdd;

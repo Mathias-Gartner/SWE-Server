@@ -24,6 +24,13 @@ namespace ErpUnitTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NullRequestTest()
+        {
+            erpPlugin.CreateProduct(null);
+        }
+
+        [TestMethod]
         public void GetRequest()
         {
             var request = RequestFromString("GET /?action=erp HTTP/1.1");

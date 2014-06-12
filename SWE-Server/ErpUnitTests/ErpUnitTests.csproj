@@ -53,12 +53,17 @@
   <ItemGroup>
     <Compile Include="ContactTests.cs" />
     <Compile Include="Dal\ContactDefinitionTests.cs" />
+    <Compile Include="Dal\InvoiceDefinitionTests.cs" />
+    <Compile Include="Dal\AddressDefinitionTests.cs" />
+    <Compile Include="Dal\InvoiceEntryDefinitionTests.cs" />
+    <Compile Include="Dal\UserDefinitionTests.cs" />
     <Compile Include="ErpBaseTest.cs" />
     <Compile Include="Dal\SqlUtilityTests.cs" />
     <Compile Include="Dal\IDefinitionFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Dal\FakeDalTests.cs" />
     <Compile Include="FacadeTests.cs" />
+    <Compile Include="InvoiceTests.cs" />
+    <Compile Include="UserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ErpPlugin\ErpPlugin.csproj">

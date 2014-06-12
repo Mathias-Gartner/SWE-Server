@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ErpUnitTests
 {
+    [TestClass]
     public class ContactTests : ErpBaseTest
     {
         [TestInitialize]

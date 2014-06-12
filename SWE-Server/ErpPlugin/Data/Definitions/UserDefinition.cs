@@ -29,7 +29,7 @@ namespace ErpPlugin.Data.Definitions
             if (user.ID >= 0)
                 arguments.Add("id", user.ID);
             if (!String.IsNullOrEmpty(user.Username))
-                arguments.Add("lastname", user.Username);
+                arguments.Add("username", user.Username);
             if (!String.IsNullOrEmpty(user.PasswordHash))
                 arguments.Add("password", user.PasswordHash);
             if (!String.IsNullOrEmpty(user.PasswordSalt))

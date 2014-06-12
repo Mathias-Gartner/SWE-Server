@@ -14,6 +14,11 @@ namespace ErpPlugin
 {
     public class Invoice : BusinessObject
     {
+        public Invoice()
+        {
+            Entries = new Collection<InvoiceEntry>();
+        }
+
         public bool? Outgoing { get; set; }
 
         public int InvoiceNumber { get; set; }
@@ -104,10 +109,16 @@ namespace ErpPlugin
             section.AddParagraph();
 
             p = section.AddParagraph("Rechnung");
+            p.Format.Font.Bold = true;
             if (InvoiceNumber > 0)
                 p.AddText(String.Format(" Nr. {0}", InvoiceNumber));
 
+            section.AddParagraph();
+
             var table = section.AddTable();
+            for (var i = 0; i < 6; i++)
+                table.AddColumn();
+            
             var headRow = table.AddRow();
             headRow.Format.Font.Bold = true;
             
@@ -116,6 +127,7 @@ namespace ErpPlugin
             AddCell(headRow, "Netto");
             AddCell(headRow, "USt");
             AddCell(headRow, "Brutto");
+            AddCell(headRow, "Summe");
             
             decimal sum = 0;
             foreach(var entry in Entries)
@@ -123,13 +135,17 @@ namespace ErpPlugin
                 var row = table.AddRow();
                 AddCell(row, entry.Amount.ToString("#,##0"));
                 AddCell(row, entry.Description);
-                AddCell(row, (entry.Amount * entry.NetPrice).ToString("#,##0.00"));
+                AddCell(row, entry.NetPrice.ToString("#,##0.00"));
                 AddCell(row, entry.UStPercent.ToString("00"));
-                AddCell(row, (entry.Amount * entry.Price).ToString("#,##0.00"));
+                AddCell(row, entry.Price.ToString("#,##0.00"));
+                AddCell(row, (entry.Price * entry.Amount).ToString("#,##0.00"));
                 sum += entry.Price;
             }
 
-            p = section.AddParagraph("Summe: " + sum.ToString("#,##0.00"));
+            section.AddParagraph();
+            p = section.AddParagraph();
+            p.AddFormattedText("Summe: ", TextFormat.Bold);
+            p.AddText(sum.ToString("#,##0.00"));
             p.Format.Alignment = ParagraphAlignment.Right;
             
             var renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);

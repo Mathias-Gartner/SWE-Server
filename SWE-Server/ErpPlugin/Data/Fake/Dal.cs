@@ -9,11 +9,13 @@ namespace ErpPlugin.Data.Fake
     public class Dal : IDal
     {
         public static bool ContactSaved;
+        public static bool InvoiceSaved;
         public static bool BusinessObjectSaved;
 
         public static void Reset()
         {
             ContactSaved = false;
+            InvoiceSaved = false;
             BusinessObjectSaved = false;
         }
 
@@ -55,6 +57,7 @@ namespace ErpPlugin.Data.Fake
         public bool Save(Contact contact)
         {
             ContactSaved = true;
+            contact.State = BusinessObjectState.Unmodified;
             return true;
         }
 
@@ -86,7 +89,9 @@ namespace ErpPlugin.Data.Fake
 
         public bool Save(Invoice invoice)
         {
-            throw new NotImplementedException();
+            InvoiceSaved = true;
+            invoice.State = BusinessObjectState.Unmodified;
+            return true;
         }
 
         public bool Delete(Invoice invoice)
