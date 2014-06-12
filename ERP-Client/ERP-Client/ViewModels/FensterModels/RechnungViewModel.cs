@@ -407,7 +407,8 @@ namespace ERPClient.ViewModels.FensterModels
             zeile.Price = Convert.ToDecimal(Price);
             zeile.UStPercent = Convert.ToInt32(Ust);
             Rechnungszeile.Add(zeile);
-
+            OnPropertyChanged("Rechnungszeile");
+            
             dlgr.Close();
         }
 

@@ -23,9 +23,9 @@
         <TextBlock HorizontalAlignment="Left" Margin="300,98,0,0" TextWrapping="Wrap" Text="Fälligkeitsdatum:" VerticalAlignment="Top"/>
         <DatePicker SelectedDate="{Binding DueDate}" Margin="400,95,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-        <ctrls:CommandButton CommandViewModel="{Binding SaveRechnung}" HorizontalAlignment="Right" Margin="0,95,20,0" VerticalAlignment="Top" Height="25" Width="140"/>
-        
+        <ctrls:CommandButton CommandViewModel="{Binding SaveRechnung}" HorizontalAlignment="Right" Margin="0,95,20,0" VerticalAlignment="Top" Height="25" Width="140"/>       
         <ctrls:CommandButton CommandViewModel="{Binding NewRechnungszeile}" HorizontalAlignment="Left" Margin="15,130,0,0" VerticalAlignment="Top" Height="25" Width="140"/>
+        
         <ListView Margin="5,165,5,5" ItemsSource="{Binding Rechnungszeile}">
             <ListView.View>
                 <GridView>                    
@@ -33,6 +33,7 @@
                     <GridViewColumn Header="Menge" HeaderStringFormat="Menge" DisplayMemberBinding="{Binding Amount}" Width="50"/>
                     <GridViewColumn Header="Stückpreis" HeaderStringFormat="Stückpreis" DisplayMemberBinding="{Binding Price}" Width="150"/>
                     <GridViewColumn Header="Ust." HeaderStringFormat="USt." DisplayMemberBinding="{Binding UStPercent}" Width="50"/>
+                    <GridViewColumn Header="Netto" HeaderStringFormat="Netto" DisplayMemberBinding="{Binding NetPrice}" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>
