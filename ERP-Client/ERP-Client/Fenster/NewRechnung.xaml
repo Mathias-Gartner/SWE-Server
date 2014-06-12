@@ -9,36 +9,30 @@
 
     <Grid Background="#FFE5E5E5">
         <TextBlock HorizontalAlignment="Left" Margin="0,8,0,0" TextWrapping="Wrap" Text="Kontakt:" VerticalAlignment="Top"/>
-        <TextBox  Margin="80,5,20,0" TextWrapping="Wrap" Text="{Binding Productname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
+        <ctrls:AutoComplete AutoCompleteSource="{Binding KontaktAutoCompleteSource}" SelectedItem="{Binding BelongsTo, Mode=TwoWay}"  Margin="80,5,20,0" VerticalAlignment="Top" Height="22"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="0,38,0,0" TextWrapping="Wrap" Text="Kommentar:" VerticalAlignment="Top"/>
         <TextBox  Margin="80,35,20,0" TextWrapping="Wrap" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="0,68,0,0" TextWrapping="Wrap" Text="Nachricht:" VerticalAlignment="Top"/>
-        <TextBox MaxLines="2"  Margin="80,65,20,0" TextWrapping="Wrap" Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="45"/>
+        <TextBox Margin="80,65,20,0" TextWrapping="Wrap" Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="0,123,0,0" TextWrapping="Wrap" Text="Rechnungsdatum:" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <DatePicker SelectedDate="{Binding InvoiceDate}" Margin="105,120,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0,98,0,0" TextWrapping="Wrap" Text="Rechnungsdatum:" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <DatePicker SelectedDate="{Binding InvoiceDate}" Margin="105,95,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="300,123,0,0" TextWrapping="Wrap" Text="Fälligkeitsdatum:" VerticalAlignment="Top"/>
-        <DatePicker SelectedDate="{Binding DueDate}" Margin="400,120,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBlock HorizontalAlignment="Left" Margin="300,98,0,0" TextWrapping="Wrap" Text="Fälligkeitsdatum:" VerticalAlignment="Top"/>
+        <DatePicker SelectedDate="{Binding DueDate}" Margin="400,95,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-        <ctrls:CommandButton CommandViewModel="{Binding SaveRechnung}" HorizontalAlignment="Right" Margin="0,120,20,0" VerticalAlignment="Top" Height="25" Width="140"/>
+        <ctrls:CommandButton CommandViewModel="{Binding SaveRechnung}" HorizontalAlignment="Right" Margin="0,95,20,0" VerticalAlignment="Top" Height="25" Width="140"/>
         
-        <ctrls:CommandButton CommandViewModel="{Binding NewRechnungszeile}" HorizontalAlignment="Left" Margin="15,150,0,0" VerticalAlignment="Top" Height="25" Width="140"/>
-        <ListView Margin="5,180,5,5" ItemsSource="{Binding Contacts}">
+        <ctrls:CommandButton CommandViewModel="{Binding NewRechnungszeile}" HorizontalAlignment="Left" Margin="15,130,0,0" VerticalAlignment="Top" Height="25" Width="140"/>
+        <ListView Margin="5,165,5,5" ItemsSource="{Binding Rechnungszeile}">
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="Auto" HeaderStringFormat="Ansehen">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Command="{Binding }" Content="Entfernen" Width="100"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Produkt" HeaderStringFormat="Produkt" DisplayMemberBinding="{Binding DisplayName}" Width="300"/>
-                    <GridViewColumn Header="Menge" HeaderStringFormat="Menge" DisplayMemberBinding="{Binding DisplayName}" Width="50"/>
-                    <GridViewColumn Header="Stückpreis" HeaderStringFormat="Stückpreis" DisplayMemberBinding="{Binding DisplayName}" Width="150"/>
+                <GridView>                    
+                    <GridViewColumn Header="Produkt" HeaderStringFormat="Produkt" DisplayMemberBinding="{Binding Description}" Width="300"/>
+                    <GridViewColumn Header="Menge" HeaderStringFormat="Menge" DisplayMemberBinding="{Binding Amount}" Width="50"/>
+                    <GridViewColumn Header="Stückpreis" HeaderStringFormat="Stückpreis" DisplayMemberBinding="{Binding Price}" Width="150"/>
+                    <GridViewColumn Header="Ust." HeaderStringFormat="USt." DisplayMemberBinding="{Binding UStPercent}" Width="50"/>
                 </GridView>
             </ListView.View>
         </ListView>

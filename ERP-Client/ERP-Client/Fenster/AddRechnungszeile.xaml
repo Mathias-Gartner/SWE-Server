@@ -9,7 +9,7 @@
 
     <Grid Background="#FFE5E5E5">
         <TextBlock HorizontalAlignment="Left" Margin="0,8,0,0" TextWrapping="Wrap" Text="Produktname:" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  Margin="80,5,0,0" TextWrapping="Wrap" Text="{Binding Productname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="550"/>        
+        <TextBox HorizontalAlignment="Left"  Margin="80,5,0,0" TextWrapping="Wrap" Text="{Binding Productname, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="550"/>
         
         <TextBlock HorizontalAlignment="Left" Margin="0,38,0,0" TextWrapping="Wrap" Text="Menge:" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left"  Margin="80,35,0,0" TextWrapping="Wrap" Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Height="22" Width="70"/>

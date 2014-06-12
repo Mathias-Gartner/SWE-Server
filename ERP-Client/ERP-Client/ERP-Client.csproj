@@ -86,6 +86,7 @@
     <Compile Include="ViewModels\FirmaAutoCompleteSource.cs" />
     <Compile Include="ViewModels\KontaktAutoCompleteSource.cs" />
     <Compile Include="ViewModels\SingleContactViewModel.cs" />
+    <Compile Include="ViewModels\SingleRechnungViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Controls\AutoComplete.xaml">
       <SubType>Designer</SubType>

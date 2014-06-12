@@ -16,10 +16,10 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock HorizontalAlignment="Left" Margin="10,3,0,0" TextWrapping="Wrap" Text="von" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                 <DatePicker SelectedDate="{Binding Begindatum}" Margin="26,0,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1"/>
-                
+
                 <TextBlock HorizontalAlignment="Left" Margin="206,3,0,0" TextWrapping="Wrap" Text="bis" VerticalAlignment="Top" Grid.Column="1"/>
-                <DatePicker SelectedDate="{Binding Enddatum}" Margin="246,0,0,0" Width="160" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1"/>
-            </Grid>            
+                <DatePicker SelectedDate="{Binding Enddatum}" Margin="246,0,-32,0" VerticalAlignment="Top" Grid.Column="1"/>
+            </Grid>
         </GroupBox>
 
         <GroupBox Header="Betrag" Margin="5,50,335,0" VerticalAlignment="Top" Height="50" IsEnabled="{Binding CanEditPerson}">
@@ -47,17 +47,25 @@
 
         <TextBlock Name="Suchergebnis" Margin="20,155,0,0" TextWrapping="Wrap" Text="{Binding Suchergebnis}" RenderTransformOrigin="-3.944,-2.82" HorizontalAlignment="Left" Width="742" Height="22" VerticalAlignment="Top"/>
 
-        <ListView Margin="5,135,5,5" ItemsSource="{Binding Contacts}">
+        <ListView Margin="5,135,5,5" ItemsSource="{Binding Entries}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Ansehen" HeaderStringFormat="Ansehen">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Command="{Binding EditContact}" Content="PDF Downloaden" Width="100"/>
+                                <Button Command="{Binding EditRechnung}" Content="Ansehen" Width="100"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Kontakt" HeaderStringFormat="Kontakt" DisplayMemberBinding="{Binding DisplayName}" Width="300"/>
+                    <GridViewColumn Width="Auto" Header="PDF Download" HeaderStringFormat="PDF Download">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding PdfDownload}" Content="PDF downloaden" Width="100"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Datum" HeaderStringFormat="Datum" DisplayMemberBinding="{Binding RDatum}" Width="300"/>
+                    <GridViewColumn Header="Rechnungsnr." HeaderStringFormat="Rechnungsnr." DisplayMemberBinding="{Binding RNummer}" Width="300"/>
                 </GridView>
             </ListView.View>
         </ListView>

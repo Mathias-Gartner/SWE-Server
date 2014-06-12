@@ -576,7 +576,6 @@ namespace ERPClient.ViewModels.FensterModels
             DependencyProperty.Register("Contacts", typeof(IEnumerable<SingleContactViewModel>), typeof(KontaktViewModel));
 
         private IEnumerable<Contact> _kontaktliste;
-
         public IEnumerable<Contact> Kontaktliste
         {
             get
@@ -643,6 +642,7 @@ namespace ERPClient.ViewModels.FensterModels
                 return _OpenAdd;
             }
         }
+
         #endregion
 
         #region Methoden

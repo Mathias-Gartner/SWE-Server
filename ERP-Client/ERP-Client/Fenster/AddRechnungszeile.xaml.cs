@@ -5,11 +5,11 @@ namespace ERPClient.Fenster
 {
     public partial class AddRechnungszeile : Window
     {
-        public AddRechnungszeile()
+        public AddRechnungszeile(RechnungViewModel rvm)
         {
             InitializeComponent();
 
-            this.DataContext = new RechnungViewModel();
+            this.DataContext = rvm;
         }
     }
 }

@@ -11,5 +11,12 @@ namespace ERPClient.Fenster
 
             this.DataContext = new RechnungViewModel();
         }
+
+        public NewRechnung(Invoice i)
+        {
+            InitializeComponent();
+
+            this.DataContext = new RechnungViewModel(i);
+        }
     }
 }

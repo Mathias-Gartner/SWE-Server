@@ -1,14 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ERPClient.Fenster;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace ERPClient.ViewModels.FensterModels
 {
-    class RechnungViewModel : ViewModel
+    public class RechnungViewModel : ViewModel
     {
         public RechnungViewModel() { }
+
+        public RechnungViewModel(Invoice Invoice)
+        {
+            InvoiceDate = Convert.ToDateTime(Invoice.InvoiceDate);
+            DueDate = Convert.ToDateTime(Invoice.DueDate);
+            Message = Invoice.Message;
+            Comment = Invoice.Comment;
+            BelongsTo = Invoice.Contact;
+
+            foreach (InvoiceEntry i in Invoice.Entries)
+                Rechnungszeile.Add(i);            
+        }
+
+        public Action CloseAction { get; set; }
+
+        public bool SearchMode
+        {
+            get { return (bool)GetValue(SearchModeProperty); }
+            protected set { SetValue(SearchModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty SearchModeProperty =
+            DependencyProperty.Register("SearchMode", typeof(bool), typeof(RechnungViewModel));
+
+        public void SetSearchResult(Contact result)
+        {
+            if (result == null)
+                Result = null;
+            else
+                Result = result.ToString();
+
+            if (CloseAction != null)
+                CloseAction();
+        }
+
+        public string Result { get; protected set; }
+
+        protected bool Neu { get; set; }
 
         #region Daten
         private DateTime _Begindatum = DateTime.Now.Date;
@@ -322,7 +363,26 @@ namespace ERPClient.ViewModels.FensterModels
 
             var invoice = new Invoice();
             invoice.State = "SearchObject";
-            proxy.RechnungSuchen(invoice);
+            invoice.InvoiceDateFrom = Begindatum;
+            invoice.InvoiceDateTo = Enddatum;
+            
+            if(MinBetrag != null)
+                invoice.SumFrom = Convert.ToInt32(MinBetrag);
+            if (MaxBetrag != null)
+                invoice.SumTo = Convert.ToInt32(MaxBetrag);
+
+            if (BelongsTo != null && BelongsTo is Contact)
+            {
+                invoice.Contact = (Contact)BelongsTo;
+            }
+            else
+            {
+                invoice.Contact = null;
+            }
+
+            var liste = proxy.RechnungSuchen(invoice);
+            
+            Rechnungsliste = liste;
         }
 
         public void ErstelleRechnung()
@@ -331,17 +391,50 @@ namespace ERPClient.ViewModels.FensterModels
             dlg.ShowDialog();
         }
 
+        public ERPClient.Fenster.AddRechnungszeile dlgr;
+
         public void ErstelleRechnungszeile()
-        {
-            var dlg = new ERPClient.Fenster.AddRechnungszeile();
-            dlg.ShowDialog();
+        {            
+            dlgr = new ERPClient.Fenster.AddRechnungszeile(this);
+            dlgr.ShowDialog();
         }
 
         public void RechnungszeileHinzufügen()
-        { }
+        {
+            InvoiceEntry zeile = new InvoiceEntry();
+            zeile.Description = Productname;
+            zeile.Amount = Convert.ToInt32(Amount);
+            zeile.Price = Convert.ToDecimal(Price);
+            zeile.UStPercent = Convert.ToInt32(Ust);
+            Rechnungszeile.Add(zeile);
+
+            dlgr.Close();
+        }
 
         public void RechnungSpeichern()
-        { }
+        {
+            Proxy proxy = new Proxy();
+            var invoice = new Invoice();
+
+            invoice.InvoiceDate = InvoiceDate;
+            invoice.DueDate = DueDate;
+            invoice.Comment = Comment;
+            invoice.Message = Message;
+
+            if (BelongsTo != null && BelongsTo is Contact)
+            {
+                invoice.Contact = (Contact)BelongsTo;
+            }
+            else
+            {
+                invoice.Contact = null;
+            }
+
+            foreach (InvoiceEntry rz in Rechnungszeile)
+                invoice.Entries.Add(rz);
+
+            proxy.RechnungChange(invoice);
+        }
         #endregion
 
         private KontaktAutoCompleteSource _kontaktAutoCompleteSource;
@@ -354,5 +447,60 @@ namespace ERPClient.ViewModels.FensterModels
                 return _kontaktAutoCompleteSource;
             }
         }
+
+        private List<InvoiceEntry> _Rechnungszeile;
+        public List<InvoiceEntry> Rechnungszeile
+        {
+            get
+            {
+                if (_Rechnungszeile == null)
+                    _Rechnungszeile = new List<InvoiceEntry>();
+                return _Rechnungszeile;
+            }
+            set
+            {
+                if (_Rechnungszeile != value)
+                {
+                    _Rechnungszeile = value;
+                    OnPropertyChanged("Rechnungszeile");
+                }
+            }
+        }
+
+        public IEnumerable<SingleRechnungViewModel> Entries
+        {
+            get { return (IEnumerable<SingleRechnungViewModel>)GetValue(DPEntries); }
+            set { SetValue(DPEntries, value); }
+        }
+
+        public static readonly DependencyProperty DPEntries =
+            DependencyProperty.Register("Entries", typeof(IEnumerable<SingleRechnungViewModel>), typeof(RechnungViewModel));
+        
+        private IEnumerable<Invoice> _rechnungsliste;
+        public IEnumerable<Invoice> Rechnungsliste
+        {
+            get
+            {
+                return _rechnungsliste;
+            }
+            set
+            {
+                if (_rechnungsliste != value)
+                {
+                    _rechnungsliste = value;
+                    Entries = value.Select(c => new SingleRechnungViewModel(this, c));
+                    OnPropertyChanged("Rechnungsliste");
+                }
+            }
+        }
+
+        public object BelongsTo
+        {
+            get { return GetValue(DPBelongsTo); }
+            set { SetValue(DPBelongsTo, value); }
+        }
+
+        public static readonly DependencyProperty DPBelongsTo =
+            DependencyProperty.Register("BelongsTo", typeof(object), typeof(RechnungViewModel));
     }
 }
